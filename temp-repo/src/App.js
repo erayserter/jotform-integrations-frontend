@@ -1,15 +1,15 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
+import Navbar from "./components/Navbar/Navbar";
 
-import logo from "./logo.svg";
-import "./App.css";
+import UserContent from "./components/User/Content/UserContent";
 
 function App() {
   return (
     <Router>
       <Navbar />
+      <UserContent />
     </Router>
   );
 }
