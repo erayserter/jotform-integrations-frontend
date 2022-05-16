@@ -1,0 +1,39 @@
+.navbar {
+  background-color: #0a1551;
+  color: white;
+  font-size: calc(12px + 0.3vw);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+.navbar--logo {
+  /* background-color: aqua; */
+}
+
+.navbar--navigation {
+  /* background-color: black; */
+  flex-grow: 1;
+}
+
+.navbar--profile {
+  /* background-color: red; */
+}
+
+ul {
+  list-style-type: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  justify-content: flex-end;
+  gap: 24px;
+}
+
+li:hover {
+  color: #e74c3c;
+}
+
+ul li:last-child {
+  padding-right: 24px;
+}
