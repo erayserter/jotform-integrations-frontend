@@ -9,6 +9,7 @@
 }
 
 .navbar--logo {
+  padding-left: 8px;
   /* background-color: aqua; */
 }
 
@@ -18,10 +19,11 @@
 }
 
 .navbar--profile {
+  padding-right: 24px;
   /* background-color: red; */
 }
 
-ul {
+.navbar--navigation ul {
   list-style-type: none;
   display: flex;
   margin: 0;
@@ -30,10 +32,10 @@ ul {
   gap: 24px;
 }
 
-li:hover {
+.navbar--navigation ul li:hover {
   color: #e74c3c;
 }
 
-ul li:last-child {
+.navbar--navigation ul li:last-child {
   padding-right: 24px;
 }

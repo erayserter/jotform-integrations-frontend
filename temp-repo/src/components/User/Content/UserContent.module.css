@@ -1,0 +1,101 @@
+.user--main {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  background-color: #fff;
+}
+
+.user--navigation {
+  background-color: #f3f3fe;
+  border-right: 1px solid #c8ceed;
+  border-bottom: 1px solid #c8ceed;
+  flex: 0 1 300px;
+}
+
+.user--section {
+  align-items: flex-end;
+  flex: 1 0;
+}
+
+.user--sidebarbutton {
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px solid #c8ceed;
+  display: flex;
+  justify-content: center;
+  min-height: 62px;
+  padding: 0px 13px 0px;
+}
+
+.user--sidebarbutton button {
+  background-color: #ff6100;
+  border: 1px solid #ff6100;
+  color: #fff;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 13px;
+  text-transform: uppercase;
+  width: 100%;
+  border-radius: 3px;
+}
+
+.user--sectionsearch {
+  background-color: #fff;
+  border-bottom: 1px solid #c8ceed;
+  padding: 8px 5px 8.5px;
+}
+
+.user--sectionsearch button {
+  padding: 14px;
+  margin-right: 5px;
+  background-color: #fff;
+  border: 1px solid #d8dae9;
+  border-radius: 4px;
+}
+
+.user--sectionsearch button:hover {
+  background-color: #f3f3fe;
+}
+
+.user--sectionsearch input {
+  padding: 14px;
+  background-color: #f3f3fe;
+  color: #c8ceed;
+  border: 1px solid #f3f3fe;
+  border-radius: 4px;
+}
+
+.user--sectionsearch input:hover {
+  border: 1px solid #c8ceed;
+}
+
+.user--sidebarmenu {
+  padding: 0px 12px;
+}
+
+.user--sidebarmenu button {
+  border: 1px solid #f3f3fe;
+  border-radius: 4px;
+  font-size: 16px;
+  text-align: left;
+  background-color: #f3f3fe;
+  padding: 11px 14px;
+  margin: 1px;
+  width: 100%;
+}
+
+.user--sidebarmenu button:hover {
+  border: 1px solid #c8ceed;
+  background-color: #c8ceed;
+  transition: 0.3s;
+}
+
+.user--sidebarmenu h2 {
+  padding-top: 16px;
+  color: #6f76a7;
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+}

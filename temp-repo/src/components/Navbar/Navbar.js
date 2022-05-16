@@ -13,9 +13,9 @@ function Navbar(props) {
       </div>
       <div className={classes["navbar--navigation"]}>
         <ul>
-          <li>list-item-1</li>
-          <li>list-item-2</li>
-          <li>list-item-3</li>
+          <li>All Integrations</li>
+          <li>Login</li>
+          <li>Logout</li>
         </ul>
       </div>
       <div className={classes["navbar--profile"]}>
