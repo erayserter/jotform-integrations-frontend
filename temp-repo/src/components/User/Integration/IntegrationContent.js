@@ -1,6 +1,8 @@
 import React from "react";
+import IntegrationAppCard from "./IntegrationAppCard";
 
 import classes from "./IntegrationContent.module.css";
+import IntegrationHeader from "./IntegrationHeader";
 
 const IntegrationContent = (props) => {
   const clickHandler = (event) => {
@@ -10,15 +12,7 @@ const IntegrationContent = (props) => {
   return (
     <div className={classes["container"]}>
       <div className={classes["content-wrapper"]}>
-        <div className={classes["integration--header"]}>
-          <h1>Create An Integration</h1>
-          <h2>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo rerum
-            incidunt odio qui! Placeat magnam ipsum ipsam eligendi totam eius!
-            Tempore necessitatibus veniam ducimus nihil minus itaque dolorum
-            odit magni.
-          </h2>
-        </div>
+        <IntegrationHeader />
       </div>
       <button className={classes["closeButton"]} onClick={clickHandler}>
         <svg

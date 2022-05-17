@@ -1,0 +1,22 @@
+.integration--header {
+  padding-top: 55px;
+}
+
+.integration--header h1 {
+  color: #0a1551;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+  text-align: center;
+}
+
+.integration--header h2 {
+  color: #6f76a7;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.001px;
+  line-height: 1.15;
+  margin: 10px 0 0;
+  text-align: center;
+}
