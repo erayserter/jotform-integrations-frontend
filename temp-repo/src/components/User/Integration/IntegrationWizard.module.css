@@ -1,0 +1,13 @@
+.wizard {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.switch-icon img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}

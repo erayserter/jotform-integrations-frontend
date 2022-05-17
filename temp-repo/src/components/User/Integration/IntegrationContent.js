@@ -3,18 +3,27 @@ import IntegrationAppCard from "./IntegrationAppCard";
 
 import classes from "./IntegrationContent.module.css";
 import IntegrationHeader from "./IntegrationHeader";
+import IntegrationWizard from "./IntegrationWizard";
 
 const IntegrationContent = (props) => {
-  const clickHandler = (event) => {
+  const integrationClickHandler = (event) => {
     props.onNewIntegration(false);
+  };
+
+  const integrationChoiceHandler = (bool) => {
+    props.onIntegrationChoice(bool);
   };
 
   return (
     <div className={classes["container"]}>
       <div className={classes["content-wrapper"]}>
         <IntegrationHeader />
+        <IntegrationWizard onClick={integrationChoiceHandler} />
       </div>
-      <button className={classes["closeButton"]} onClick={clickHandler}>
+      <button
+        className={classes["closeButton"]}
+        onClick={integrationClickHandler}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 17 16"
