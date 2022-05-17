@@ -20,11 +20,15 @@ const UserContent = (props) => {
     setSectionContent(content);
   };
 
+  const clickHandler = (event) => {
+    props.onNewIntegration(true);
+  };
+
   return (
     <main className={classes["user--main"]}>
       <div className={classes["user--navigation"]}>
         <div className={classes["user--sidebarbutton"]}>
-          <button>Create New Integration</button>
+          <button onClick={clickHandler}>Create New Integration</button>
         </div>
         <div className={classes["user--sidebarmenu"]}>
           <h2>My Integrations</h2>
