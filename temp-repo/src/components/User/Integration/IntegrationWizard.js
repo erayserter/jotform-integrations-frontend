@@ -12,7 +12,6 @@ const IntegrationWizard = (props) => {
   };
 
   const switchHandler = (event) => {
-    console.log(reversed);
     setReversed((prev) => {
       return !prev;
     });
