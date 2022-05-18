@@ -4,7 +4,7 @@ import classes from "./IntegrationAppCard.module.css";
 
 const IntegrationAppCard = (props) => {
   const clickHandler = (event) => {
-    props.onClick(true);
+    props.onClick(true, props.type);
   };
 
   return (

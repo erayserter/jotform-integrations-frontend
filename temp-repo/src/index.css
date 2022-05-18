@@ -1,3 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
+*:focus-visible {
+  outline: none;
+}
+
 html {
   height: 100%;
 }
@@ -7,7 +15,6 @@ body {
     San Francisco, Roboto, Segoe UI, Helvetica Neue, Lucida Grande, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  box-sizing: border-box;
   line-height: 1.15;
   height: 100%;
 }

@@ -1,0 +1,34 @@
+.app-search {
+  margin: 20px;
+  padding: 0px 15px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border: 1px solid #c8ceed;
+  border-radius: 4px;
+}
+
+.app-search input {
+  color: #0a1551;
+  font-size: 1rem;
+  font-weight: 300;
+  height: 40px;
+  padding: 0 16px;
+  width: 100%;
+  border: none;
+}
+
+.app-search img {
+  width: 20px;
+}
+
+.app-navigation {
+  padding: 0px 16px 15px;
+  display: flex;
+  gap: 10px;
+  overflow: auto;
+}
+
+.app-navigation img {
+  width: 50px;
+}

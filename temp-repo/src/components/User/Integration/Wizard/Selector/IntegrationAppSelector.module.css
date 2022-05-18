@@ -1,0 +1,79 @@
+.app-layout-header h1 {
+  padding-top: 20px;
+  color: #0a1551;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+  margin: 0;
+  text-align: center;
+}
+
+.app-layout-body {
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.app-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-selector svg {
+  cursor: pointer;
+  background-color: #c8ceed;
+  padding: 10px;
+  border-radius: 4px;
+  box-sizing: content-box;
+}
+
+.key-action-selector {
+  flex-basis: 80%;
+}
+
+.action-selector button {
+  cursor: pointer;
+  display: flex;
+  background-color: #fff;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #c8ceed;
+  border-radius: 4px;
+  color: #0a1551;
+  font-size: 1rem;
+  font-weight: 300;
+  height: 40px;
+  padding: 0 16px;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.action-selector button span {
+  opacity: 0.6;
+}
+
+.action-selector button img {
+  width: 15px;
+}
+
+.key-selector {
+  margin-top: 10px;
+}
+
+.key-selector input {
+  border: 1px solid #c8ceed;
+  border-radius: 4px;
+  color: #0a1551;
+  font-size: 1rem;
+  font-weight: 300;
+  height: 40px;
+  padding: 0 16px;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.app-navigation {
+  border-top: 1px solid gray;
+}
