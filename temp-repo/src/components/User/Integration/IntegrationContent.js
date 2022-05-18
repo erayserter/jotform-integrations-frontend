@@ -1,24 +1,19 @@
 import React from "react";
-import IntegrationAppCard from "./IntegrationAppCard";
 
 import classes from "./IntegrationContent.module.css";
-import IntegrationHeader from "./IntegrationHeader";
-import IntegrationWizard from "./IntegrationWizard";
+import IntegrationHeader from "./Header/IntegrationHeader";
+import IntegrationWizard from "./Wizard/IntegrationWizard";
 
 const IntegrationContent = (props) => {
   const integrationClickHandler = (event) => {
     props.onNewIntegration(false);
   };
 
-  const integrationChoiceHandler = (bool) => {
-    props.onIntegrationChoice(bool);
-  };
-
   return (
     <div className={classes["container"]}>
       <div className={classes["content-wrapper"]}>
         <IntegrationHeader />
-        <IntegrationWizard onClick={integrationChoiceHandler} />
+        <IntegrationWizard />
       </div>
       <button
         className={classes["closeButton"]}

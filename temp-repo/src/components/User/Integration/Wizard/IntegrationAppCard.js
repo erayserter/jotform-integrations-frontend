@@ -1,20 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
 import classes from "./IntegrationAppCard.module.css";
 
 const IntegrationAppCard = (props) => {
-  const [priority, setPriority] = useState(-1);
-
   const clickHandler = (event) => {
     props.onClick(true);
   };
 
   return (
-    <div
-      className={classes["container"]}
-      onClick={clickHandler}
-      // style={{ order: priority }}
-    >
+    <div className={classes["container"]} onClick={clickHandler}>
       <div className={classes["card"]}>
         <svg
           fill="none"

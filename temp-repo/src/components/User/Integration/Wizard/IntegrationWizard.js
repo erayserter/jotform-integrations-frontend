@@ -1,14 +1,17 @@
-import React, { useState, useSyncExternalStore } from "react";
+import React, { useState } from "react";
 
 import classes from "./IntegrationWizard.module.css";
 
 import IntegrationAppCard from "./IntegrationAppCard";
-import { type } from "@testing-library/user-event/dist/type";
 
+import ModalBox from "../../../UI/ModalBox";
+import IntegrationAppSelector from "./IntegrationAppSelector";
 const IntegrationWizard = (props) => {
   const [reversed, setReversed] = useState(false);
+  const [isIntegrationChoice, setIsIntegrationChoice] = useState(false);
+
   const integrationChoiceHandler = (bool) => {
-    props.onClick(bool);
+    setIsIntegrationChoice(bool);
   };
 
   const switchHandler = (event) => {
@@ -37,6 +40,11 @@ const IntegrationWizard = (props) => {
           onClick={integrationChoiceHandler}
           type="Destination"
         />
+      )}
+      {isIntegrationChoice && (
+        <ModalBox onIntegrationChoice={integrationChoiceHandler}>
+          <IntegrationAppSelector />
+        </ModalBox>
       )}
     </div>
   );

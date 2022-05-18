@@ -9,29 +9,18 @@ import IntegrationContent from "./User/Integration/IntegrationContent";
 
 const AppContainer = (props) => {
   const [isIntegrationContent, setIsIntegrationContent] = useState(false);
-  const [isIntegrationChoice, setIsIntegrationChoice] = useState(false);
 
   const newIntegrationHandler = (bool) => {
     setIsIntegrationContent(bool);
-  };
-
-  const integrationChoiceHandler = (bool) => {
-    setIsIntegrationChoice(bool);
   };
 
   return (
     <div className={classes["container"]}>
       <Navbar />
       {isIntegrationContent ? (
-        <IntegrationContent
-          onNewIntegration={newIntegrationHandler}
-          onIntegrationChoice={integrationChoiceHandler}
-        />
+        <IntegrationContent onNewIntegration={newIntegrationHandler} />
       ) : (
         <UserContent onNewIntegration={newIntegrationHandler} />
-      )}
-      {isIntegrationChoice && (
-        <ModalBox onIntegrationChoice={integrationChoiceHandler} />
       )}
     </div>
   );
