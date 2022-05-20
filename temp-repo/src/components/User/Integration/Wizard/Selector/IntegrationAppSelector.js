@@ -4,10 +4,20 @@ import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
 
 const IntegrationAppSelector = (props) => {
-  const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(false);
+  const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
+  const [selectedAppID, setSelectedAppID] = useState(null);
+  const [selectorStyle, setSelectorStyle] = useState({});
+  const [actionSelectorStyle, setActionSelectorStyle] = useState({});
 
-  const appSelectorHandler = (event) => {
+  const appSelectorSectionHandler = (event) => {
     setIsAppSelectorVisible((prev) => !prev);
+  };
+
+  const appSelectHandler = (id) => {
+    setSelectorStyle({ flexBasis: "85%" });
+    setActionSelectorStyle({ display: "block" });
+    setIsAppSelectorVisible(false);
+    setSelectedAppID(id);
   };
 
   return (
@@ -16,25 +26,23 @@ const IntegrationAppSelector = (props) => {
         <h1>Choose {props.type} App</h1>
       </div>
       <div className={classes["app-layout-body"]}>
-        <div className={classes["app-selector"]} onClick={appSelectorHandler}>
-          <svg
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 54 54"
-            className="jfWizard-list-item-icon-svg"
-            width="33"
-            height="31"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M2.25 24.75h22.5V2.25a2.25 2.25 0 014.5 0v22.5h22.5a2.25 2.25 0 010 4.5h-22.5v22.5a2.25 2.25 0 01-4.5 0v-22.5H2.25a2.25 2.25 0 010-4.5z"
-              fill="#6F76A7"
-            ></path>
-          </svg>
+        <div
+          className={classes["app-selector"]}
+          onClick={appSelectorSectionHandler}
+        >
+          {selectedAppID && (
+            <img
+              src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+              width="60"
+              height="60"
+            />
+          )}
         </div>
-        <div className={classes["key-action-selector"]}>
-          <div className={classes["action-selector"]}>
+        <div className={classes["key-action-selector"]} style={selectorStyle}>
+          <div
+            className={classes["action-selector"]}
+            style={actionSelectorStyle}
+          >
             <button className={classes["action-button"]}>
               <span>Select An Action.</span>
               <img
@@ -50,7 +58,7 @@ const IntegrationAppSelector = (props) => {
       </div>
       {isAppSelectorVisible && (
         <div className={classes["app-navigation"]}>
-          <SelectionCard />
+          <SelectionCard onAppSelect={appSelectHandler} />
         </div>
       )}
     </Fragment>

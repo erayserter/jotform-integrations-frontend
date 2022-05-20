@@ -1,8 +1,13 @@
 import React, { Fragment } from "react";
+import IntegrationApp from "./Apps/IntegrationApp";
 
 import classes from "./SelectionCard.module.css";
 
 const SelectionCard = (props) => {
+  const appSelectHandler = (id) => {
+    props.onAppSelect(id);
+  };
+
   return (
     <Fragment>
       <div className={classes["app-search"]}>
@@ -13,57 +18,81 @@ const SelectionCard = (props) => {
         <input placeholder="Search Available App" />
       </div>
       <div className={classes["app-navigation"]}>
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          name="Telegram"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
-        <img
-          alt=""
-          src="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        />
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
+        />
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          appId="1"
+          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
         />
       </div>
     </Fragment>

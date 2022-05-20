@@ -23,12 +23,8 @@
 }
 
 .app-navigation {
-  padding: 0px 16px 15px;
+  padding: 15px;
   display: flex;
   gap: 10px;
   overflow: auto;
-}
-
-.app-navigation img {
-  width: 50px;
 }

@@ -12,7 +12,7 @@
   margin: 20px;
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 20px;
 }
 
 .app-selector {
@@ -21,7 +21,7 @@
   justify-content: center;
 }
 
-.app-selector svg {
+.app-selector * {
   cursor: pointer;
   background-color: #c8ceed;
   padding: 10px;
@@ -30,7 +30,11 @@
 }
 
 .key-action-selector {
-  flex-basis: 80%;
+  /* flex-basis: 80%; */
+}
+
+.action-selector {
+  display: none;
 }
 
 .action-selector button {
@@ -59,6 +63,7 @@
 }
 
 .key-selector {
+  display: none;
   margin-top: 10px;
 }
 
@@ -72,8 +77,4 @@
   padding: 0 16px;
   transition: 0.3s;
   width: 100%;
-}
-
-.app-navigation {
-  border-top: 1px solid gray;
 }
