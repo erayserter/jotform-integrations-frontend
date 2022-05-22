@@ -10,6 +10,7 @@
 }
 
 .modal-content {
+  position: relative;
   background: #fff;
   border-radius: 4px;
   left: 50%;
@@ -20,4 +21,16 @@
   -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
   width: calc(100vw - 30px);
+}
+
+.closeButton {
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  padding: 12px 12px 9px;
+  margin: 0px;
+  border-radius: 50%;
+  border-style: hidden;
+  background-color: #e3e5f5;
 }

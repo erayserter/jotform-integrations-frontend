@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 import classes from "./UserLogin.module.css";
 
@@ -14,6 +15,18 @@ const UserLogin = (props) => {
     console.log(username);
     console.log(password);
   };
+
+  if (props.isLogedIn)
+    return (
+      <Navigate
+        to={{
+          pathname: "/",
+          state: {
+            from: props.location,
+          },
+        }}
+      />
+    );
 
   return (
     <div className={classes["container"]}>

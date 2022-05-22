@@ -1,12 +1,68 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import IntegrationApp from "./Apps/IntegrationApp";
 
 import classes from "./SelectionCard.module.css";
 
+const APPS = [
+  {
+    id: "1",
+    name: "Telegram",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  },
+  {
+    id: "2",
+    name: "Whatsapp",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  },
+  {
+    id: "3",
+    name: "Google Docs",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  },
+  {
+    id: "4",
+    name: "Telegram",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  },
+  {
+    id: "5",
+    name: "Telegram",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  },
+  {
+    id: "6",
+    name: "Telegram",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  },
+  {
+    id: "7",
+    name: "Telegram",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  },
+];
+
 const SelectionCard = (props) => {
+  const [searchedWord, setSearchedWord] = useState("");
+
   const appSelectHandler = (id) => {
     props.onAppSelect(id);
   };
+
+  const fullContent = APPS.map((e) => {
+    return <IntegrationApp key={e.id} id={e.id} img={e.img} name={e.name} />;
+  });
+
+  // console.log(
+  //   APPS.map((e) => {
+  //     <IntegrationApp />;
+  //   })
+  // );
+
+  var filteredContent = APPS.filter((e) => e.name.includes(searchedWord)).map(
+    (e) => {
+      return <IntegrationApp key={e.id} id={e.id} img={e.img} name={e.name} />;
+    }
+  );
 
   return (
     <Fragment>
@@ -15,85 +71,15 @@ const SelectionCard = (props) => {
           src="https://img.icons8.com/material-outlined/384/000000/search--v1.png"
           alt=""
         />
-        <input placeholder="Search Available App" />
+        <input
+          onChange={(e) => {
+            setSearchedWord(e.target.value);
+          }}
+          placeholder="Search Available App"
+        />
       </div>
       <div className={classes["app-navigation"]}>
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          name="Telegram"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          appId="1"
-          appImg="https://img.icons8.com/color/480/000000/telegram-app--v1.png"
-        />
+        {searchedWord == "" ? fullContent : filteredContent}
       </div>
     </Fragment>
   );

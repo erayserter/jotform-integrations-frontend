@@ -15,7 +15,11 @@ function App() {
           path="/"
           element={<AppContainer isLogedIn={isLogedIn} />}
         ></Route>
-        <Route exact path="login" element={<UserLogin />}></Route>
+        <Route
+          exact
+          path="login"
+          element={<UserLogin isLogedIn={isLogedIn} />}
+        ></Route>
       </Routes>
     </BrowserRouter>
   );
