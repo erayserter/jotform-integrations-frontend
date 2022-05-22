@@ -25,6 +25,8 @@
 .app-navigation {
   padding: 15px;
   display: flex;
-  gap: 10px;
-  overflow: auto;
+  gap: 40px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }

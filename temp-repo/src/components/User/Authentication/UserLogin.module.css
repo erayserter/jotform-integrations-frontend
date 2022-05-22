@@ -1,0 +1,11 @@
+.userLogin--container {
+  width: 70%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+}
+
+.userLogin--header {
+  margin: 50px 0px 50px;
+}

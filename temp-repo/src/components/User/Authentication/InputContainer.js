@@ -1,0 +1,18 @@
+import React from "react";
+
+import classes from "./InputContainer.module.css";
+
+const InputContainer = (props) => {
+  return (
+    <div className={classes["input--container"]}>
+      <label>{props.inputLabel}</label>
+      <input
+        type={props.inputType}
+        required
+        onChange={(e) => props.setter(e.target.value)}
+      />
+    </div>
+  );
+};
+
+export default InputContainer;

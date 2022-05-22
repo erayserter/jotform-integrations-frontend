@@ -1,16 +1,23 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import AppContainer from "./components/AppContainer";
-
-import Navbar from "./components/Navbar/Navbar";
-
-import UserContent from "./components/User/Content/UserContent";
+import UserLogin from "./components/User/Authentication/UserLogin";
 
 function App() {
+  const [isLogedIn, setIsLogedIn] = useState(true);
+
   return (
-    <Router>
-      <AppContainer />
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={<AppContainer isLogedIn={isLogedIn} />}
+        ></Route>
+        <Route exact path="login" element={<UserLogin />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
 
 import classes from "./AppContainer.module.css";
 
@@ -8,19 +9,30 @@ import IntegrationContent from "./User/Integration/IntegrationContent";
 
 const AppContainer = (props) => {
   const [isIntegrationContent, setIsIntegrationContent] = useState(false);
+  // return props.isLogedIn ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
 
-  const newIntegrationHandler = (bool) => {
-    setIsIntegrationContent(bool);
-  };
+  const logedinContent = isIntegrationContent ? (
+    <IntegrationContent onNewIntegration={setIsIntegrationContent} />
+  ) : (
+    <UserContent onNewIntegration={setIsIntegrationContent} />
+  );
+
+  if (!props.isLogedIn)
+    return (
+      <Navigate
+        to={{
+          pathname: "/login",
+          state: {
+            from: props.location,
+          },
+        }}
+      />
+    );
 
   return (
     <div className={classes["container"]}>
       <Navbar />
-      {isIntegrationContent ? (
-        <IntegrationContent onNewIntegration={newIntegrationHandler} />
-      ) : (
-        <UserContent onNewIntegration={newIntegrationHandler} />
-      )}
+      {logedinContent}
     </div>
   );
 };

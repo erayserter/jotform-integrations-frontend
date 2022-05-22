@@ -1,0 +1,29 @@
+.input--container label {
+  display: block;
+}
+
+.input--container input {
+  border-radius: 4px;
+  height: 40px;
+  font-size: 16px;
+  border: solid 1px #c8ceed;
+  display: block;
+  width: 100%;
+  padding: 0 12px;
+  margin-top: 8px;
+  position: relative;
+  background-color: #fff;
+  z-index: 2;
+  font-family: Circular, -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
+    oxygen-sans, ubuntu, cantarell, "Helvetica Neue", sans-serif;
+  transition: all 0.2s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.input--container input:focus {
+  outline: 0;
+  border-color: #6a9cff;
+  box-shadow: 0 0 0 2px rgba(106, 156, 255, 0.58);
+}
