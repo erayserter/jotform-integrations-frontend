@@ -9,7 +9,6 @@ import IntegrationContent from "./User/Integration/IntegrationContent";
 
 const AppContainer = (props) => {
   const [isIntegrationContent, setIsIntegrationContent] = useState(false);
-  // return props.isLogedIn ? <Navigate to="/dashboard" /> : <Navigate to="/login" />;
 
   const logedinContent = isIntegrationContent ? (
     <IntegrationContent onNewIntegration={setIsIntegrationContent} />

@@ -1,13 +1,19 @@
 import React, { Fragment, useState } from "react";
 
 import classes from "./IntegrationAppSelector.module.css";
+import IntegrationAppSelectorDropdown from "./IntegrationAppSelectorDropdown";
 import SelectionCard from "./SelectionCard";
 
 const IntegrationAppSelector = (props) => {
   const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
+  const [isKeySelectorVisible, setIsKeySelectorVisible] = useState(false);
+
   const [selectedAppID, setSelectedAppID] = useState(null);
+  const [selectedActionID, setSelectedActionID] = useState(null);
+
   const [selectorStyle, setSelectorStyle] = useState({});
   const [actionSelectorStyle, setActionSelectorStyle] = useState({});
+  const [apiKey, setApiKey] = useState("");
 
   const appSelectorSectionHandler = (event) => {
     setIsAppSelectorVisible((prev) => !prev);
@@ -18,6 +24,11 @@ const IntegrationAppSelector = (props) => {
     setActionSelectorStyle({ display: "block" });
     setIsAppSelectorVisible(false);
     setSelectedAppID(id);
+  };
+
+  const actionSelectHandler = (id) => {
+    setSelectedActionID(id);
+    setIsKeySelectorVisible(true);
   };
 
   return (
@@ -43,17 +54,22 @@ const IntegrationAppSelector = (props) => {
             className={classes["action-selector"]}
             style={actionSelectorStyle}
           >
-            <button className={classes["action-button"]}>
-              <span>Select An Action.</span>
-              <img
-                src="https://img.icons8.com/ios-glyphs/90/000000/chevron-down.png"
-                alt=""
+            <span>Action</span>
+            <IntegrationAppSelectorDropdown
+              onActionSelect={actionSelectHandler}
+            />
+          </div>
+          {isKeySelectorVisible && (
+            <div className={classes["key-selector"]}>
+              <span>API Key</span>
+              <input
+                placeholder="API Key Here."
+                onChange={(e) => {
+                  setApiKey(e.target.value);
+                }}
               />
-            </button>
-          </div>
-          <div className={classes["key-selector"]}>
-            <input placeholder="API Key Here." />
-          </div>
+            </div>
+          )}
         </div>
       </div>
       {isAppSelectorVisible && (

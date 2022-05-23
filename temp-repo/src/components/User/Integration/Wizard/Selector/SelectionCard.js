@@ -49,18 +49,28 @@ const SelectionCard = (props) => {
   };
 
   const fullContent = APPS.map((e) => {
-    return <IntegrationApp key={e.id} id={e.id} img={e.img} name={e.name} />;
+    return (
+      <IntegrationApp
+        onAppSelect={appSelectHandler}
+        key={e.id}
+        id={e.id}
+        img={e.img}
+        name={e.name}
+      />
+    );
   });
-
-  // console.log(
-  //   APPS.map((e) => {
-  //     <IntegrationApp />;
-  //   })
-  // );
 
   var filteredContent = APPS.filter((e) => e.name.includes(searchedWord)).map(
     (e) => {
-      return <IntegrationApp key={e.id} id={e.id} img={e.img} name={e.name} />;
+      return (
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          key={e.id}
+          id={e.id}
+          img={e.img}
+          name={e.name}
+        />
+      );
     }
   );
 
