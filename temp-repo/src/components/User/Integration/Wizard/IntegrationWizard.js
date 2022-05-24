@@ -6,54 +6,123 @@ import IntegrationAppCard from "./IntegrationAppCard";
 import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 
+const APPS = [
+  {
+    id: 1,
+    name: "Jotform",
+    img: "https://cdn.jotfor.ms/assets/img/logo2021/jotform-logo.svg",
+    triggers: ["Get Submission"],
+    actions: [
+      "whatsapp action 1",
+      "whatsapp action 2",
+      "whatsapp action 3",
+      "whatsapp action 4",
+      "whatsapp action 5",
+    ],
+  },
+  {
+    id: 2,
+    name: "Telegram",
+    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+    triggers: [
+      "tele trigger 1",
+      "tele trriger 2",
+      "tele trriger 3",
+      "tele trriger 4",
+      "tele trriger 5",
+    ],
+    actions: [
+      "tele action 1",
+      "tele action 2",
+      "tele action 3",
+      "tele action 4",
+      "tele action 5",
+    ],
+  },
+];
+
 const IntegrationWizard = (props) => {
   const [appType, setAppType] = useState("Source");
-  const [reversed, setReversed] = useState(false);
   const [isIntegrationChoice, setIsIntegrationChoice] = useState(false);
+  const [selectedDatas, setSelectedDatas] = useState({
+    source: [null, null, null],
+    destination: [null, null, null],
+  });
 
   const modalClickRef = useRef();
 
   const integrationChoiceHandler = (bool, type) => {
-    setIsIntegrationChoice(bool);
     setAppType(type);
+    setIsIntegrationChoice(bool);
+  };
+
+  const cards = {
+    source: (
+      <IntegrationAppCard
+        apps={APPS}
+        onClick={integrationChoiceHandler}
+        datas={selectedDatas.source}
+        type="Source"
+      />
+    ),
+    destination: (
+      <IntegrationAppCard
+        apps={APPS}
+        onClick={integrationChoiceHandler}
+        datas={selectedDatas.destination}
+        type="Destination"
+      />
+    ),
   };
 
   const switchHandler = (event) => {
-    setReversed((prev) => {
-      return !prev;
+    setSelectedDatas((prev) => {
+      return {
+        source: [prev.destination[0], "", prev.destination[2]],
+        destination: [prev.source[0], "", prev.source[2]],
+      };
     });
+  };
+
+  const authHandler = (datas, type) => {
+    if (type === "Source")
+      setSelectedDatas((prev) => {
+        return {
+          source: datas,
+          destination: prev.destination,
+        };
+      });
+    else
+      setSelectedDatas((prev) => {
+        return {
+          source: prev.source,
+          destination: datas,
+        };
+      });
+    setIsIntegrationChoice(false);
   };
 
   return (
     <div className={classes["wizard"]}>
-      {reversed ? (
-        <IntegrationAppCard onClick={integrationChoiceHandler} type="Source" />
-      ) : (
-        <IntegrationAppCard onClick={integrationChoiceHandler} type="Source" />
-      )}
+      {cards.source}
       <div className={classes["switch-icon"]} onClick={switchHandler}>
         <img
           src="https://img.icons8.com/ios-glyphs/100/000000/refresh--v2.png"
           alt=""
         />
       </div>
-      {!reversed ? (
-        <IntegrationAppCard
-          onClick={integrationChoiceHandler}
-          type="Destination"
-        />
-      ) : (
-        <IntegrationAppCard
-          onClick={integrationChoiceHandler}
-          type="Destination"
-        />
-      )}
+      {cards.destination}
       {isIntegrationChoice && (
         <ModalBox
           onIntegrationChoice={integrationChoiceHandler}
           ref={modalClickRef}
         >
-          <IntegrationAppSelector type={appType} />
+          <IntegrationAppSelector
+            apps={APPS}
+            onAuthenticate={authHandler}
+            type={appType}
+            datas={selectedDatas}
+          />
         </ModalBox>
       )}
     </div>

@@ -10,6 +10,7 @@
 
 .app-layout-body {
   margin: 20px;
+  margin-bottom: 35px;
   display: flex;
   align-items: center;
   gap: 20px;
@@ -30,12 +31,11 @@
 }
 
 .key-action-selector {
-  /* flex-basis: 80%; */
+  flex-basis: 85%;
 }
 
 .action-selector {
   position: relative;
-  display: none;
 }
 
 .action-selector > span {
@@ -50,7 +50,12 @@
   padding-left: 16px;
 }
 
-.key-selector input {
+.key-input {
+  display: flex;
+  justify-content: space-between;
+}
+
+.key-input input {
   border: 1px solid #c8ceed;
   border-radius: 4px;
   color: #0a1551;
@@ -59,5 +64,28 @@
   height: 40px;
   padding: 0 16px;
   transition: 0.3s;
-  width: 100%;
+  flex-basis: 70%;
+  display: block;
+}
+
+.key-input button {
+  flex-basis: 25%;
+  background-color: #78bb07;
+  color: #fff;
+  align-items: center;
+  border: 1px solid #b8b9c9;
+  border-radius: 4px;
+  display: flex;
+  font-size: 1rem;
+  height: 40px;
+  justify-content: center;
+  min-width: 110px;
+  padding: 0 16px 2px;
+  text-align: center;
+  text-transform: uppercase;
+  transition: 0.3s;
+}
+
+.key-input button:hover {
+  background-color: #68a206;
 }

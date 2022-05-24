@@ -6,14 +6,30 @@ import classes from "./UserLogin.module.css";
 import InputContainer from "./InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
+async function loginUser(credentials) {
+  return fetch("https://b-ersoz.jotform.dev/intern-api/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+}
+
 const UserLogin = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const clickHandler = (event) => {
-    event.preventDefault();
-    console.log(username);
-    console.log(password);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const res = await loginUser({
+      login_info: username,
+      password: password,
+    });
+    if (res.content.status == 1) {
+      props.onSignIn(true);
+      // console.log(res);
+    }
   };
 
   if (props.isLogedIn)
@@ -45,7 +61,7 @@ const UserLogin = (props) => {
               inputType="password"
               setter={setPassword}
             />
-            <button onClick={clickHandler}>Submit</button>
+            <button onClick={handleSubmit}>Submit</button>
           </form>
         </div>
       </div>
