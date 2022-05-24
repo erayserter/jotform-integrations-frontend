@@ -37,13 +37,14 @@ const IntegrationAppSelector = (props) => {
   };
 
   const authHandler = async (event) => {
-    props.onAuthenticate([selectedAppID, selectedAction, apiKey], props.type);
-    const app = props.apps.filter((e) => e.id === selectedAppID);
+    const app = props.apps.filter((e) => e.id === selectedAppID)[0];
     const res = await validateApiKey({
       app_name: app.name,
       action: selectedAction,
       api_key: apiKey,
     });
+    if (res.content.status == 200)
+      props.onAuthenticate([selectedAppID, selectedAction, apiKey], props.type);
   };
 
   useEffect(() => {
@@ -61,8 +62,6 @@ const IntegrationAppSelector = (props) => {
       setIsKeySelectorVisible(true);
     }
   }, [props.datas, props.type]);
-
-  console.log(props.apps);
 
   return (
     <Fragment>

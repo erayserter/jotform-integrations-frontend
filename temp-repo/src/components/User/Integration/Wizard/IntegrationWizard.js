@@ -43,7 +43,10 @@ const APPS = [
 
 const IntegrationWizard = (props) => {
   const [appType, setAppType] = useState("Source");
+
   const [isIntegrationChoice, setIsIntegrationChoice] = useState(false);
+  const [isAuthenticationsValid, setIsAuthenticationsValid] = useState(false);
+
   const [selectedDatas, setSelectedDatas] = useState({
     source: [null, null, null],
     destination: [null, null, null],
@@ -100,30 +103,55 @@ const IntegrationWizard = (props) => {
         };
       });
     setIsIntegrationChoice(false);
+
+    console.log(datas);
+
+    setIsAuthenticationsValid(true);
+    for (const [index, [key, value]] of Object.entries(
+      Object.entries(selectedDatas)
+    )) {
+      if (value[1] == null && key != type.toLowerCase())
+        setIsAuthenticationsValid(false);
+    }
   };
+
+  const settingsHandler = (e) => {};
 
   return (
     <div className={classes["wizard"]}>
-      {cards.source}
-      <div className={classes["switch-icon"]} onClick={switchHandler}>
-        <img
-          src="https://img.icons8.com/ios-glyphs/100/000000/refresh--v2.png"
-          alt=""
-        />
-      </div>
-      {cards.destination}
-      {isIntegrationChoice && (
-        <ModalBox
-          onIntegrationChoice={integrationChoiceHandler}
-          ref={modalClickRef}
-        >
-          <IntegrationAppSelector
-            apps={APPS}
-            onAuthenticate={authHandler}
-            type={appType}
-            datas={selectedDatas}
+      <div className={classes["cards"]}>
+        {cards.source}
+        <div className={classes["switch-icon"]} onClick={switchHandler}>
+          <img
+            src="https://img.icons8.com/ios-glyphs/100/000000/refresh--v2.png"
+            alt=""
           />
-        </ModalBox>
+        </div>
+        {cards.destination}
+
+        {isIntegrationChoice && (
+          <ModalBox
+            onIntegrationChoice={integrationChoiceHandler}
+            ref={modalClickRef}
+          >
+            <IntegrationAppSelector
+              apps={APPS}
+              onAuthenticate={authHandler}
+              type={appType}
+              datas={selectedDatas}
+            />
+          </ModalBox>
+        )}
+      </div>
+      {isAuthenticationsValid && (
+        <div className={classes["settingContainer"]}>
+          <button
+            className={classes["settingsButton"]}
+            onClick={settingsHandler}
+          >
+            Settings
+          </button>
+        </div>
       )}
     </div>
   );

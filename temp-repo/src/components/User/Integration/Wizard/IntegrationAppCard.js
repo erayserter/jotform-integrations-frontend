@@ -7,8 +7,6 @@ const IntegrationAppCard = (props) => {
     props.onClick(true, props.type);
   };
 
-  console.log(props.apps[props.datas[0] - 1]);
-
   return (
     <div className={classes["container"]} onClick={clickHandler}>
       <div className={classes["card"]}>
