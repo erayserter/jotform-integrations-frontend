@@ -10,7 +10,7 @@ const APPS = [
   {
     id: 1,
     name: "Jotform",
-    img: "https://cdn.jotfor.ms/assets/img/logo2021/jotform-logo.svg",
+    img: "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg",
     triggers: ["Get Submission"],
     actions: [
       "whatsapp action 1",
@@ -31,15 +31,25 @@ const APPS = [
       "tele trriger 4",
       "tele trriger 5",
     ],
-    actions: [
-      "tele action 1",
-      "tele action 2",
-      "tele action 3",
-      "tele action 4",
-      "tele action 5",
-    ],
+    actions: ["Send Message"],
   },
 ];
+
+const getForms = async (apiKey) => {
+  return fetch(
+    "https://b-ersoz.jotform.dev/intern-api/getForms?apiKey=" + apiKey
+  ).then((data) => data.json());
+};
+
+const createIntegration = async (credentials) => {
+  return await fetch("https://b-ersoz.jotform.dev/intern-api/webhook", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+};
 
 const IntegrationWizard = (props) => {
   const [appType, setAppType] = useState("Source");
@@ -50,6 +60,10 @@ const IntegrationWizard = (props) => {
   const [selectedDatas, setSelectedDatas] = useState({
     source: [null, null, null],
     destination: [null, null, null],
+  });
+  const [selectedSettings, setSelectedSettings] = useState({
+    Source: {},
+    Destination: {},
   });
 
   const modalClickRef = useRef();
@@ -85,6 +99,7 @@ const IntegrationWizard = (props) => {
         destination: [prev.source[0], "", prev.source[2]],
       };
     });
+    setSelectedSettings({ Source: {}, Destination: {} });
   };
 
   const authHandler = (datas, type) => {
@@ -102,20 +117,50 @@ const IntegrationWizard = (props) => {
           destination: datas,
         };
       });
-    setIsIntegrationChoice(false);
-
-    console.log(datas);
-
-    setIsAuthenticationsValid(true);
-    for (const [index, [key, value]] of Object.entries(
-      Object.entries(selectedDatas)
-    )) {
-      if (value[1] == null && key != type.toLowerCase())
-        setIsAuthenticationsValid(false);
-    }
   };
 
-  const settingsHandler = (e) => {};
+  const saveHandler = (values, type) => {
+    // console.log(values);
+    setSelectedSettings((prev) => {
+      return { ...prev, [type]: values };
+    });
+
+    for (const key in selectedSettings) {
+      setIsAuthenticationsValid(true);
+      if (
+        Object.keys(selectedSettings[key]).length === 0 &&
+        selectedSettings[key].constructor === Object &&
+        key !== type
+      ) {
+        setIsAuthenticationsValid(false);
+      }
+    }
+    setIsIntegrationChoice(false);
+  };
+
+  const integrateHandler = (event) => {
+    const source_app = APPS.filter((e) => {
+      return e.id === selectedDatas.source[0];
+    })[0];
+    const destination_app = APPS.filter((e) => {
+      return e.id === selectedDatas.destination[0];
+    })[0];
+
+    const res = createIntegration({
+      Source: {
+        app_name: source_app.name,
+        app_action: selectedDatas.source[1],
+        settings: selectedDatas.source,
+      },
+      Destination: {
+        app_name: destination_app.name,
+        app_action: selectedDatas.destination[1],
+        settings: selectedDatas.destination,
+      },
+    });
+
+    props.onNewIntegration();
+  };
 
   return (
     <div className={classes["wizard"]}>
@@ -137,8 +182,10 @@ const IntegrationWizard = (props) => {
             <IntegrationAppSelector
               apps={APPS}
               onAuthenticate={authHandler}
+              onSave={saveHandler}
               type={appType}
               datas={selectedDatas}
+              settingsData={selectedSettings}
             />
           </ModalBox>
         )}
@@ -147,9 +194,9 @@ const IntegrationWizard = (props) => {
         <div className={classes["settingContainer"]}>
           <button
             className={classes["settingsButton"]}
-            onClick={settingsHandler}
+            onClick={integrateHandler}
           >
-            Settings
+            Integrate
           </button>
         </div>
       )}

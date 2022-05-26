@@ -9,7 +9,7 @@
 }
 
 .navbar--logo {
-  padding-left: 8px;
+  /* padding-left: 3px; */
   /* background-color: aqua; */
 }
 
@@ -19,8 +19,13 @@
 }
 
 .navbar--profile {
-  padding-right: 24px;
+  padding-right: 20px;
   /* background-color: red; */
+}
+
+.navbar--profile img {
+  border: 2px solid #47507d;
+  border-radius: 50%;
 }
 
 .navbar--navigation ul {

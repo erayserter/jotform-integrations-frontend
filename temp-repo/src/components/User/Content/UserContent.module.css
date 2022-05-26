@@ -43,17 +43,33 @@
 }
 
 .user--sectionsearch {
+  display: flex;
   background-color: #fff;
   border-bottom: 1px solid #c8ceed;
-  padding: 8px 5px 7.5px;
+  padding: 8.5px 5px 8.5px;
+
+  justify-content: flex-end;
 }
 
 .user--sectionsearch button {
-  padding: 14px;
-  margin-right: 5px;
   background-color: #fff;
   border: 1px solid #d8dae9;
   border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.125rem;
+  min-height: 44px;
+  outline: none;
+  padding: 12px;
+  background: transparent;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='21' height='15' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232B3245'%3E%3Crect width='12.954' height='2.1' rx='1.05'/%3E%3Crect y='4.05' width='10.5' height='2.1' rx='1.05'/%3E%3Cpath d='M1.05 8.1H6.3a1.05 1.05 0 1 1 0 2.1H1.05a1.05 1.05 0 1 1 0-2.1zm0 4.05H4.2a1.05 1.05 0 1 1 0 2.1H1.05a1.05 1.05 0 1 1 0-2.1zM15.798 14.72a.81.81 0 0 0 .625-.267l3.465-3.464a.884.884 0 0 0-1.25-1.25l-1.947 1.946V.893a.893.893 0 0 0-1.786 0v10.792L12.96 9.739a.884.884 0 1 0-1.25 1.25l3.464 3.464a.81.81 0 0 0 .625.268z'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: 10px;
+  background-repeat: no-repeat;
+  box-shadow: none;
+  color: #252d5b;
+  font-weight: 600;
+  margin: 0 5px;
+  padding-left: 35px !important;
+  text-shadow: none;
 }
 
 .user--sectionsearch button:hover {
@@ -61,11 +77,28 @@
 }
 
 .user--sectionsearch input {
-  padding: 14px;
   background-color: #f3f3fe;
-  color: #6f76a7;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.875 6.688a4.818 4.818 0 0 1 4.813-4.813A4.818 4.818 0 0 1 11.5 6.688 4.819 4.819 0 0 1 6.687 11.5a4.818 4.818 0 0 1-4.812-4.813zm12.996 7.565-3.869-3.87a5.664 5.664 0 0 0 1.373-3.695A5.694 5.694 0 0 0 6.687 1 5.694 5.694 0 0 0 1 6.688a5.694 5.694 0 0 0 5.688 5.687c1.41 0 2.7-.52 3.696-1.373l3.869 3.87a.438.438 0 1 0 .619-.62z' fill='%236F76A7' stroke='%236F76A7'/%3E%3C/svg%3E");
+  background-position: left 10px center;
+  background-repeat: no-repeat;
   border: 1px solid #f3f3fe;
   border-radius: 4px;
+  color: #6f76a7;
+  display: block;
+  font-weight: 400;
+  font-size: 14px;
+  min-height: 38px;
+  padding: 13px 36px;
+  transition: 0.3s;
+  margin: 0 17px 0 5px;
+  min-width: 240px;
+  position: relative;
+}
+
+.user--sectionsearch input::placeholder {
+  color: #6f76a7;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .user--sectionsearch input:hover {

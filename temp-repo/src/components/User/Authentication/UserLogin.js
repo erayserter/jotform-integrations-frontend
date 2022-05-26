@@ -3,11 +3,11 @@ import { Navigate } from "react-router-dom";
 
 import classes from "./UserLogin.module.css";
 
-import InputContainer from "./InputContainer";
+import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
 async function loginUser(credentials) {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/login", {
+  return fetch("http://b-ersoz.jotform.dev/intern-api/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -28,7 +28,6 @@ const UserLogin = (props) => {
     });
     if (res.content.status == 1) {
       props.onSignIn(true);
-      // console.log(res);
     }
   };
 
@@ -54,12 +53,18 @@ const UserLogin = (props) => {
             <InputContainer
               inputLabel="Username"
               inputType="text"
-              setter={setUsername}
+              setter={(l, t, v) => {
+                setUsername(v);
+              }}
+              default={username}
             />
             <InputContainer
               inputLabel="Password"
               inputType="password"
-              setter={setPassword}
+              setter={(l, t, v) => {
+                setPassword(v);
+              }}
+              default={password}
             />
             <button onClick={handleSubmit}>Submit</button>
           </form>

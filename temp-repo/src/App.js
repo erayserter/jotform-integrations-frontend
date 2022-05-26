@@ -11,13 +11,10 @@ async function alreadyLoggedIn() {
 }
 
 function App() {
-  const [isLogedIn, setIsLogedIn] = useState(false);
+  const [isLogedIn, setIsLogedIn] = useState(true);
 
   useEffect(() => {
-    const res = alreadyLoggedIn().then((value) => {
-      // console.log(value);
-      // if (value.content.status > 0) setIsLogedIn(true);
-    });
+    // const res = alreadyLoggedIn().then((value) => {});
   }, []);
 
   return (

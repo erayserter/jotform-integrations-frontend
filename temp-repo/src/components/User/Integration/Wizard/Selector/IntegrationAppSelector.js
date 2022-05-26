@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Select from "react-select";
+import IntegrationSettings from "../Settings/IntegrationSettings";
 
 import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
@@ -17,6 +18,7 @@ async function validateApiKey(credentials) {
 const IntegrationAppSelector = (props) => {
   const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
   const [isKeySelectorVisible, setIsKeySelectorVisible] = useState(false);
+  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
 
   const [selectedAppID, setSelectedAppID] = useState(null);
   const [selectedAction, setSelectedAction] = useState("");
@@ -36,32 +38,46 @@ const IntegrationAppSelector = (props) => {
     setIsKeySelectorVisible(true);
   };
 
+  const saveHandler = (values) => {
+    // console.log(values);
+    props.onSave(values, props.type);
+  };
+
   const authHandler = async (event) => {
     const app = props.apps.filter((e) => e.id === selectedAppID)[0];
-    const res = await validateApiKey({
-      app_name: app.name,
-      action: selectedAction,
-      api_key: apiKey,
-    });
-    if (res.content.status == 200)
-      props.onAuthenticate([selectedAppID, selectedAction, apiKey], props.type);
+    // const res = await validateApiKey({
+    //   app_name: app.name,
+    //   action: selectedAction,
+    //   api_key: apiKey,
+    // });
+    // if (res.content.status == 200) {
+    props.onAuthenticate([selectedAppID, selectedAction, apiKey], props.type);
+    setIsSettingsVisible(true);
+    // }
   };
 
   useEffect(() => {
-    if (props.type === "Source" && props.datas.source[0] != null) {
+    if (props.type === "Source" && props.datas.source[0] !== null) {
       setSelectedAppID(props.datas.source[0]);
       setSelectedAction(props.datas.source[1]);
       setApiKey(props.datas.source[2]);
       setIsAppSelectorVisible(false);
       setIsKeySelectorVisible(true);
-    } else if (props.datas.destination[0] != null) {
+      setIsSettingsVisible(true);
+    } else if (
+      props.type === "Destination" &&
+      props.datas.destination[0] != null
+    ) {
       setSelectedAppID(props.datas.destination[0]);
       setSelectedAction(props.datas.destination[1]);
       setApiKey(props.datas.destination[2]);
       setIsAppSelectorVisible(false);
       setIsKeySelectorVisible(true);
+      setIsSettingsVisible(true);
     }
   }, [props.datas, props.type]);
+
+  const app = props.apps.filter((e) => e.id === selectedAppID)[0];
 
   return (
     <Fragment>
@@ -73,13 +89,7 @@ const IntegrationAppSelector = (props) => {
           className={classes["app-selector"]}
           onClick={appSelectorSectionHandler}
         >
-          {selectedAppID && (
-            <img
-              src={props.apps.filter((e) => e.id === selectedAppID)[0].img}
-              width="60"
-              height="60"
-            />
-          )}
+          {selectedAppID && <img src={app.img} width="60" height="60" />}
         </div>
         <div className={classes["key-action-selector"]}>
           {selectedAppID && (
@@ -93,16 +103,12 @@ const IntegrationAppSelector = (props) => {
                 name="actions"
                 options={
                   props.type === "Source"
-                    ? props.apps
-                        .filter((e) => e.id === selectedAppID)[0]
-                        .triggers.map((e) => {
-                          return { value: e, label: e };
-                        })
-                    : props.apps
-                        .filter((e) => e.id === selectedAppID)[0]
-                        .actions.map((e) => {
-                          return { value: e, label: e };
-                        })
+                    ? app.triggers.map((e) => {
+                        return { value: e, label: e };
+                      })
+                    : app.actions.map((e) => {
+                        return { value: e, label: e };
+                      })
                 }
                 styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                 menuPortalTarget={document.body}
@@ -137,6 +143,14 @@ const IntegrationAppSelector = (props) => {
           )}
         </div>
       </div>
+      {isSettingsVisible && (
+        <IntegrationSettings
+          appName={app.name}
+          appAction={selectedAction}
+          onSave={saveHandler}
+          settingsData={props.settingsData[props.type]}
+        />
+      )}
       {isAppSelectorVisible && (
         <div className={classes["app-navigation"]}>
           <SelectionCard apps={props.apps} onAppSelect={appSelectHandler} />

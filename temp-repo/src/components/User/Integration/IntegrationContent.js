@@ -13,7 +13,7 @@ const IntegrationContent = (props) => {
     <div className={classes["container"]}>
       <div className={classes["content-wrapper"]}>
         <IntegrationHeader />
-        <IntegrationWizard />
+        <IntegrationWizard onNewIntegration={integrationClickHandler} />
       </div>
       <button
         className={classes["closeButton"]}

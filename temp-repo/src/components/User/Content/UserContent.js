@@ -50,7 +50,7 @@ const UserContent = (props) => {
       </div>
       <div className={classes["user--section"]}>
         <div className={classes["user--sectionsearch"]}>
-          <button>Sort by Title</button>
+          <button>Title [a-z]</button>
           <input type="text" placeholder="Search Integration" />
         </div>
         <UserContentSection content={sectionContent} />

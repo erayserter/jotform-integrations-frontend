@@ -8,7 +8,11 @@ function Navbar(props) {
     <header className={classes["navbar"]}>
       <div className={classes["navbar--logo"]}>
         <Link to="/">
-          <img src="" alt="Logo" height={167} />
+          <img
+            src="https://www.jotform.com/resources/assets/svg/jotform-icon-dark.svg"
+            alt="Logo"
+            height="70"
+          />
         </Link>
       </div>
       <div className={classes["navbar--navigation"]}>
@@ -19,7 +23,11 @@ function Navbar(props) {
         </ul>
       </div>
       <div className={classes["navbar--profile"]}>
-        <img src="" alt="User Image" />
+        <img
+          src="https://pbs.twimg.com/profile_images/1143923112389632002/FZdo7wSi_400x400.png"
+          alt="User Image"
+          height="50"
+        />
       </div>
     </header>
   );
