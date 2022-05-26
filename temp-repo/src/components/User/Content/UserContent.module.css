@@ -109,6 +109,10 @@
   padding: 0px 12px;
 }
 
+.user--sidebarmenu li {
+  border-bottom: 1px solid rgb(223, 223, 227);
+}
+
 .user--sidebarmenu button {
   border: 1px solid #f3f3fe;
   border-radius: 4px;
@@ -116,7 +120,7 @@
   text-align: left;
   background-color: #f3f3fe;
   padding: 11px 14px;
-  margin: 1px;
+  margin: 17.5px 0px;
   width: 100%;
 }
 

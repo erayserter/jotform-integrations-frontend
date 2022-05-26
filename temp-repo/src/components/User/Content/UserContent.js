@@ -36,12 +36,10 @@ const UserContent = (props) => {
             {LIST_ITEMS.map((item) => {
               return (
                 <li key={item}>
-                  <div className={classes["user--navigationitem"]}>
-                    <UserContentNavigationItem
-                      title={item}
-                      sectionChange={sectionContentHandler}
-                    />
-                  </div>
+                  <UserContentNavigationItem
+                    title={item}
+                    sectionChange={sectionContentHandler}
+                  />
                 </li>
               );
             })}

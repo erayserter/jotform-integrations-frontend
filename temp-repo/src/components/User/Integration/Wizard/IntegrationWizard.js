@@ -33,6 +33,45 @@ const APPS = [
     ],
     actions: ["Send Message"],
   },
+  // {
+  //   id: 3,
+  //   name: "Telegram",
+  //   img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  //   triggers: [
+  //     "Telegram trigger 1",
+  //     "Telegram trigger 2",
+  //     "Telegram trigger 3",
+  //     "Telegram trigger 4",
+  //     "Telegram trigger 5",
+  //   ],
+  //   actions: ["Send Message"],
+  // },
+  // {
+  //   id: 4,
+  //   name: "Telegram",
+  //   img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  //   triggers: [
+  //     "Telegram trigger 1",
+  //     "Telegram trigger 2",
+  //     "Telegram trigger 3",
+  //     "Telegram trigger 4",
+  //     "Telegram trigger 5",
+  //   ],
+  //   actions: ["Send Message"],
+  // },
+  // {
+  //   id: 5,
+  //   name: "Telegram",
+  //   img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+  //   triggers: [
+  //     "Telegram trigger 1",
+  //     "Telegram trigger 2",
+  //     "Telegram trigger 3",
+  //     "Telegram trigger 4",
+  //     "Telegram trigger 5",
+  //   ],
+  //   actions: ["Send Message"],
+  // },
 ];
 
 const getForms = async (apiKey) => {
@@ -147,17 +186,23 @@ const IntegrationWizard = (props) => {
     })[0];
 
     const allData = {
-      Source: {
+      source: {
         app_name: source_app.name,
         app_action: selectedDatas.source[1],
+        api_key: selectedDatas.source[2],
         settings: selectedSettings.Source,
       },
-      Destination: {
+      destination: {
         app_name: destination_app.name,
         app_action: selectedDatas.destination[1],
+        api_key: selectedDatas.destination[2],
         settings: selectedSettings.Destination,
       },
+      action: "create",
     };
+
+    console.log(selectedSettings.Source);
+    console.log(selectedSettings.Destination);
 
     const res = createIntegration(allData);
 

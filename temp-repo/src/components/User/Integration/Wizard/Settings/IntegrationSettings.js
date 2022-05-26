@@ -12,6 +12,7 @@ const appSettings = {
       {
         label: "Choose Form",
         type: "Select",
+        selection: "form_id",
         data: [
           { value: "form1", label: "FORM 1" },
           { value: "form2", label: "FORM 2" },
@@ -29,9 +30,11 @@ const appSettings = {
       {
         label: "Chat ID",
         type: "text",
+        selection: "chat_id",
       },
       {
         label: "Text",
+        selection: "text",
         type: "tagInput",
       },
     ],
@@ -88,7 +91,7 @@ const IntegrationSettings = (props) => {
         if (e.type === "Select")
           return (
             <Select
-              key={e.label}
+              key={e.selection}
               className="basic-single"
               classNamePrefix="select"
               isClearable={true}
@@ -99,12 +102,12 @@ const IntegrationSettings = (props) => {
               menuPortalTarget={document.body}
               menuPlacement="bottom"
               onChange={(event) => {
-                newValueHandler(e.label, e.type, event.value);
+                newValueHandler(e.selection, e.type, event.value);
               }}
               defaultValue={
-                inputValues[e.label] &&
+                inputValues[e.selection] &&
                 e.data.filter((element) => {
-                  return element.value === inputValues[e.label];
+                  return element.value === inputValues[e.selection];
                 })[0]
               }
             />
@@ -112,22 +115,22 @@ const IntegrationSettings = (props) => {
         else if (e.type == "tagInput")
           return (
             <TagInputContainer
-              key={e.label}
+              key={e.selection}
               label={e.label}
               onChange={(value) => {
-                newValueHandler(e.label, e.type, value);
+                newValueHandler(e.selection, e.type, value);
               }}
-              defaultValue={inputValues[e.label]}
+              defaultValue={inputValues[e.selection]}
             />
           );
         else
           return (
             <InputContainer
-              key={e.label}
+              key={e.selection}
               inputLabel={e.label}
               inputType={e.type}
-              setter={newValueHandler}
-              default={inputValues[e.label]}
+              setter={(value) => newValueHandler(e.selection, e.type, value)}
+              default={inputValues[e.selection]}
             />
           );
       })}

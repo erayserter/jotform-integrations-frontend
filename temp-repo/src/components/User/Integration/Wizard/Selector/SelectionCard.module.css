@@ -23,9 +23,18 @@
 }
 
 .app-navigation {
-  padding: 15px 100px 55px;
+  padding: 15px 50px 55px;
+}
+
+.app-navigation ul {
   display: flex;
-  gap: 40px 20%;
+  gap: 40px 0px;
   flex-wrap: wrap;
   align-items: center;
+}
+
+.app-navigation ul li {
+  flex-basis: 25%;
+  display: flex;
+  justify-content: center;
 }

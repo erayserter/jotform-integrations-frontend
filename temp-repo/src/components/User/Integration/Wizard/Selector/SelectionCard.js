@@ -12,13 +12,14 @@ const SelectionCard = (props) => {
 
   const fullContent = props.apps.map((e) => {
     return (
-      <IntegrationApp
-        onAppSelect={appSelectHandler}
-        key={e.id}
-        id={e.id}
-        img={e.img}
-        name={e.name}
-      />
+      <li key={e.id}>
+        <IntegrationApp
+          onAppSelect={appSelectHandler}
+          id={e.id}
+          img={e.img}
+          name={e.name}
+        />
+      </li>
     );
   });
 
@@ -26,13 +27,14 @@ const SelectionCard = (props) => {
     .filter((e) => e.name.includes(searchedWord))
     .map((e) => {
       return (
-        <IntegrationApp
-          onAppSelect={appSelectHandler}
-          key={e.id}
-          id={e.id}
-          img={e.img}
-          name={e.name}
-        />
+        <li key={e.id}>
+          <IntegrationApp
+            onAppSelect={appSelectHandler}
+            id={e.id}
+            img={e.img}
+            name={e.name}
+          />
+        </li>
       );
     });
 
@@ -51,7 +53,7 @@ const SelectionCard = (props) => {
         />
       </div>
       <div className={classes["app-navigation"]}>
-        {searchedWord == "" ? fullContent : filteredContent}
+        <ul>{searchedWord == "" ? fullContent : filteredContent}</ul>
       </div>
     </Fragment>
   );

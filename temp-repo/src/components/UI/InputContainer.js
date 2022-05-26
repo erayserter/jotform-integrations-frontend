@@ -10,9 +10,7 @@ const InputContainer = (props) => {
         type={props.inputType}
         required
         value={props.default || ""}
-        onChange={(e) =>
-          props.setter(props.inputLabel, props.inputType, e.target.value)
-        }
+        onChange={(e) => props.setter(e.target.value)}
       />
     </div>
   );

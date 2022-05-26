@@ -1,9 +1,13 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .app-image {
   cursor: pointer;
   width: 50px;
   display: block;
-  justify-content: center;
-}
-
-.app-container img {
 }
