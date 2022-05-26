@@ -16,14 +16,11 @@ const AppContainer = (props) => {
     <UserContent onNewIntegration={setIsIntegrationContent} />
   );
 
-  if (!props.isLogedIn)
+  if (!props.isLoggedIn)
     return (
       <Navigate
         to={{
           pathname: "/login",
-          state: {
-            from: props.location,
-          },
         }}
       />
     );

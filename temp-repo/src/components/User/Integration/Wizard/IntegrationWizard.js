@@ -13,11 +13,11 @@ const APPS = [
     img: "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg",
     triggers: ["Get Submission"],
     actions: [
-      "whatsapp action 1",
-      "whatsapp action 2",
-      "whatsapp action 3",
-      "whatsapp action 4",
-      "whatsapp action 5",
+      "Jotform action 1",
+      "Jotform action 2",
+      "Jotform action 3",
+      "Jotform action 4",
+      "Jotform action 5",
     ],
   },
   {
@@ -25,11 +25,11 @@ const APPS = [
     name: "Telegram",
     img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
     triggers: [
-      "tele trigger 1",
-      "tele trriger 2",
-      "tele trriger 3",
-      "tele trriger 4",
-      "tele trriger 5",
+      "Telegram trigger 1",
+      "Telegram trigger 2",
+      "Telegram trigger 3",
+      "Telegram trigger 4",
+      "Telegram trigger 5",
     ],
     actions: ["Send Message"],
   },
@@ -146,18 +146,20 @@ const IntegrationWizard = (props) => {
       return e.id === selectedDatas.destination[0];
     })[0];
 
-    const res = createIntegration({
+    const allData = {
       Source: {
         app_name: source_app.name,
         app_action: selectedDatas.source[1],
-        settings: selectedDatas.source,
+        settings: selectedSettings.Source,
       },
       Destination: {
         app_name: destination_app.name,
         app_action: selectedDatas.destination[1],
-        settings: selectedDatas.destination,
+        settings: selectedSettings.Destination,
       },
-    });
+    };
+
+    const res = createIntegration(allData);
 
     props.onNewIntegration();
   };

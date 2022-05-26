@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Tags from "@yaireo/tagify";
 import Select from "react-select";
 
 import InputContainer from "../../../../UI/InputContainer";
+import TagInputContainer from "../../../../UI/TagInputContainer";
 
 import classes from "./IntegrationSettings.module.css";
 
@@ -30,10 +30,6 @@ const appSettings = {
         label: "Chat ID",
         type: "text",
       },
-      // {
-      //   label: "Text",
-      //   type: "text",
-      // },
       {
         label: "Text",
         type: "tagInput",
@@ -61,7 +57,6 @@ const IntegrationSettings = (props) => {
       Object.keys(props.settingsData).length !== 0 ||
       props.settingsData.constructor !== Object
     ) {
-      // console.log(props.settingsData);
       setInputValues(props.settingsData);
     }
   }, []);
@@ -75,6 +70,16 @@ const IntegrationSettings = (props) => {
   const saveHandler = (event) => {
     props.onSave(inputValues);
   };
+
+  // console.log(
+  //   inputValues[appSettings[props.appName][props.appAction][0].label] &&
+  //     appSettings[props.appName][props.appAction][0].data.filter((element) => {
+  //       return (
+  //         element.value ===
+  //         inputValues[appSettings[props.appName][props.appAction][0].label]
+  //       );
+  //     })[0]
+  // );
 
   return (
     <div className={classes["settings--container"]}>
@@ -104,6 +109,17 @@ const IntegrationSettings = (props) => {
               }
             />
           );
+        else if (e.type == "tagInput")
+          return (
+            <TagInputContainer
+              key={e.label}
+              label={e.label}
+              onChange={(value) => {
+                newValueHandler(e.label, e.type, value);
+              }}
+              defaultValue={inputValues[e.label]}
+            />
+          );
         else
           return (
             <InputContainer
@@ -114,10 +130,6 @@ const IntegrationSettings = (props) => {
               default={inputValues[e.label]}
             />
           );
-        // else
-        //   return (
-        //     <Tags key={e.label} mode="textarea" settings={tagifySettings} />
-        //   );
       })}
       <button onClick={saveHandler}>Save Settings</button>
     </div>

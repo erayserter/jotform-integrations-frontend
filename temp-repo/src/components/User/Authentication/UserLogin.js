@@ -31,14 +31,11 @@ const UserLogin = (props) => {
     }
   };
 
-  if (props.isLogedIn)
+  if (props.isLoggedIn)
     return (
       <Navigate
         to={{
           pathname: "/",
-          state: {
-            from: props.location,
-          },
         }}
       />
     );

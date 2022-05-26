@@ -11,7 +11,7 @@ async function alreadyLoggedIn() {
 }
 
 function App() {
-  const [isLogedIn, setIsLogedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   useEffect(() => {
     // const res = alreadyLoggedIn().then((value) => {});
@@ -23,12 +23,14 @@ function App() {
         <Route
           exact
           path="/"
-          element={<AppContainer isLogedIn={isLogedIn} />}
+          element={<AppContainer isLoggedIn={isLoggedIn} />}
         ></Route>
         <Route
           exact
           path="login"
-          element={<UserLogin isLogedIn={isLogedIn} onSignIn={setIsLogedIn} />}
+          element={
+            <UserLogin isLoggedIn={isLoggedIn} onSignIn={setIsLoggedIn} />
+          }
         ></Route>
       </Routes>
     </BrowserRouter>
