@@ -7,13 +7,14 @@ import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
 async function loginUser(credentials) {
-  return fetch("http://b-ersoz.jotform.dev/intern-api/login", {
+  return fetch("https://b-ersoz.jotform.dev/intern-api/login", {
+    mode: "no-cors",
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  });
 }
 
 const UserLogin = (props) => {
@@ -26,9 +27,10 @@ const UserLogin = (props) => {
       login_info: username,
       password: password,
     });
-    if (res.content.status == 1) {
-      props.onSignIn(true);
-    }
+    console.log(res);
+    // if (res.content.status == 1) {
+    //   props.onSignIn(true);
+    // }
   };
 
   if (props.isLoggedIn)
@@ -50,7 +52,7 @@ const UserLogin = (props) => {
             <InputContainer
               inputLabel="Username"
               inputType="text"
-              setter={(l, t, v) => {
+              setter={(v) => {
                 setUsername(v);
               }}
               default={username}
@@ -58,7 +60,7 @@ const UserLogin = (props) => {
             <InputContainer
               inputLabel="Password"
               inputType="password"
-              setter={(l, t, v) => {
+              setter={(v) => {
                 setPassword(v);
               }}
               default={password}

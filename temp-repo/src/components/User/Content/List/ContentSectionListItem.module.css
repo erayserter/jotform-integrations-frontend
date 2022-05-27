@@ -1,0 +1,172 @@
+.content--list-item {
+  align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  font-size: 1rem;
+  padding: 0.875rem 1.4375rem;
+  position: relative;
+  height: 68px;
+  left: 0px;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  transition: 0.3s;
+}
+
+.content--list-item::before {
+  background-color: #f3f3fe;
+  border-radius: 6px;
+  bottom: 3px;
+  box-sizing: border-box;
+  content: "";
+  display: block;
+  left: 3px;
+  opacity: 0;
+  position: absolute;
+  right: 3px;
+  top: 3px;
+  transition: 0.3s;
+  z-index: -1;
+}
+
+.content--list-item:hover {
+  border-radius: 6px;
+  background-color: #f3f3fe;
+}
+
+.content--list-item-sections {
+  position: relative;
+  margin-right: 18px;
+  z-index: 1;
+}
+
+.content--list-item-checkbox input {
+  opacity: 0;
+  position: absolute;
+  height: 24px;
+  width: 24px;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.content--list-item-checkbox input + label {
+  position: relative;
+  margin-right: 24px;
+  height: 24px;
+}
+
+.content--list-item-checkbox input + label::before {
+  content: "";
+  position: absolute;
+  box-sizing: border-box;
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgb(200, 206, 237);
+  background-color: rgb(255, 255, 255);
+  border-radius: 4px;
+  top: 0px;
+  left: 0px;
+  transition: all 0.3s ease 0s;
+}
+
+.content--list-item-checkbox input + label::after {
+  content: "";
+  display: block;
+  width: 3px;
+  height: 8px;
+  border-style: solid;
+  border-color: rgb(255, 255, 255);
+  border-image: initial;
+  border-width: 0px 2px 2px 0px;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 3px;
+  left: 7px;
+  opacity: 1;
+  transition: all 0.3s ease 0s;
+  z-index: 2;
+}
+
+.content--list-item-checkbox input:checked + label::before {
+  background-color: rgb(0, 153, 255);
+  border-color: rgb(0, 153, 255);
+}
+
+.content--list-item-favorite-icon {
+  color: #c8ceed;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.content--list-item-integration-icon {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+
+.content--list-item-integration-icon > span {
+  background-size: 20px;
+  background-color: rgb(181, 89, 212);
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='24' height='24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m23.597 11.562-2.954-2.927A3.916 3.916 0 0 0 22.8 4.912a3.924 3.924 0 0 0-7.444-1.565L12.48.391a1.371 1.371 0 0 0-1.919 0L7.578 3.357a.48.48 0 0 0 .211.806c.672.176 1.26.584 1.66 1.152a2.995 2.995 0 0 1-.106 3.55 2.953 2.953 0 0 1-5.18-1.074.48.48 0 0 0-.805-.212L.403 10.555a1.344 1.344 0 0 0 0 1.919l2.955 2.879a3.926 3.926 0 0 0 3.597 6.976 3.925 3.925 0 0 0 1.688-1.688l2.877 2.956c.52.53 1.37.538 1.9.02l.019-.02 2.964-2.966a.48.48 0 0 0-.211-.806 2.944 2.944 0 0 1-1.66-1.151 2.995 2.995 0 0 1 .106-3.551 2.953 2.953 0 0 1 5.18 1.075.48.48 0 0 0 .335.335.479.479 0 0 0 .46-.124l2.984-2.975c.53-.52.538-1.37.02-1.9l-.02-.02v.048Z' fill='%23fff'/%3E%3C/svg%3E");
+}
+
+.content--list-item-headline {
+  flex: 1 1 auto;
+  min-width: 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
+.content--list-item-headline-title {
+  align-items: center;
+  display: flex;
+  white-space: nowrap;
+}
+
+.content--title {
+  display: inline-flex;
+  -webkit-box-align: center;
+  align-items: center;
+  font-size: 1.125em;
+  font-weight: 500;
+  padding: 2px 6px;
+  margin: 0px 4px 0px -6px;
+  color: rgb(10, 21, 81);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content--title > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content--list-item-headline-desc {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(111, 118, 167);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 45vw;
+  margin-top: 2px;
+}
+
+/* .content--list-item-headline-desc span {
+  color: #6f76a7;
+  text-decoration: none;
+  transition: 0.3s;
+} */

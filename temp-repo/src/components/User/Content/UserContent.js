@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import classes from "./UserContent.module.css";
 import UserContentNavigationItem from "./UserContentNavigationItem";
 
-import UserContentSection from "./UserContentSection";
+import UserContentSection from "./List/UserContentSection";
 
 const LIST_ITEMS = [
   "All Integrations",
