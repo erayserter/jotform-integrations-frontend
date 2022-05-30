@@ -36,7 +36,7 @@ const ContentSectionListItem = (props) => {
         </div>
       </div>
       <div className={classes["content--list-item-sections"]}>
-        <div className={classes["content-list-item-integration-icon"]}>
+        <div className={classes["content--list-item-integration-icon"]}>
           <span></span>
         </div>
       </div>

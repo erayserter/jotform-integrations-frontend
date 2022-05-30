@@ -1,0 +1,42 @@
+#!/bin/bash
+if [ ! -f .vscode/sftp.json ]; then
+  echo "# Visual Studio Code SFTP config not found (.vscode/sftp.json)";
+  exit
+fi
+
+parse() {
+  grep $1 .vscode/sftp.json | awk {'print $2'} | sed 's/"//g' | sed 's/,//g'
+}
+
+jotform() {
+  echo "    _     _   ___              "
+  echo " _ | |___| |_| __|__ _ _ _ __  "
+  echo "| || / _ \  _| _/ _ \ '_| '  \ "
+  echo " \__/\___/\__|_|\___/_| |_|_|_|"
+  echo " "
+}
+
+jotform
+
+USERNAME="$(parse 'username')"
+REMOTE_PATH="$(parse 'remotePath')"
+REMOTE_HOST="$(parse 'host')"
+REMOTE_PORT="$(parse 'port')"
+
+echo "# Syncing...";
+echo "- Source Path : `pwd`";
+echo "- Target Path : $REMOTE_PATH";
+echo "- Target Host : $REMOTE_HOST:$REMOTE_PORT";
+echo "- Username    : $USERNAME";
+echo " "
+
+chmod -R 755 .
+rsync \
+    --exclude-from ".gitignore" \
+    --exclude ".git" \
+    -aze "ssh -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o StrictHostKeyChecking=no -p $REMOTE_PORT" \
+    . \
+    $USERNAME@$REMOTE_HOST:$REMOTE_PATH
+
+echo "# Syncing ... done";
+echo " "
