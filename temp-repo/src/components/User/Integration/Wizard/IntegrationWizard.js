@@ -5,6 +5,7 @@ import classes from "./IntegrationWizard.module.css";
 import IntegrationAppCard from "./IntegrationAppCard";
 import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
+import IntegrationSettings from "./Settings/IntegrationSettings";
 
 const APPS = [
   {
@@ -47,9 +48,12 @@ const createIntegration = async (credentials) => {
 
 const IntegrationWizard = (props) => {
   const [appType, setAppType] = useState("source");
+  const [settingsChoice, setSettingsChoice] = useState("source");
 
+  const [isModelOpen, setIsModelOpen] = useState(false);
   const [isIntegrationChoice, setIsIntegrationChoice] = useState(false);
   const [isAuthenticationsValid, setIsAuthenticationsValid] = useState(false);
+  const [isSettingsChoice, setIsSettingsChoice] = useState(false);
 
   const [appDatas, setAppDatas] = useState({
     source: {},
@@ -66,6 +70,10 @@ const IntegrationWizard = (props) => {
 
   const modalClickRef = useRef();
 
+  const modalBoxHandler = (bool) => {
+    setIsModelOpen(bool);
+  };
+
   const integrationChoiceHandler = (bool, type) => {
     setAppType(type);
     setIsIntegrationChoice(bool);
@@ -75,7 +83,10 @@ const IntegrationWizard = (props) => {
     source: (
       <IntegrationAppCard
         apps={APPS}
-        onClick={integrationChoiceHandler}
+        onClick={(bool, type) => {
+          integrationChoiceHandler(bool, type);
+          setIsModelOpen(true);
+        }}
         datas={selectedDatas.source}
         type="source"
       />
@@ -83,7 +94,10 @@ const IntegrationWizard = (props) => {
     destination: (
       <IntegrationAppCard
         apps={APPS}
-        onClick={integrationChoiceHandler}
+        onClick={(bool, type) => {
+          integrationChoiceHandler(bool, type);
+          setIsModelOpen(true);
+        }}
         datas={selectedDatas.destination}
         type="destination"
       />
@@ -98,63 +112,96 @@ const IntegrationWizard = (props) => {
       };
     });
     setSelectedSettings({ source: {}, destination: {} });
+    setIsAuthenticationsValid(false);
   };
 
   const authHandler = (datas, type, appDatas) => {
+    setIsModelOpen(false);
+    setIsIntegrationChoice(false);
     setSelectedDatas((prev) => {
       return { ...prev, [type.toLowerCase()]: datas };
     });
     setAppDatas((prev) => {
       return { ...prev, [type]: appDatas };
     });
+
+    if (
+      (selectedDatas["source"][1] !== null || type === "source") &&
+      (selectedDatas["destination"][1] !== null || type === "destination")
+    )
+      setIsAuthenticationsValid(true);
   };
 
-  const saveHandler = (values, type) => {
+  const settingsHandler = (event) => {
+    setIsIntegrationChoice(false);
+    setIsSettingsChoice(true);
+    setIsModelOpen(true);
+  };
+
+  const saveSettingsHandler = (values, type) => {
     setSelectedSettings((prev) => {
       return { ...prev, [type]: values };
     });
+    if (settingsChoice === "source") {
+      setSettingsChoice("destination");
+    } else {
+      const source_app = APPS.filter((e) => {
+        return e.id === selectedDatas.source[0];
+      })[0];
+      const destination_app = APPS.filter((e) => {
+        return e.id === selectedDatas.destination[0];
+      })[0];
 
-    setIsAuthenticationsValid(true);
-    for (const key in selectedSettings) {
-      if (
-        Object.keys(selectedSettings[key]).length === 0 &&
-        selectedSettings[key].constructor === Object &&
-        key !== type
-      ) {
-        setIsAuthenticationsValid(false);
-      }
+      const allData = {
+        source: {
+          app_name: source_app.name.toLowerCase(),
+          app_action: selectedDatas.source[1],
+          api_key: selectedDatas.source[2],
+          settings: selectedSettings.source,
+        },
+        destination: {
+          app_name: destination_app.name.toLowerCase(),
+          app_action: selectedDatas.destination[1],
+          api_key: selectedDatas.destination[2],
+          settings: selectedSettings.destination,
+        },
+        action: "create",
+      };
+
+      const res = createIntegration(allData);
+
+      props.onNewIntegration(false);
     }
-    setIsIntegrationChoice(false);
   };
 
-  const integrateHandler = (event) => {
-    const source_app = APPS.filter((e) => {
-      return e.id === selectedDatas.source[0];
-    })[0];
-    const destination_app = APPS.filter((e) => {
-      return e.id === selectedDatas.destination[0];
-    })[0];
+  // const integrateHandler = (event) => {
+  //   const source_app = APPS.filter((e) => {
+  //     return e.id === selectedDatas.source[0];
+  //   })[0];
+  //   const destination_app = APPS.filter((e) => {
+  //     return e.id === selectedDatas.destination[0];
+  //   })[0];
 
-    const allData = {
-      source: {
-        app_name: source_app.name.toLowerCase(),
-        app_action: selectedDatas.source[1],
-        api_key: selectedDatas.source[2],
-        settings: selectedSettings.source,
-      },
-      destination: {
-        app_name: destination_app.name.toLowerCase(),
-        app_action: selectedDatas.destination[1],
-        api_key: selectedDatas.destination[2],
-        settings: selectedSettings.destination,
-      },
-      action: "create",
-    };
+  //   const allData = {
+  //     source: {
+  //       app_name: source_app.name.toLowerCase(),
+  //       app_action: selectedDatas.source[1],
+  //       api_key: selectedDatas.source[2],
+  //       settings: selectedSettings.source,
+  //     },
+  //     destination: {
+  //       app_name: destination_app.name.toLowerCase(),
+  //       app_action: selectedDatas.destination[1],
+  //       api_key: selectedDatas.destination[2],
+  //       settings: selectedSettings.destination,
+  //     },
+  //     action: "create",
+  //   };
 
-    const res = createIntegration(allData);
+  //   const res = createIntegration(allData);
 
-    props.onNewIntegration();
-  };
+  //   props.onNewIntegration();
+  // };
 
   return (
     <div className={classes["wizard"]}>
@@ -168,20 +215,31 @@ const IntegrationWizard = (props) => {
         </div>
         {cards.destination}
 
-        {isIntegrationChoice && (
-          <ModalBox
-            onIntegrationChoice={integrationChoiceHandler}
-            ref={modalClickRef}
-          >
-            <IntegrationAppSelector
-              apps={APPS}
-              onAuthenticate={authHandler}
-              onSave={saveHandler}
-              type={appType}
-              datas={selectedDatas}
-              settingsData={selectedSettings}
-              appDatas={appDatas}
-            />
+        {isModelOpen && (
+          <ModalBox onModalBoxClose={modalBoxHandler} ref={modalClickRef}>
+            {isIntegrationChoice && (
+              <IntegrationAppSelector
+                apps={APPS}
+                onAuthenticate={authHandler}
+                type={appType}
+                datas={selectedDatas}
+                appDatas={appDatas}
+              />
+            )}
+            {isSettingsChoice && (
+              <IntegrationSettings
+                app={
+                  APPS.filter((e) => {
+                    return e.id === selectedDatas[settingsChoice][0];
+                  })[0]
+                }
+                onSave={saveSettingsHandler}
+                appAction={selectedDatas[settingsChoice][1]}
+                type={settingsChoice}
+                settingsData={selectedSettings}
+                appDatas={appDatas}
+              />
+            )}
           </ModalBox>
         )}
       </div>
@@ -189,9 +247,9 @@ const IntegrationWizard = (props) => {
         <div className={classes["settingContainer"]}>
           <button
             className={classes["settingsButton"]}
-            onClick={integrateHandler}
+            onClick={settingsHandler}
           >
-            Integrate
+            Settings
           </button>
         </div>
       )}

@@ -5,7 +5,7 @@ import classes from "./ModalBox.module.css";
 import useOnClickOutside from "../Hooks/useOnClickOutside";
 
 const ModalBox = forwardRef(function ModalBox(props, ref) {
-  useOnClickOutside(ref, () => props.onIntegrationChoice(false));
+  useOnClickOutside(ref, () => props.onModalBoxClose(false));
 
   return (
     <div className={classes["modalbox"]}>
@@ -13,7 +13,7 @@ const ModalBox = forwardRef(function ModalBox(props, ref) {
         {props.children}
         <button
           className={classes["closeButton"]}
-          onClick={() => props.onIntegrationChoice(false)}
+          onClick={() => props.onModalBoxClose(false)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

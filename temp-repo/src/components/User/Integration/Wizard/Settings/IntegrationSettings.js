@@ -107,25 +107,25 @@ const IntegrationSettings = (props) => {
 
   useEffect(() => {
     if (
-      props.appName === "Jotform" &&
-      appSettings[props.appName][props.appAction][0].data.length === 0
+      props.app.name === "Jotform" &&
+      appSettings[props.app.name][props.appAction][0].data.length === 0
     ) {
       for (const key in props.appDatas[props.type]) {
-        appSettings[props.appName][props.appAction][0].data.push({
+        appSettings[props.app.name][props.appAction][0].data.push({
           value: key,
           label: props.appDatas[props.type][key]["title"],
         });
       }
     }
     if (
-      props.appName === "Telegram" &&
-      appSettings[props.appName][props.appAction][1].whitelist.length === 0
+      props.app.name === "Telegram" &&
+      appSettings[props.app.name][props.appAction][1].whitelist.length === 0
     ) {
       let count = 0;
       for (const field in props.appDatas["source"][
         props.settingsData["source"]["form_id"]
       ]["fields"]) {
-        appSettings[props.appName][props.appAction][1].whitelist.push({
+        appSettings[props.app.name][props.appAction][1].whitelist.push({
           id: count++,
           value:
             props.appDatas["source"][props.settingsData["source"]["form_id"]][
@@ -133,7 +133,7 @@ const IntegrationSettings = (props) => {
             ][field]["field_name"],
         });
       }
-      // console.log(appSettings[props.appName][props.appAction][1].whitelist);
+      // console.log(appSettings[props.app.name][props.appAction][1].whitelist);
       console.log(props.appDatas);
     }
     if (
@@ -144,20 +144,20 @@ const IntegrationSettings = (props) => {
     }
   }, []);
 
-  const newValueHandler = (label, type, value) => {
+  const newValueHandler = (label, value) => {
     setInputValues((prev) => {
       return { ...prev, [label]: value };
     });
   };
 
   const saveHandler = (event) => {
-    props.onSave(inputValues);
+    props.onSave(inputValues, props.type);
   };
 
   return (
     <div className={classes["settings--container"]}>
-      <h3>Settings</h3>
-      {appSettings[props.appName][props.appAction].map((e) => {
+      <h1>{props.app.name} Settings</h1>
+      {appSettings[props.app.name][props.appAction].map((e) => {
         if (e.type === "Select")
           return (
             <Select
@@ -172,7 +172,7 @@ const IntegrationSettings = (props) => {
               menuPortalTarget={document.body}
               menuPlacement="bottom"
               onChange={(event) => {
-                newValueHandler(e.selection, e.type, event.value);
+                newValueHandler(e.selection, event.value);
               }}
               defaultValue={
                 inputValues[e.selection] &&
@@ -188,11 +188,11 @@ const IntegrationSettings = (props) => {
               key={e.selection}
               label={e.label}
               onChange={(value) => {
-                newValueHandler(e.selection, e.type, value);
+                newValueHandler(e.selection, value);
               }}
               defaultValue={inputValues[e.selection]}
               whitelist={
-                appSettings[props.appName][props.appAction][1].whitelist
+                appSettings[props.app.name][props.appAction][1].whitelist
               }
             />
           );
@@ -207,7 +207,9 @@ const IntegrationSettings = (props) => {
             />
           );
       })}
-      <button onClick={saveHandler}>Save Settings</button>
+      <button onClick={saveHandler}>
+        {props.type === "source" ? "Next" : "Save Settings"}
+      </button>
     </div>
   );
 };

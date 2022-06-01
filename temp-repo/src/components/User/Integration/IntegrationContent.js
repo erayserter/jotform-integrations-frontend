@@ -5,19 +5,17 @@ import IntegrationHeader from "./Header/IntegrationHeader";
 import IntegrationWizard from "./Wizard/IntegrationWizard";
 
 const IntegrationContent = (props) => {
-  const integrationClickHandler = (event) => {
-    props.onNewIntegration(false);
-  };
-
   return (
     <div className={classes["container"]}>
       <div className={classes["content-wrapper"]}>
         <IntegrationHeader />
-        <IntegrationWizard onNewIntegration={integrationClickHandler} />
+        <IntegrationWizard onNewIntegration={props.onNewIntegration} />
       </div>
       <button
         className={classes["closeButton"]}
-        onClick={integrationClickHandler}
+        onClick={() => {
+          props.onNewIntegration(false);
+        }}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

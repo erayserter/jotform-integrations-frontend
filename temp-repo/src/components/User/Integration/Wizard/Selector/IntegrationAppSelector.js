@@ -16,6 +16,8 @@ async function validateApiKey(credentials) {
 }
 
 const IntegrationAppSelector = (props) => {
+  const [buttonText, setButtonText] = useState("Authenticate");
+
   const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
   const [isKeySelectorVisible, setIsKeySelectorVisible] = useState(false);
   const [isSettingsVisible, setIsSettingsVisible] = useState(false);
@@ -38,35 +40,34 @@ const IntegrationAppSelector = (props) => {
     setIsKeySelectorVisible(true);
   };
 
-  const saveHandler = (values) => {
-    props.onSave(values, props.type);
-  };
-
   const authHandler = async (event) => {
     const app = props.apps.filter((e) => e.id === selectedAppID)[0];
+    setButtonText("...");
     const res = await validateApiKey({
       app_name: app.name.toLowerCase(),
       action: selectedAction,
       api_key: apiKey,
     });
     if (res.content.responseCode === 200) {
+      setButtonText("Authenticated");
       props.onAuthenticate(
         [selectedAppID, selectedAction, apiKey],
         props.type,
         res.content.content
       );
+    } else {
     }
   };
 
   useEffect(() => {
     const type = props.type.toLowerCase();
     if (props.datas[type][0] !== null) {
+      setButtonText("Authenticated");
       setSelectedAppID(props.datas[type][0]);
       setSelectedAction(props.datas[type][1]);
       setApiKey(props.datas[type][2]);
       setIsAppSelectorVisible(false);
       setIsKeySelectorVisible(true);
-      setIsSettingsVisible(true);
     }
   }, [props.datas, props.type]);
 
@@ -126,26 +127,17 @@ const IntegrationAppSelector = (props) => {
                 <input
                   placeholder="API Key Here."
                   onChange={(e) => {
+                    setButtonText("Authenticate");
                     setApiKey(e.target.value);
                   }}
                   value={apiKey}
                 />
-                <button onClick={authHandler}>Authenticate</button>
+                <button onClick={authHandler}>{buttonText}</button>
               </div>
             </div>
           )}
         </div>
       </div>
-      {isSettingsVisible && (
-        <IntegrationSettings
-          type={props.type}
-          appName={app.name}
-          appAction={selectedAction}
-          onSave={saveHandler}
-          settingsData={props.settingsData}
-          appDatas={props.appDatas}
-        />
-      )}
       {isAppSelectorVisible && (
         <div className={classes["app-navigation"]}>
           <SelectionCard apps={props.apps} onAppSelect={appSelectHandler} />

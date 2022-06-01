@@ -42,10 +42,16 @@ const ContentSectionListItem = (props) => {
       </div>
       <div className={classes["content--list-item-headline"]}>
         <div className={classes["content--list-item-headline-title"]}>
-          <div className={classes["content--title"]}>Form</div>
+          <div className={classes["content--title"]}>
+            {props.webhook.source.appName} + {props.webhook.destination.appName}
+          </div>
         </div>
         <div className={classes["content--list-item-headline-desc"]}>
-          <span>0 submissions</span>
+          <span>
+            When {props.webhook.source.action} on {props.webhook.source.appName}
+            , {props.webhook.destination.action} on{" "}
+            {props.webhook.destination.appName}
+          </span>
         </div>
       </div>
     </div>
