@@ -6,6 +6,67 @@ import TagInputContainer from "../../../../UI/TagInputContainer";
 
 import classes from "./IntegrationSettings.module.css";
 
+// {
+//   "responseCode": 200,
+//   "message": "success",
+//   "content": {
+//       "responseCode": 200,
+//       "content": {
+//           "221363901691050": {
+//               "title": "Form1",
+//               "created_at": "2022-05-17 08:27:49",
+//               "updated_at": "2022-05-17 09:13:46",
+//               "status": "ENABLED",
+//               "fields": {
+//                   "3": {
+//                       "field_name": "Name",
+//                       "subfields": {
+//                           "first": "First Name",
+//                           "last": "Last Name"
+//                       }
+//                   }
+//               }
+//           },
+//           "221363053821043": {
+//               "title": "Form2",
+//               "created_at": "2022-05-17 07:47:14",
+//               "updated_at": "2022-05-17 08:28:08",
+//               "status": "ENABLED",
+//               "fields": {
+//                   "3": {
+//                       "field_name": "Name",
+//                       "subfields": {
+//                           "first": "First Name",
+//                           "last": "Last Name"
+//                       }
+//                   },
+//                   "4": {
+//                       "field_name": "Email"
+//                   },
+//                   "5": {
+//                       "field_name": "Address",
+//                       "subfields": {
+//                           "cc_firstName": "First Name",
+//                           "cc_lastName": "Last Name",
+//                           "cc_number": "Credit Card Number",
+//                           "cc_ccv": "Security Code",
+//                           "cc_exp_month": "Expiration Month",
+//                           "cc_exp_year": "Expiration Year",
+//                           "addr_line1": "Street Address",
+//                           "addr_line2": "Street Address Line 2",
+//                           "city": "City",
+//                           "state": "State \/ Province",
+//                           "postal": "Postal \/ Zip Code",
+//                           "country": "Country"
+//                       }
+//                   }
+//               }
+//           }
+//       }
+//   },
+//   "duration": "511.42ms"
+// }
+
 const appSettings = {
   Jotform: {
     "Get Submission": [
@@ -13,15 +74,7 @@ const appSettings = {
         label: "Choose Form",
         type: "Select",
         selection: "form_id",
-        data: [
-          { value: "form1", label: "FORM 1" },
-          { value: "form2", label: "FORM 2" },
-          { value: "form3", label: "FORM 3" },
-          { value: "form4", label: "FORM 4" },
-          { value: "form5", label: "FORM 5" },
-          { value: "form6", label: "FORM 6" },
-          { value: "form7", label: "FORM 7" },
-        ],
+        data: [],
       },
     ],
   },
@@ -36,19 +89,16 @@ const appSettings = {
         label: "Text",
         selection: "text",
         type: "tagInput",
+        whitelist: [],
       },
     ],
   },
 };
 
 const tagifySettings = {
-  // blacklist: ["xxx", "yyy", "zzz"],
-  // maxTags: 6,
-  // backspace: "edit",
   addTagOnBlur: false,
-  // placeholder: "",
   dropdown: {
-    enabled: 0, // a;ways show suggestions dropdown
+    enabled: 0,
   },
 };
 
@@ -57,10 +107,40 @@ const IntegrationSettings = (props) => {
 
   useEffect(() => {
     if (
-      Object.keys(props.settingsData).length !== 0 ||
-      props.settingsData.constructor !== Object
+      props.appName === "Jotform" &&
+      appSettings[props.appName][props.appAction][0].data.length === 0
     ) {
-      setInputValues(props.settingsData);
+      for (const key in props.appDatas[props.type]) {
+        appSettings[props.appName][props.appAction][0].data.push({
+          value: key,
+          label: props.appDatas[props.type][key]["title"],
+        });
+      }
+    }
+    if (
+      props.appName === "Telegram" &&
+      appSettings[props.appName][props.appAction][1].whitelist.length === 0
+    ) {
+      let count = 0;
+      for (const field in props.appDatas["source"][
+        props.settingsData["source"]["form_id"]
+      ]["fields"]) {
+        appSettings[props.appName][props.appAction][1].whitelist.push({
+          id: count++,
+          value:
+            props.appDatas["source"][props.settingsData["source"]["form_id"]][
+              "fields"
+            ][field]["field_name"],
+        });
+      }
+      // console.log(appSettings[props.appName][props.appAction][1].whitelist);
+      console.log(props.appDatas);
+    }
+    if (
+      Object.keys(props.settingsData[props.type]).length !== 0 ||
+      props.settingsData[props.type].constructor !== Object
+    ) {
+      setInputValues(props.settingsData[props.type]);
     }
   }, []);
 
@@ -73,16 +153,6 @@ const IntegrationSettings = (props) => {
   const saveHandler = (event) => {
     props.onSave(inputValues);
   };
-
-  // console.log(
-  //   inputValues[appSettings[props.appName][props.appAction][0].label] &&
-  //     appSettings[props.appName][props.appAction][0].data.filter((element) => {
-  //       return (
-  //         element.value ===
-  //         inputValues[appSettings[props.appName][props.appAction][0].label]
-  //       );
-  //     })[0]
-  // );
 
   return (
     <div className={classes["settings--container"]}>
@@ -121,6 +191,9 @@ const IntegrationSettings = (props) => {
                 newValueHandler(e.selection, e.type, value);
               }}
               defaultValue={inputValues[e.selection]}
+              whitelist={
+                appSettings[props.appName][props.appAction][1].whitelist
+              }
             />
           );
         else

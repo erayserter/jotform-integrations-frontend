@@ -33,55 +33,10 @@ const APPS = [
     ],
     actions: ["Send Message"],
   },
-  // {
-  //   id: 3,
-  //   name: "Telegram",
-  //   img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
-  //   triggers: [
-  //     "Telegram trigger 1",
-  //     "Telegram trigger 2",
-  //     "Telegram trigger 3",
-  //     "Telegram trigger 4",
-  //     "Telegram trigger 5",
-  //   ],
-  //   actions: ["Send Message"],
-  // },
-  // {
-  //   id: 4,
-  //   name: "Telegram",
-  //   img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
-  //   triggers: [
-  //     "Telegram trigger 1",
-  //     "Telegram trigger 2",
-  //     "Telegram trigger 3",
-  //     "Telegram trigger 4",
-  //     "Telegram trigger 5",
-  //   ],
-  //   actions: ["Send Message"],
-  // },
-  // {
-  //   id: 5,
-  //   name: "Telegram",
-  //   img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
-  //   triggers: [
-  //     "Telegram trigger 1",
-  //     "Telegram trigger 2",
-  //     "Telegram trigger 3",
-  //     "Telegram trigger 4",
-  //     "Telegram trigger 5",
-  //   ],
-  //   actions: ["Send Message"],
-  // },
 ];
 
-const getForms = async (apiKey) => {
-  return fetch(
-    "https://b-ersoz.jotform.dev/intern-api/getForms?apiKey=" + apiKey
-  ).then((data) => data.json());
-};
-
 const createIntegration = async (credentials) => {
-  return await fetch("https://b-ersoz.jotform.dev/intern-api/webhook", {
+  return await fetch("https://me-serter.jotform.dev/intern-api/webhook", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -91,18 +46,22 @@ const createIntegration = async (credentials) => {
 };
 
 const IntegrationWizard = (props) => {
-  const [appType, setAppType] = useState("Source");
+  const [appType, setAppType] = useState("source");
 
   const [isIntegrationChoice, setIsIntegrationChoice] = useState(false);
   const [isAuthenticationsValid, setIsAuthenticationsValid] = useState(false);
 
+  const [appDatas, setAppDatas] = useState({
+    source: {},
+    destination: {},
+  });
   const [selectedDatas, setSelectedDatas] = useState({
     source: [null, null, null],
     destination: [null, null, null],
   });
   const [selectedSettings, setSelectedSettings] = useState({
-    Source: {},
-    Destination: {},
+    source: {},
+    destination: {},
   });
 
   const modalClickRef = useRef();
@@ -118,7 +77,7 @@ const IntegrationWizard = (props) => {
         apps={APPS}
         onClick={integrationChoiceHandler}
         datas={selectedDatas.source}
-        type="Source"
+        type="source"
       />
     ),
     destination: (
@@ -126,7 +85,7 @@ const IntegrationWizard = (props) => {
         apps={APPS}
         onClick={integrationChoiceHandler}
         datas={selectedDatas.destination}
-        type="Destination"
+        type="destination"
       />
     ),
   };
@@ -138,34 +97,25 @@ const IntegrationWizard = (props) => {
         destination: [prev.source[0], "", prev.source[2]],
       };
     });
-    setSelectedSettings({ Source: {}, Destination: {} });
+    setSelectedSettings({ source: {}, destination: {} });
   };
 
-  const authHandler = (datas, type) => {
-    if (type === "Source")
-      setSelectedDatas((prev) => {
-        return {
-          source: datas,
-          destination: prev.destination,
-        };
-      });
-    else
-      setSelectedDatas((prev) => {
-        return {
-          source: prev.source,
-          destination: datas,
-        };
-      });
+  const authHandler = (datas, type, appDatas) => {
+    setSelectedDatas((prev) => {
+      return { ...prev, [type.toLowerCase()]: datas };
+    });
+    setAppDatas((prev) => {
+      return { ...prev, [type]: appDatas };
+    });
   };
 
   const saveHandler = (values, type) => {
-    // console.log(values);
     setSelectedSettings((prev) => {
       return { ...prev, [type]: values };
     });
 
+    setIsAuthenticationsValid(true);
     for (const key in selectedSettings) {
-      setIsAuthenticationsValid(true);
       if (
         Object.keys(selectedSettings[key]).length === 0 &&
         selectedSettings[key].constructor === Object &&
@@ -187,22 +137,19 @@ const IntegrationWizard = (props) => {
 
     const allData = {
       source: {
-        app_name: source_app.name,
+        app_name: source_app.name.toLowerCase(),
         app_action: selectedDatas.source[1],
         api_key: selectedDatas.source[2],
-        settings: selectedSettings.Source,
+        settings: selectedSettings.source,
       },
       destination: {
-        app_name: destination_app.name,
+        app_name: destination_app.name.toLowerCase(),
         app_action: selectedDatas.destination[1],
         api_key: selectedDatas.destination[2],
-        settings: selectedSettings.Destination,
+        settings: selectedSettings.destination,
       },
       action: "create",
     };
-
-    console.log(selectedSettings.Source);
-    console.log(selectedSettings.Destination);
 
     const res = createIntegration(allData);
 
@@ -233,6 +180,7 @@ const IntegrationWizard = (props) => {
               type={appType}
               datas={selectedDatas}
               settingsData={selectedSettings}
+              appDatas={appDatas}
             />
           </ModalBox>
         )}

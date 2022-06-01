@@ -7,7 +7,7 @@ import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
 async function loginUser(credentials) {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/login", {
+  return fetch("https://me-serter.jotform.dev/intern-api/login", {
     mode: "no-cors",
     method: "POST",
     headers: {
@@ -27,10 +27,9 @@ const UserLogin = (props) => {
       login_info: username,
       password: password,
     });
-    console.log(res);
-    // if (res.content.status == 1) {
-    //   props.onSignIn(true);
-    // }
+    if (res.content.responseCode == 200) {
+      props.onSignIn(true);
+    }
   };
 
   if (props.isLoggedIn)

@@ -5,18 +5,19 @@ import AppContainer from "./components/AppContainer";
 import UserLogin from "./components/User/Authentication/UserLogin";
 
 async function alreadyLoggedIn() {
-  return fetch("http://b-ersoz.jotform.dev/intern-api/isLoggedIn").then((res) =>
-    res.json()
+  return fetch("https://me-serter.jotform.dev/intern-api/isLoggedIn").then(
+    (res) => res.json()
   );
 }
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const asyncHandler = async () => {
       const res = await alreadyLoggedIn();
-      console.log(res);
+      if (res.content.responseCode === 200) setIsLoggedIn(true);
+      else setIsLoggedIn(false);
     };
     asyncHandler();
   }, []);

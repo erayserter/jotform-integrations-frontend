@@ -6,7 +6,7 @@ import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
 
 async function validateApiKey(credentials) {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/validateApiKey", {
+  return fetch("https://me-serter.jotform.dev/intern-api/validateApiKey", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -39,38 +39,31 @@ const IntegrationAppSelector = (props) => {
   };
 
   const saveHandler = (values) => {
-    // console.log(values);
     props.onSave(values, props.type);
   };
 
   const authHandler = async (event) => {
     const app = props.apps.filter((e) => e.id === selectedAppID)[0];
-    // const res = await validateApiKey({
-    //   app_name: app.name,
-    //   action: selectedAction,
-    //   api_key: apiKey,
-    // });
-    // if (res.content.status == 200) {
-    props.onAuthenticate([selectedAppID, selectedAction, apiKey], props.type);
-    setIsSettingsVisible(true);
-    // }
+    const res = await validateApiKey({
+      app_name: app.name.toLowerCase(),
+      action: selectedAction,
+      api_key: apiKey,
+    });
+    if (res.content.responseCode === 200) {
+      props.onAuthenticate(
+        [selectedAppID, selectedAction, apiKey],
+        props.type,
+        res.content.content
+      );
+    }
   };
 
   useEffect(() => {
-    if (props.type === "Source" && props.datas.source[0] !== null) {
-      setSelectedAppID(props.datas.source[0]);
-      setSelectedAction(props.datas.source[1]);
-      setApiKey(props.datas.source[2]);
-      setIsAppSelectorVisible(false);
-      setIsKeySelectorVisible(true);
-      setIsSettingsVisible(true);
-    } else if (
-      props.type === "Destination" &&
-      props.datas.destination[0] != null
-    ) {
-      setSelectedAppID(props.datas.destination[0]);
-      setSelectedAction(props.datas.destination[1]);
-      setApiKey(props.datas.destination[2]);
+    const type = props.type.toLowerCase();
+    if (props.datas[type][0] !== null) {
+      setSelectedAppID(props.datas[type][0]);
+      setSelectedAction(props.datas[type][1]);
+      setApiKey(props.datas[type][2]);
       setIsAppSelectorVisible(false);
       setIsKeySelectorVisible(true);
       setIsSettingsVisible(true);
@@ -102,7 +95,7 @@ const IntegrationAppSelector = (props) => {
                 isSearchable={true}
                 name="actions"
                 options={
-                  props.type === "Source"
+                  props.type === "source"
                     ? app.triggers.map((e) => {
                         return { value: e, label: e };
                       })
@@ -145,10 +138,12 @@ const IntegrationAppSelector = (props) => {
       </div>
       {isSettingsVisible && (
         <IntegrationSettings
+          type={props.type}
           appName={app.name}
           appAction={selectedAction}
           onSave={saveHandler}
-          settingsData={props.settingsData[props.type]}
+          settingsData={props.settingsData}
+          appDatas={props.appDatas}
         />
       )}
       {isAppSelectorVisible && (
