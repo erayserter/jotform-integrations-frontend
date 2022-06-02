@@ -20,7 +20,6 @@ const IntegrationAppSelector = (props) => {
 
   const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
   const [isKeySelectorVisible, setIsKeySelectorVisible] = useState(false);
-  const [isSettingsVisible, setIsSettingsVisible] = useState(false);
 
   const [selectedAppID, setSelectedAppID] = useState(null);
   const [selectedAction, setSelectedAction] = useState("");
@@ -32,7 +31,10 @@ const IntegrationAppSelector = (props) => {
 
   const appSelectHandler = (id) => {
     setIsAppSelectorVisible(false);
+    setIsKeySelectorVisible(false);
     setSelectedAppID(id);
+    setSelectedAction("");
+    setApiKey("");
   };
 
   const actionSelectHandler = (value) => {
@@ -84,6 +86,14 @@ const IntegrationAppSelector = (props) => {
           onClick={appSelectorSectionHandler}
         >
           {selectedAppID && <img src={app.img} width="60" height="60" />}
+          {selectedAppID && (
+            <img
+              className={classes["switch-app-icon"]}
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAFD0lEQVR4nO2bTWwbRRTH/2/WTltie/1FEgGqhBBSBVXUAk2KEFfUSi0NLXBA4s4JcQFBoUh8RZzgzIUDAnGApgkttBIHDghUmiIqxMcBKiEUpCb1erPrNBDHO49DbGudxN5Pb7xOfrednX1+/7/ezuzMyMAOO2xrKIwgmsYZJMxPJeMQMVaJ+Ku8qj5HRFYY8btJYAPmy0ujQlg/ELB7Xeh/Cmp6LxHJoL/RTUSQh+fLS6OKsK5sFA8AfOdNw3gpSPwo8G3AfHlpVFHkFQC7uE0fYjzmN35U+DKgKZ55F6P9eyRIlP2nFg0Jrw/Uy34WjIFO4gGgBvmB/9SiwVMFLOhLBxRhzQLO4sH4eDib/TpIclHgeha4UansVyx5lervfKcHSdBnhUzm6eDpdR9XBvSreMCFAf0sHnAw4Ealsj9hyavoU/FAB03bQTwAKJs1Luj6gQRjFn0uHthEm67rByUplxnsPNURrRLTr13LLkSY+U+L5MvD2ex1e3uLPk3T7oKSvO5KfBxhyBrkyZFcbqbR1PIhxCJ5qW/FAwBBJEl8Ym9q/RIk3rfWr39hYLBUMsYa1+s/hftZexOpyObyvcUACfwdfTrRQkD19mz2u8Z16xjAygSAnt7BCQoTXrRv1W0o+XLZPM6Cp9ndStECUSnUDLsF8xxZ/Eqh0LpC3fSd1wzjCEv+EkTOJkiaLOYzr4aUZuS0HfS2iwltxRVU9ZIUdAzMzmOC4NOlsvlOqJlFhOO0t2AYR4XkC1tZCYZh5KtSfkEkHqzncR2CThXT6d+DxnY172+lCcyc1AxzAUB23R0pRPJEPjN4IUh8V3uCQ6p6cateB71SeRMbxAMACSlrM2Xz1rEg8V1vig6p6kVAnCQX3wlM8rSmG2eCJNaMxXikw+26CeZxv/E97QoXc5kZrtEpJxOICEx4Q9O0+/wm1kCC5xy6CCl5+qZuPu4nvueDkWIxM02SJlxUAklFCTwWWEJMMqPd4VMDQcTnSrp5wmt8XydD+XzmvOCEYyWAMeInvp2RdPoXFnid2ckDCBBPeTXB99lgLjc47WQCQfnGb3w7Q6r6Ngs6AxcmEPGUri8/4TZ24OWvrt+akFQ7u8naQSuomTuIqBr0NxosGMZrQvJboM5pEyAFJ5/M5W475xQz0PE4sFYJNVYeAPAHATUAq8z4dkDQvjDFA2uVIF1UAgNC0urnbiohlhsg3ipBPJXLpac69IknYZkQWwOAcEzY8KRhGEdqTO8yBZ/CIoG5iDYHPHbamdB6LmAYLzDj/ZBT7BnWTEg8lMsN/mRrW4OZE5phLgNIbkl2EUHAX4WsenfjujkNlhYXH0Wfi6+z137RNEBI+W/0uUQPo3Vd0TSgUChcZsZyvVP/wvyb/bLlS9CCfAYMGeu5sTNVWLWj9oYNWucXF+8RoEkC7iWInveCie8Hs5uxqyoTyvhQKnXN3tjzAjtR0o2PQHjWqR8BVcGJw/bpz3YvnoQhvn4/foQlvt4nXngSn9gznksNXHPoFx/CFl/vGw+6IR4IYUcoCrRF80M34gFUawnlkFvxQAwqQFtefphXqt87rflBtGIpYmw4lfrZS3zP/xeInGr1eUfxQFVRdh8upgY8iQdi8AowiT0OXVYs6a3s7fS8ARb4bIfbK5ZUxobz3sreTs+PAcxMmmn+CMbBlnbgPymV8SDigRhUABFxIZMZZ8Z7AM0BmAfTeWHVhoOK32GHHfA/olYyFCa5eMcAAAAASUVORK5CYII="
+              width="45"
+              height="45"
+            />
+          )}
         </div>
         <div className={classes["key-action-selector"]}>
           {selectedAppID && (

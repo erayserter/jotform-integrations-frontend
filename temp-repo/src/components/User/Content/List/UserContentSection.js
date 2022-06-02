@@ -10,20 +10,13 @@ const getAllWebhooks = async () => {
   );
 };
 
-const WEBHOOKS = [
-  {
-    source: { appName: "Jotform", action: "Get Submission" },
-    destination: { appName: "Telegram", action: "Send Message" },
-  },
-];
-
 const UserContentSection = (props) => {
   const [webhooks, setWebhooks] = useState([]);
 
   useEffect(() => {
     const asyncHandler = async () => {
       const res = await getAllWebhooks();
-      console.log(JSON.parse(res.content[0].value));
+      if (res.responseCode === 200) setWebhooks(res.content);
     };
     asyncHandler();
   }, []);
@@ -32,9 +25,31 @@ const UserContentSection = (props) => {
     <div className={classes["content--list"]}>
       <div className={classes["content--list-wrapper"]}>
         {webhooks.length !== 0 &&
-          webhooks.map((e) => {
-            return <ContentSectionListItem webhook={e} />;
-          })}
+          webhooks
+            .filter((m) => {
+              return (
+                m.value.source["app_name"]
+                  .toLowerCase()
+                  .includes(props.searchedWord.toLowerCase()) ||
+                m.value.destination["app_name"]
+                  .toLowerCase()
+                  .includes(props.searchedWord.toLowerCase()) ||
+                m.value.source["app_action"]
+                  .toLowerCase()
+                  .includes(props.searchedWord.toLowerCase()) ||
+                m.value.destination["app_action"]
+                  .toLowerCase()
+                  .includes(props.searchedWord.toLowerCase())
+              );
+            })
+            .map((e) => {
+              return (
+                <ContentSectionListItem
+                  webhook={e}
+                  onIntegrationUpdate={props.onIntegrationUpdate}
+                />
+              );
+            })}
         {webhooks.length === 0 && "..."}
       </div>
     </div>

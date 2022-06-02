@@ -1,33 +1,11 @@
 .content--list-item {
-  align-items: center;
-  border-radius: 3px;
-  cursor: pointer;
   display: flex;
+  cursor: pointer;
+  align-items: center;
   font-size: 1rem;
   padding: 0.875rem 1.4375rem;
-  position: relative;
   height: 68px;
-  left: 0px;
-  position: absolute;
-  top: 0px;
-  width: 100%;
   transition: 0.3s;
-}
-
-.content--list-item::before {
-  background-color: #f3f3fe;
-  border-radius: 6px;
-  bottom: 3px;
-  box-sizing: border-box;
-  content: "";
-  display: block;
-  left: 3px;
-  opacity: 0;
-  position: absolute;
-  right: 3px;
-  top: 3px;
-  transition: 0.3s;
-  z-index: -1;
 }
 
 .content--list-item:hover {
@@ -151,6 +129,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-transform: capitalize;
 }
 
 .content--list-item-headline-desc {
@@ -163,10 +142,58 @@
   white-space: nowrap;
   max-width: 45vw;
   margin-top: 2px;
+  text-transform: capitalize;
 }
 
-/* .content--list-item-headline-desc span {
-  color: #6f76a7;
+.content--list-item-actions {
+  height: 100%;
+  display: none;
+  margin-left: 14px;
+  white-space: nowrap;
+}
+
+.content--list-item:hover .content--list-item-actions {
+  align-items: center;
+  display: flex;
+  height: calc(100% + 28px);
+  margin-right: -1.25rem;
+  position: relative;
+}
+
+.content--list-item-actions > button {
+  cursor: pointer;
+  border: none;
+  align-items: center;
+  display: inline-flex;
+  height: 100%;
+  justify-content: center;
+  padding: 0 20px;
+  background-color: transparent;
+}
+
+.content--list-item-actions-edit {
   text-decoration: none;
-  transition: 0.3s;
-} */
+  color: rgb(10, 21, 81);
+  font-size: 0.875em;
+  display: inline-block;
+  padding: 1em 0.75em;
+  font-weight: 500;
+  position: relative;
+  pointer-events: auto;
+  opacity: 1;
+  z-index: 1;
+}
+
+.content--list-item-actions-edit:hover::before {
+  opacity: 1;
+}
+
+.content--list-item-actions-edit::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  background-color: rgb(200, 206, 237);
+  inset: 0px;
+  opacity: 0;
+  transition: all 0.3s ease 0s;
+}

@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 
 import classes from "./ContentSectionListItem.module.css";
 
 const ContentSectionListItem = (props) => {
+  const [isSelected, setIsSelected] = useState(false);
   return (
-    <div className={classes["content--list-item"]}>
+    <div
+      className={classes["content--list-item"]}
+      style={isSelected ? { backgroundColor: "#edf8ff" } : {}}
+    >
       <div
         className={[
           classes["content--list-item-sections"],
@@ -12,7 +16,12 @@ const ContentSectionListItem = (props) => {
         ].join(" ")}
       >
         <div>
-          <input type="checkbox"></input>
+          <input
+            type="checkbox"
+            onChange={() => {
+              setIsSelected((prev) => !prev);
+            }}
+          ></input>
           <label></label>
         </div>
       </div>
@@ -43,16 +52,36 @@ const ContentSectionListItem = (props) => {
       <div className={classes["content--list-item-headline"]}>
         <div className={classes["content--list-item-headline-title"]}>
           <div className={classes["content--title"]}>
-            {props.webhook.source.appName} + {props.webhook.destination.appName}
+            <span>
+              {props.webhook.value.source["app_name"]}
+              {"  "}
+              <img
+                src="https://img.icons8.com/ios-glyphs/30/undefined/right--v1.png"
+                width="15px"
+              />
+              {"  "}
+              {props.webhook.value.destination["app_name"]}
+            </span>
           </div>
         </div>
         <div className={classes["content--list-item-headline-desc"]}>
           <span>
-            When {props.webhook.source.action} on {props.webhook.source.appName}
-            , {props.webhook.destination.action} on{" "}
-            {props.webhook.destination.appName}
+            When {props.webhook.value.source["app_action"]} on{" "}
+            {props.webhook.value.source["app_name"]},{" "}
+            {props.webhook.value.destination["app_action"]} on{" "}
+            {props.webhook.value.destination["app_name"]}
           </span>
         </div>
+      </div>
+      <div className={classes["content--list-item-actions"]}>
+        <button
+          onClick={(event) => {
+            props.onIntegrationUpdate(props.webhook, true);
+          }}
+          className={classes["content--list-item-actions-edit"]}
+        >
+          Edit Integration
+        </button>
       </div>
     </div>
   );

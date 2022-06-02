@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 import classes from "./IntegrationWizard.module.css";
 
@@ -67,6 +67,8 @@ const IntegrationWizard = (props) => {
     source: {},
     destination: {},
   });
+
+  useEffect(() => {}, []);
 
   const modalClickRef = useRef();
 
@@ -170,38 +172,9 @@ const IntegrationWizard = (props) => {
 
       const res = createIntegration(allData);
 
-      props.onNewIntegration(false);
+      props.onClose();
     }
   };
-
-  // const integrateHandler = (event) => {
-  //   const source_app = APPS.filter((e) => {
-  //     return e.id === selectedDatas.source[0];
-  //   })[0];
-  //   const destination_app = APPS.filter((e) => {
-  //     return e.id === selectedDatas.destination[0];
-  //   })[0];
-
-  //   const allData = {
-  //     source: {
-  //       app_name: source_app.name.toLowerCase(),
-  //       app_action: selectedDatas.source[1],
-  //       api_key: selectedDatas.source[2],
-  //       settings: selectedSettings.source,
-  //     },
-  //     destination: {
-  //       app_name: destination_app.name.toLowerCase(),
-  //       app_action: selectedDatas.destination[1],
-  //       api_key: selectedDatas.destination[2],
-  //       settings: selectedSettings.destination,
-  //     },
-  //     action: "create",
-  //   };
-
-  //   const res = createIntegration(allData);
-
-  //   props.onNewIntegration();
-  // };
 
   return (
     <div className={classes["wizard"]}>

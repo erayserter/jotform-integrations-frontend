@@ -15,6 +15,7 @@ const LIST_ITEMS = [
 
 const UserContent = (props) => {
   const [sectionContent, setSectionContent] = useState("All Integrations");
+  const [searchedWord, setSearchedWord] = useState("");
 
   const sectionContentHandler = (content) => {
     setSectionContent(content);
@@ -49,9 +50,19 @@ const UserContent = (props) => {
       <div className={classes["user--section"]}>
         <div className={classes["user--sectionsearch"]}>
           <button>Title [a-z]</button>
-          <input type="text" placeholder="Search Integration" />
+          <input
+            type="text"
+            placeholder="Search Integration"
+            onChange={(event) => {
+              setSearchedWord(event.target.value);
+            }}
+          />
         </div>
-        <UserContentSection content={sectionContent} />
+        <UserContentSection
+          onIntegrationUpdate={props.onIntegrationUpdate}
+          content={sectionContent}
+          searchedWord={searchedWord}
+        />
       </div>
     </main>
   );

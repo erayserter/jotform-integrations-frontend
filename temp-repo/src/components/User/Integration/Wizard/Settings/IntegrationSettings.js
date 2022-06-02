@@ -95,13 +95,6 @@ const appSettings = {
   },
 };
 
-const tagifySettings = {
-  addTagOnBlur: false,
-  dropdown: {
-    enabled: 0,
-  },
-};
-
 const IntegrationSettings = (props) => {
   const [inputValues, setInputValues] = useState({});
 
@@ -121,20 +114,30 @@ const IntegrationSettings = (props) => {
       props.app.name === "Telegram" &&
       appSettings[props.app.name][props.appAction][1].whitelist.length === 0
     ) {
+      const fields =
+        props.appDatas["source"][props.settingsData["source"]["form_id"]][
+          "fields"
+        ];
       let count = 0;
-      for (const field in props.appDatas["source"][
-        props.settingsData["source"]["form_id"]
-      ]["fields"]) {
+      for (const field in fields) {
         appSettings[props.app.name][props.appAction][1].whitelist.push({
+          // id: field,
           id: count++,
-          value:
-            props.appDatas["source"][props.settingsData["source"]["form_id"]][
-              "fields"
-            ][field]["field_name"],
+          value: fields[field]["field_name"],
+          title: fields[field]["field_name"],
         });
+        if (fields[field]["subfields"]) {
+          const subfields = fields[field]["subfields"];
+          for (const subfield in subfields) {
+            appSettings[props.app.name][props.appAction][1].whitelist.push({
+              // id: field + ":" + subfield,
+              id: count++,
+              value: subfields[subfield],
+              title: subfields[subfield],
+            });
+          }
+        }
       }
-      // console.log(appSettings[props.app.name][props.appAction][1].whitelist);
-      console.log(props.appDatas);
     }
     if (
       Object.keys(props.settingsData[props.type]).length !== 0 ||
@@ -142,7 +145,13 @@ const IntegrationSettings = (props) => {
     ) {
       setInputValues(props.settingsData[props.type]);
     }
-  }, []);
+  }, [
+    props.app.name,
+    props.appAction,
+    props.appDatas,
+    props.settingsData,
+    props.type,
+  ]);
 
   const newValueHandler = (label, value) => {
     setInputValues((prev) => {
@@ -182,7 +191,9 @@ const IntegrationSettings = (props) => {
               }
             />
           );
-        else if (e.type == "tagInput")
+        else if (e.type === "tagInput") {
+          const whitelist5 =
+            appSettings[props.app.name][props.appAction][1].whitelist;
           return (
             <TagInputContainer
               key={e.selection}
@@ -192,17 +203,30 @@ const IntegrationSettings = (props) => {
               }}
               defaultValue={inputValues[e.selection]}
               whitelist={
-                appSettings[props.app.name][props.appAction][1].whitelist
+                whitelist5
+                // appSettings[props.app.name][props.appAction][1].whitelist
+                // [
+                //   { id: 100, value: "kenny" },
+                //   { id: 101, value: "cartman", title: "Eric Cartman" },
+                //   { id: 102, value: "kyle", title: "Kyle Broflovski" },
+                //   { id: 103, value: "token", title: "Token Black" },
+                //   { id: 104, value: "jimmy", title: "Jimmy Valmer" },
+                //   { id: 105, value: "butters", title: "Butters Stotch" },
+                //   { id: 106, value: "stan", title: "Stan Marsh" },
+                //   { id: 107, value: "randy", title: "Randy Marsh" },
+                //   { id: 108, value: "Mr. Garrison", title: "POTUS" },
+                //   { id: 109, value: "Mr. Mackey", title: "M'Kay" },
+                // ]
               }
             />
           );
-        else
+        } else
           return (
             <InputContainer
               key={e.selection}
               inputLabel={e.label}
               inputType={e.type}
-              setter={(value) => newValueHandler(e.selection, e.type, value)}
+              setter={(value) => newValueHandler(e.selection, value)}
               default={inputValues[e.selection]}
             />
           );

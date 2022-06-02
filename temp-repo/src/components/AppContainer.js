@@ -9,11 +9,33 @@ import IntegrationContent from "./User/Integration/IntegrationContent";
 
 const AppContainer = (props) => {
   const [isIntegrationContent, setIsIntegrationContent] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [oldContent, setOldContent] = useState({});
+
+  const integrationUpdateHandler = (webhook, bool) => {
+    setIsUpdate(true);
+    setIsIntegrationContent(true);
+    setOldContent(webhook);
+  };
+
+  const closeHandler = () => {
+    setIsIntegrationContent(false);
+    setIsUpdate(false);
+    setOldContent({});
+  };
 
   const logedinContent = isIntegrationContent ? (
-    <IntegrationContent onNewIntegration={setIsIntegrationContent} />
+    <IntegrationContent
+      onNewIntegration={setIsIntegrationContent}
+      onClose={closeHandler}
+      update={isUpdate}
+      oldContent={oldContent}
+    />
   ) : (
-    <UserContent onNewIntegration={setIsIntegrationContent} />
+    <UserContent
+      onNewIntegration={setIsIntegrationContent}
+      onIntegrationUpdate={integrationUpdateHandler}
+    />
   );
 
   if (!props.isLoggedIn)

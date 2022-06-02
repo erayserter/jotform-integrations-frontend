@@ -8,15 +8,14 @@ const IntegrationContent = (props) => {
   return (
     <div className={classes["container"]}>
       <div className={classes["content-wrapper"]}>
-        <IntegrationHeader />
-        <IntegrationWizard onNewIntegration={props.onNewIntegration} />
+        <IntegrationHeader update={props.update} />
+        <IntegrationWizard
+          onClose={props.onClose}
+          update={props.update}
+          oldContent={props.oldContent}
+        />
       </div>
-      <button
-        className={classes["closeButton"]}
-        onClick={() => {
-          props.onNewIntegration(false);
-        }}
-      >
+      <button className={classes["closeButton"]} onClick={props.onClose}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 17 16"
