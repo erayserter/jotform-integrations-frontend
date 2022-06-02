@@ -1,6 +1,16 @@
 .content--list {
   height: 100%;
   padding: 18px 20px;
+  overflow: auto;
+}
+
+.content--list::-webkit-scrollbar {
+  display: none;
+}
+
+.content--list {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .content--list-wrapper {

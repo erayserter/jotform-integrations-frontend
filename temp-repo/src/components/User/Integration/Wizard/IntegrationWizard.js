@@ -7,6 +7,47 @@ import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
 
+const appSettingsInitial = {
+  Jotform: {
+    "Get Submission": [
+      {
+        label: "Choose Form",
+        type: "Select",
+        selection: "form_id",
+        data: [],
+      },
+    ],
+  },
+  Telegram: {
+    "Send Message": [
+      {
+        label: "Chat ID",
+        type: "text",
+        selection: "chat_id",
+      },
+      {
+        label: "Text",
+        selection: "text",
+        type: "tagInput",
+        whitelist: [],
+      },
+    ],
+    "Send Attachments": [
+      {
+        label: "Chat ID",
+        type: "text",
+        selection: "chat_id",
+      },
+      {
+        label: "File Upload Field",
+        type: "Select",
+        selection: "upload_fields",
+        data: [],
+      },
+    ],
+  },
+};
+
 const APPS = [
   {
     id: 1,
@@ -154,18 +195,85 @@ const IntegrationWizard = (props) => {
         return e.id === selectedDatas.destination[0];
       })[0];
 
+      const settings = {
+        source: {},
+        destination: {},
+      };
+      for (const setting in selectedSettings.source) {
+        if (
+          appSettingsInitial[source_app.name][selectedDatas.source[1]].filter(
+            (e) => e.selection === setting
+          )[0].type === "tagInput"
+        ) {
+          let temp = "";
+          const settingText = selectedSettings.source[setting];
+          let currIndex = 0;
+          while (settingText.indexOf("[[", currIndex) != -1) {
+            temp += settingText.slice(
+              currIndex,
+              settingText.indexOf("[[", currIndex) + 2
+            );
+            const textJson = JSON.parse(
+              settingText.slice(
+                settingText.indexOf("[[", currIndex) + 2,
+                settingText.indexOf("]]", currIndex)
+              )
+            );
+            temp += textJson.id;
+            temp += "]]";
+            currIndex = settingText.indexOf("]]", currIndex) + 2;
+          }
+          temp += settingText.slice(currIndex);
+          settings.source[setting] = temp;
+        } else {
+          settings.source[setting] = selectedSettings.source[setting];
+        }
+      }
+      for (const setting in values) {
+        if (
+          appSettingsInitial[destination_app.name][
+            selectedDatas.destination[1]
+          ].filter((e) => e.selection === setting)[0].type === "tagInput"
+        ) {
+          let temp = "";
+          const settingText = values[setting];
+          let currIndex = 0;
+          while (settingText.indexOf("[[", currIndex) != -1) {
+            temp += settingText.slice(
+              currIndex,
+              settingText.indexOf("[[", currIndex) + 2
+            );
+            const textJson = JSON.parse(
+              settingText.slice(
+                settingText.indexOf("[[", currIndex) + 2,
+                settingText.indexOf("]]", currIndex)
+              )
+            );
+            temp += textJson.id;
+            temp += "]]";
+            currIndex = settingText.indexOf("]]", currIndex) + 2;
+            console.log(currIndex);
+            console.log(temp);
+          }
+          temp += settingText.slice(currIndex);
+          settings.destination[setting] = temp;
+        } else {
+          settings.destination[setting] = values[setting];
+        }
+      }
+
       const allData = {
         source: {
           app_name: source_app.name.toLowerCase(),
           app_action: selectedDatas.source[1],
           api_key: selectedDatas.source[2],
-          settings: selectedSettings.source,
+          settings: settings.source,
         },
         destination: {
           app_name: destination_app.name.toLowerCase(),
           app_action: selectedDatas.destination[1],
           api_key: selectedDatas.destination[2],
-          settings: selectedSettings.destination,
+          settings: settings.destination,
         },
         action: "create",
       };
@@ -206,6 +314,7 @@ const IntegrationWizard = (props) => {
                     return e.id === selectedDatas[settingsChoice][0];
                   })[0]
                 }
+                appSettingsInitial={appSettingsInitial}
                 onSave={saveSettingsHandler}
                 appAction={selectedDatas[settingsChoice][1]}
                 type={settingsChoice}
