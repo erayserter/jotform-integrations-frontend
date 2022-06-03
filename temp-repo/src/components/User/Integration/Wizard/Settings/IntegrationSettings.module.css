@@ -24,3 +24,12 @@
 .settings--container button:hover {
   background-color: #e65700;
 }
+
+.select--container {
+  margin: 15px 10px;
+}
+
+.select--container label {
+  margin: 10px 0px;
+  display: block;
+}

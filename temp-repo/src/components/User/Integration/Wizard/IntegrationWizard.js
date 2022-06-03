@@ -73,7 +73,7 @@ const APPS = [
       "Telegram trigger 4",
       "Telegram trigger 5",
     ],
-    actions: ["Send Message"],
+    actions: ["Send Message", "Send Attachments"],
   },
 ];
 
