@@ -4,28 +4,20 @@ import classes from "./UserContentSection.module.css";
 
 import ContentSectionListItem from "./ContentSectionListItem";
 
-const getAllWebhooks = async () => {
-  return fetch("https://me-serter.jotform.dev/intern-api/getAllWebhooks").then(
-    (res) => res.json()
-  );
-};
-
 const UserContentSection = (props) => {
-  const [webhooks, setWebhooks] = useState([]);
-
-  useEffect(() => {
-    const asyncHandler = async () => {
-      const res = await getAllWebhooks();
-      if (res.responseCode === 200) setWebhooks(res.content);
-    };
-    asyncHandler();
-  }, []);
+  const askedContent = props.webhooks.filter((m) => {
+    if (props.content.header === "Integrations")
+      return m.status === "ENABLED" || m.status === "DISABLED";
+    if (props.content.header === "Trash") return m.status === "DELETED";
+    if (props.content.header === "Favorites")
+      return m.status !== "DELETED" && m["is_favorite"] === 1;
+  });
 
   return (
     <div className={classes["content--list"]}>
       <div className={classes["content--list-wrapper"]}>
-        {webhooks.length !== 0 &&
-          webhooks
+        {askedContent.length !== 0 &&
+          askedContent
             .filter((m) => {
               return (
                 m.value.source["app_name"]
@@ -47,10 +39,24 @@ const UserContentSection = (props) => {
                 <ContentSectionListItem
                   webhook={e}
                   onIntegrationUpdate={props.onIntegrationUpdate}
+                  onSelect={props.onSelect}
+                  onFavorite={props.onFavorite}
                 />
               );
             })}
-        {webhooks.length === 0 && "..."}
+        {askedContent.length === 0 && (
+          <div className={classes["content--no-content"]}>
+            <div className={classes["content--no-content-wrapper"]}>
+              <div className={classes["content--no-content-icon"]}></div>
+              <div className={classes["content--no-content-primary-text"]}>
+                YOU DON'T HAVE ANY {props.content.value} YET!
+              </div>
+              <div className={classes["content--no-content-secondary-text"]}>
+                Your {props.content.value} will appear here.
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

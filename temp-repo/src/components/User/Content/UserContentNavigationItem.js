@@ -4,12 +4,12 @@ import classes from "./UserContentNavigationItem.module.css";
 
 const UserContentNavigationItem = (props) => {
   const clickHandler = (event) => {
-    props.sectionChange(props.title);
+    props.sectionChange(props.item);
   };
 
   return (
     <button className={classes["navigation--button"]} onClick={clickHandler}>
-      {props.title}
+      {props.item.header}
     </button>
   );
 };

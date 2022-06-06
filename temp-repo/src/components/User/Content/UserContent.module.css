@@ -1,20 +1,23 @@
 .user--main {
   height: 100%;
-  display: flex;
-  align-items: stretch;
   background-color: #fff;
+  align-items: stretch;
+  display: flex;
+  flex: 1 1 auto;
+  isolation: isolate;
 }
 
 .user--navigation {
-  background-color: #f3f3fe;
+  /* background-color: #f3f3fe;
   border-right: 1px solid #c8ceed;
   border-bottom: 1px solid #c8ceed;
+  flex: 0 1 300px; */
+  background: #f3f3fe;
+  border-color: #c8ceed;
+  border-style: solid;
+  border-width: 0 1px 1px 0;
   flex: 0 1 300px;
-}
-
-.user--section {
-  align-items: flex-end;
-  flex: 1 0;
+  min-width: 300px;
 }
 
 .user--sidebarbutton {
@@ -24,85 +27,26 @@
   display: flex;
   justify-content: center;
   min-height: 62px;
-  padding: 0px 13px 0px;
+  padding: 8px 13px 9px;
 }
 
 .user--sidebarbutton button {
   background-color: #ff6100;
   border: 1px solid #ff6100;
   color: #fff;
+  box-sizing: border-box;
   display: inline-block;
   font-size: 16px;
   font-weight: 500;
   line-height: 1;
+  min-height: 44px;
   padding: 13px;
   text-transform: uppercase;
-  width: 100%;
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.user--sectionsearch {
-  display: flex;
-  background-color: #fff;
-  border-bottom: 1px solid #c8ceed;
-  padding: 8.5px 5px 8.5px;
-
-  justify-content: flex-end;
-}
-
-.user--sectionsearch button {
-  background-color: #fff;
-  border: 1px solid #d8dae9;
-  border-radius: 4px;
-  font-size: 14px;
-  line-height: 1.125rem;
-  min-height: 44px;
-  outline: none;
-  padding: 12px;
-  background: transparent;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='21' height='15' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232B3245'%3E%3Crect width='12.954' height='2.1' rx='1.05'/%3E%3Crect y='4.05' width='10.5' height='2.1' rx='1.05'/%3E%3Cpath d='M1.05 8.1H6.3a1.05 1.05 0 1 1 0 2.1H1.05a1.05 1.05 0 1 1 0-2.1zm0 4.05H4.2a1.05 1.05 0 1 1 0 2.1H1.05a1.05 1.05 0 1 1 0-2.1zM15.798 14.72a.81.81 0 0 0 .625-.267l3.465-3.464a.884.884 0 0 0-1.25-1.25l-1.947 1.946V.893a.893.893 0 0 0-1.786 0v10.792L12.96 9.739a.884.884 0 1 0-1.25 1.25l3.464 3.464a.81.81 0 0 0 .625.268z'/%3E%3C/g%3E%3C/svg%3E");
-  background-position: 10px;
-  background-repeat: no-repeat;
-  box-shadow: none;
-  color: #252d5b;
-  font-weight: 600;
-  margin: 0 5px;
-  padding-left: 35px !important;
-  text-shadow: none;
-}
-
-.user--sectionsearch button:hover {
-  background-color: #f3f3fe;
-}
-
-.user--sectionsearch input {
-  background-color: #f3f3fe;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.875 6.688a4.818 4.818 0 0 1 4.813-4.813A4.818 4.818 0 0 1 11.5 6.688 4.819 4.819 0 0 1 6.687 11.5a4.818 4.818 0 0 1-4.812-4.813zm12.996 7.565-3.869-3.87a5.664 5.664 0 0 0 1.373-3.695A5.694 5.694 0 0 0 6.687 1 5.694 5.694 0 0 0 1 6.688a5.694 5.694 0 0 0 5.688 5.687c1.41 0 2.7-.52 3.696-1.373l3.869 3.87a.438.438 0 1 0 .619-.62z' fill='%236F76A7' stroke='%236F76A7'/%3E%3C/svg%3E");
-  background-position: left 10px center;
-  background-repeat: no-repeat;
-  border: 1px solid #f3f3fe;
-  border-radius: 4px;
-  color: #6f76a7;
-  display: block;
-  font-weight: 400;
-  font-size: 14px;
-  min-height: 38px;
-  padding: 13px 36px;
   transition: 0.3s;
-  margin: 0 17px 0 5px;
-  min-width: 240px;
+  width: 100%;
+  overflow: hidden;
   position: relative;
-}
-
-.user--sectionsearch input::placeholder {
-  color: #6f76a7;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.user--sectionsearch input:hover {
-  border: 1px solid #c8ceed;
+  z-index: 2;
 }
 
 .user--sidebarmenu {
@@ -136,4 +80,156 @@
   font-size: 15px;
   font-weight: 500;
   text-transform: uppercase;
+}
+
+.user--section-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 500px;
+  position: relative;
+  width: 100%;
+}
+
+.user--section-toolbar {
+  background: #fff;
+  border-bottom: 1px solid #c8ceed;
+  display: flex;
+  flex-shrink: 1;
+  left: 0;
+  min-height: 62px;
+  padding: 8px 5px;
+  position: -webkit-sticky;
+  position: sticky;
+  right: 0;
+  top: 0;
+  z-index: 5;
+}
+
+button {
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(0.13, 0.89, 0.82, 1);
+}
+
+.user--section-toolbar button:hover {
+  background-color: #f3f3fe;
+  border-color: #c3cad8;
+}
+
+.user--section-toolbar-wrapper {
+  display: flex;
+  flex: 1 1;
+  justify-content: space-between;
+  pointer-events: none;
+  position: relative;
+  z-index: 20;
+}
+
+.user--selection-menu {
+  align-items: flex-start;
+  display: flex;
+  flex: 1 1;
+  justify-content: flex-start;
+  margin-right: 8px;
+  padding-left: 17px;
+  pointer-events: all;
+  display: none;
+}
+
+.user--trash {
+  background-position: 50%;
+  height: 44px;
+  padding: 0;
+  width: 44px;
+  cursor: pointer;
+
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.454 12.694V5.826H6.215c-.21 0-.211 0-.211.222v6.646h1.45Zm-4.363.011h1.243c.207 0 .208 0 .208-.225V6.048c0-.04.011-.085-.004-.117-.02-.04-.06-.099-.093-.1-.447-.006-.895-.004-1.354-.004v6.878ZM.89 3.54h8.768v9.879c0 .911-.635 1.58-1.504 1.58-1.92.003-3.841.003-5.762 0-.868 0-1.502-.669-1.502-1.581V3.539ZM0 2.622V.88h.201c.883 0 1.766.004 2.649-.005a.402.402 0 0 0 .26-.123c.195-.204.37-.433.563-.64A.332.332 0 0 1 3.89.005a180.78 180.78 0 0 1 2.766 0 .33.33 0 0 1 .217.107c.193.206.368.436.563.64a.406.406 0 0 0 .26.122c.877.009 1.755.005 2.632.005h.214v1.743H0Z' fill='%23D93434'/%3E%3C/svg%3E");
+  color: #d93434;
+  background-repeat: no-repeat;
+  flex-shrink: 0;
+  background-color: #fff;
+  border: 1px solid #d8dae9;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.125rem;
+  min-height: 44px;
+  outline: none;
+  margin-left: 8px;
+  pointer-events: all;
+}
+
+.user--sectionsearch {
+  display: flex;
+  margin-left: auto;
+  max-width: 850px;
+  pointer-events: all;
+}
+
+.user--sectionsearch-sort-wrapper {
+  font-size: 1em;
+  color: rgb(44, 51, 69);
+  line-height: 1;
+  display: flex;
+  pointer-events: all;
+}
+
+.user--sectionsearch-sort-wrapper button {
+  margin-left: 0;
+  background-color: #fff;
+  border: 1px solid #d8dae9;
+  border-radius: 4px;
+  color: #0a1551;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.125rem;
+  min-height: 44px;
+  outline: none;
+  padding: 12px;
+  background: transparent;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='21' height='15' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232B3245'%3E%3Crect width='12.954' height='2.1' rx='1.05'/%3E%3Crect y='4.05' width='10.5' height='2.1' rx='1.05'/%3E%3Cpath d='M1.05 8.1H6.3a1.05 1.05 0 1 1 0 2.1H1.05a1.05 1.05 0 1 1 0-2.1zm0 4.05H4.2a1.05 1.05 0 1 1 0 2.1H1.05a1.05 1.05 0 1 1 0-2.1zM15.798 14.72a.81.81 0 0 0 .625-.267l3.465-3.464a.884.884 0 0 0-1.25-1.25l-1.947 1.946V.893a.893.893 0 0 0-1.786 0v10.792L12.96 9.739a.884.884 0 1 0-1.25 1.25l3.464 3.464a.81.81 0 0 0 .625.268z'/%3E%3C/g%3E%3C/svg%3E");
+  background-position: 10px;
+  background-repeat: no-repeat;
+  box-shadow: none;
+  margin: 0 5px;
+  padding-left: 35px !important;
+  text-shadow: none;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.user--sectionsearch-sort-wrapper button span {
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: all;
+}
+
+.user--sectionsearch-input {
+  flex: 1 1;
+  margin: 0 17px 0 5px;
+  min-width: 240px;
+  position: relative;
+  pointer-events: all;
+}
+
+.user--sectionsearch-input input {
+  background-color: #f3f3fe;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='16' height='16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M1.875 6.688a4.818 4.818 0 0 1 4.813-4.813A4.818 4.818 0 0 1 11.5 6.688 4.819 4.819 0 0 1 6.687 11.5a4.818 4.818 0 0 1-4.812-4.813zm12.996 7.565-3.869-3.87a5.664 5.664 0 0 0 1.373-3.695A5.694 5.694 0 0 0 6.687 1 5.694 5.694 0 0 0 1 6.688a5.694 5.694 0 0 0 5.688 5.687c1.41 0 2.7-.52 3.696-1.373l3.869 3.87a.438.438 0 1 0 .619-.62z' fill='%236F76A7' stroke='%236F76A7'/%3E%3C/svg%3E");
+  background-position: left 10px center;
+  background-repeat: no-repeat;
+  border: 1px solid #f3f3fe;
+  border-radius: 4px;
+  color: #6f76a7;
+  display: block;
+  font-size: 0.875em;
+  min-height: 38px;
+  padding: 13px 36px;
+  transition: 0.3s;
+  width: 100%;
+  line-height: 1.15;
+  margin: 0;
+  pointer-events: all;
+}
+
+.user--sectionsearch-input input:hover {
+  border-color: #c3cad8;
 }

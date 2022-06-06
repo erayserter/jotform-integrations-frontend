@@ -77,6 +77,18 @@
   transition: 0.3s;
 }
 
+.content--list-item-favorite-icon:hover {
+  color: #b5bde7;
+}
+
+.content--list-item-favorite-icon.isActive {
+  color: #ffb629;
+}
+
+.content--list-item.favorite-icon.isActive:hover {
+  color: #ffad10;
+}
+
 .content--list-item-integration-icon {
   display: flex;
   -webkit-box-align: center;

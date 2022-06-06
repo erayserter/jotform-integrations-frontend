@@ -4,6 +4,7 @@ import classes from "./ContentSectionListItem.module.css";
 
 const ContentSectionListItem = (props) => {
   const [isSelected, setIsSelected] = useState(false);
+
   return (
     <div
       className={classes["content--list-item"]}
@@ -19,14 +20,27 @@ const ContentSectionListItem = (props) => {
           <input
             type="checkbox"
             onChange={() => {
-              setIsSelected((prev) => !prev);
+              setIsSelected((prev) => {
+                props.onSelect(props.webhook["webhook_id"], !prev);
+                return !prev;
+              });
             }}
           ></input>
           <label></label>
         </div>
       </div>
-      <div className={classes["content--list-item-sections"]}>
-        <div className={classes["content--list-item-favorite-icon"]}>
+      <div
+        className={`${classes["content--list-item-sections"]} ${classes["isActive"]}`}
+      >
+        <div
+          className={classes["content--list-item-favorite-icon"]}
+          onClick={() => {
+            props.onFavorite(
+              props.webhook.id,
+              props.webhook.is_favorite == 1 ? 0 : 1
+            );
+          }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
