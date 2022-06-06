@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Select from "react-select";
-import IntegrationSettings from "../Settings/IntegrationSettings";
 
 import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
@@ -33,6 +32,7 @@ const IntegrationAppSelector = (props) => {
     setIsAppSelectorVisible(false);
     setIsKeySelectorVisible(false);
     setSelectedAppID(id);
+    setButtonText("Authenticate");
     setSelectedAction("");
     setApiKey("");
   };
@@ -68,7 +68,7 @@ const IntegrationAppSelector = (props) => {
       setSelectedAppID(props.datas[type][0]);
       setSelectedAction(props.datas[type][1]);
       setApiKey(props.datas[type][2]);
-      setIsAppSelectorVisible(false);
+      setIsAppSelectorVisible(true);
       setIsKeySelectorVisible(true);
     }
   }, [props.datas, props.type]);
@@ -121,7 +121,7 @@ const IntegrationAppSelector = (props) => {
                   actionSelectHandler(e.value);
                 }}
                 defaultValue={
-                  selectedAction != "" && {
+                  selectedAction !== "" && {
                     value: selectedAction,
                     label: selectedAction,
                   }

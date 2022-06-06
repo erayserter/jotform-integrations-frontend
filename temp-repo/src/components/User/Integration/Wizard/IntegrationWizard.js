@@ -13,6 +13,7 @@ const appSettingsInitial = {
       {
         label: "Choose Form",
         type: "Select",
+        isMulti: false,
         selection: "form_id",
         data: [],
       },
@@ -41,6 +42,7 @@ const appSettingsInitial = {
       {
         label: "File Upload Field",
         type: "Select",
+        isMulti: true,
         selection: "upload_fields",
         data: [],
       },
@@ -77,6 +79,16 @@ const APPS = [
   },
 ];
 
+async function validateApiKey(credentials) {
+  return fetch("https://me-serter.jotform.dev/intern-api/validateApiKey", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(credentials),
+  }).then((data) => data.json());
+}
+
 const createIntegration = async (credentials) => {
   return await fetch("https://me-serter.jotform.dev/intern-api/webhook", {
     method: "POST",
@@ -95,6 +107,7 @@ const IntegrationWizard = (props) => {
   const [isIntegrationChoice, setIsIntegrationChoice] = useState(false);
   const [isAuthenticationsValid, setIsAuthenticationsValid] = useState(false);
   const [isSettingsChoice, setIsSettingsChoice] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [appDatas, setAppDatas] = useState({
     source: {},
@@ -109,12 +122,67 @@ const IntegrationWizard = (props) => {
     destination: {},
   });
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (props.update) {
+      const source_app = APPS.filter(
+        (e) =>
+          e.name.toLowerCase() === props.oldContent.value.source["app_name"]
+      )[0];
+      const destination_app = APPS.filter(
+        (e) =>
+          e.name.toLowerCase() ===
+          props.oldContent.value.destination["app_name"]
+      )[0];
+      setSelectedDatas({
+        source: [
+          source_app.id,
+          props.oldContent.value.source["app_action"],
+          props.oldContent.value.source["api_key"],
+        ],
+        destination: [
+          destination_app.id,
+          props.oldContent.value.destination["app_action"],
+          props.oldContent.value.destination["api_key"],
+        ],
+      });
+      setSelectedSettings({
+        source: props.oldContent.value.source.settings,
+        destination: props.oldContent.value.destination.settings,
+      });
+      setIsLoading(true);
+
+      const pullDatas = async () => {
+        const res_source = await validateApiKey({
+          app_name: props.oldContent.value.source["app_name"].toLowerCase(),
+          action: props.oldContent.value.source["app_action"],
+          api_key: props.oldContent.value.source["api_key"],
+        });
+        // const res_destination = await validateApiKey({
+        //   app_name:
+        //     props.oldContent.value.destination["app_name"].toLowerCase(),
+        //   action: props.oldContent.value.destination["app_action"],
+        //   api_key: props.oldContent.value.destination["api_key"],
+        // });
+        setAppDatas({ source: res_source.content.content, destination: {} });
+      };
+
+      pullDatas();
+
+      setIsAuthenticationsValid(true);
+      setIsModelOpen(true);
+      setIsLoading(false);
+      setIsSettingsChoice(true);
+    }
+  }, [props.update]);
 
   const modalClickRef = useRef();
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
+    if (!bool) {
+      setIsIntegrationChoice(false);
+      setIsSettingsChoice(false);
+    }
   };
 
   const integrationChoiceHandler = (bool, type) => {
@@ -181,10 +249,16 @@ const IntegrationWizard = (props) => {
     setIsModelOpen(true);
   };
 
-  const saveSettingsHandler = (values, type) => {
+  const settingsChangeHandler = (values, type) => {
     setSelectedSettings((prev) => {
       return { ...prev, [type]: values };
     });
+  };
+
+  const saveSettingsHandler = (values, type) => {
+    // setSelectedSettings((prev) => {
+    //   return { ...prev, [type]: values };
+    // });
     if (settingsChoice === "source") {
       setSettingsChoice("destination");
     } else {
@@ -252,8 +326,6 @@ const IntegrationWizard = (props) => {
             temp += textJson.id;
             temp += "]]";
             currIndex = settingText.indexOf("]]", currIndex) + 2;
-            console.log(currIndex);
-            console.log(temp);
           }
           temp += settingText.slice(currIndex);
           settings.destination[setting] = temp;
@@ -275,8 +347,15 @@ const IntegrationWizard = (props) => {
           api_key: selectedDatas.destination[2],
           settings: settings.destination,
         },
-        action: "create",
+        // action: "create",
       };
+
+      if (props.update) {
+        allData.action = "update";
+        allData["webhook_id"] = props.oldContent["webhook_id"];
+      } else {
+        allData.action = "create";
+      }
 
       const res = createIntegration(allData);
 
@@ -315,6 +394,7 @@ const IntegrationWizard = (props) => {
                   })[0]
                 }
                 appSettingsInitial={appSettingsInitial}
+                onSettingsChange={settingsChangeHandler}
                 onSave={saveSettingsHandler}
                 appAction={selectedDatas[settingsChoice][1]}
                 type={settingsChoice}
@@ -322,6 +402,7 @@ const IntegrationWizard = (props) => {
                 appDatas={appDatas}
               />
             )}
+            {isLoading && <div>loading...</div>}
           </ModalBox>
         )}
       </div>

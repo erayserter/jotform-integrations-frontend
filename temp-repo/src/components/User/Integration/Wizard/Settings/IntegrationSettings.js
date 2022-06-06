@@ -8,13 +8,9 @@ import TagInputContainer from "../../../../UI/TagInputContainer";
 import classes from "./IntegrationSettings.module.css";
 
 const IntegrationSettings = (props) => {
-  const [inputValues, setInputValues] = useState({
-    source: {},
-    destination: {},
-  });
   const [appSettings, setAppSettings] = useState(props.appSettingsInitial);
 
-  const [isMulti, setIsMulti] = useState(false);
+  const inputValues = props.settingsData;
 
   useEffect(() => {
     const temp = cloneDeep(appSettings);
@@ -59,41 +55,24 @@ const IntegrationSettings = (props) => {
         props.appAction === "Send Attachments" &&
         temp[props.app.name][props.appAction][1].data.length === 0
       ) {
-        setIsMulti(true);
         const upload_fields =
-          props.appDatas["source"][
-            props.settingsData["source"]["form_id"]["file_upload_fields"]
+          props.appDatas["source"][props.settingsData["source"]["form_id"]][
+            "file_upload_fields"
           ];
         for (const field in upload_fields) {
           temp[props.app.name][props.appAction][1].data.push({
             value: field,
-            label: props.appDatas[props.type][field]["field_name"],
+            label: upload_fields[field]["field_name"],
           });
         }
       }
     }
     setAppSettings(temp);
-    if (
-      Object.keys(props.settingsData[props.type]).length !== 0 ||
-      props.settingsData[props.type].constructor !== Object
-    ) {
-      // setInputValues(props.settingsData[props.type]);
-      setInputValues((prev) => {
-        return { ...prev, [props.type]: props.settingsData[props.type] };
-      });
-    }
-  }, [
-    props.app.name,
-    props.appAction,
-    props.appDatas,
-    props.settingsData,
-    props.type,
-  ]);
+  }, [props.app.name, props.appAction, props.appDatas, props.type]);
 
   const newValueHandler = (label, value) => {
-    setInputValues((prev) => {
-      return { ...prev, [props.type]: { ...prev[props.type], [label]: value } };
-    });
+    inputValues[props.type][label] = value;
+    props.onSettingsChange(inputValues[props.type], props.type);
   };
 
   const saveHandler = (event) => {
@@ -104,13 +83,13 @@ const IntegrationSettings = (props) => {
     <div className={classes["settings--container"]}>
       <h1>{props.app.name} Settings</h1>
       {appSettings[props.app.name][props.appAction].map((e) => {
-        if (e.type === "Select")
+        if (e.type === "Select") {
           return (
             <div className={classes["select--container"]}>
               <label>{e.label}</label>
               <Select
                 key={e.selection}
-                isMulti={isMulti}
+                isMulti={e.isMulti}
                 className="basic-multi-select"
                 classNamePrefix="select"
                 isClearable={true}
@@ -121,13 +100,16 @@ const IntegrationSettings = (props) => {
                 menuPortalTarget={document.body}
                 menuPlacement="bottom"
                 onChange={(event) => {
-                  if (isMulti) {
-                    console.log(event.value);
-                  }
-                  newValueHandler(e.selection, event.value);
+                  if (e.isMulti) {
+                    newValueHandler(
+                      e.selection,
+                      event.map((element) => {
+                        return parseInt(element.value, 10);
+                      })
+                    );
+                  } else newValueHandler(e.selection, event.value);
                 }}
-                defaultValue={
-                  inputValues[props.type][e.selection] &&
+                value={
                   e.data.filter((element) => {
                     return (
                       element.value === inputValues[props.type][e.selection]
@@ -137,7 +119,7 @@ const IntegrationSettings = (props) => {
               />
             </div>
           );
-        else if (e.type === "tagInput") {
+        } else if (e.type === "tagInput") {
           if (
             appSettings[props.app.name][props.appAction][1].whitelist.length <=
             0

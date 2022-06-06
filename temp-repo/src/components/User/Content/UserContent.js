@@ -5,13 +5,7 @@ import UserContentNavigationItem from "./UserContentNavigationItem";
 
 import UserContentSection from "./List/UserContentSection";
 
-const LIST_ITEMS = [
-  "All Integrations",
-  "Templates",
-  "Keys",
-  "Favorites",
-  "Trash",
-];
+const LIST_ITEMS = ["Integrations", "Templates", "Keys", "Favorites", "Trash"];
 
 const UserContent = (props) => {
   const [sectionContent, setSectionContent] = useState("All Integrations");
