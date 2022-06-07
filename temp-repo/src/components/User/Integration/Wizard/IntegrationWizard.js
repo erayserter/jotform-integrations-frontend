@@ -256,9 +256,6 @@ const IntegrationWizard = (props) => {
   };
 
   const saveSettingsHandler = (values, type) => {
-    // setSelectedSettings((prev) => {
-    //   return { ...prev, [type]: values };
-    // });
     if (settingsChoice === "source") {
       setSettingsChoice("destination");
     } else {
@@ -282,7 +279,7 @@ const IntegrationWizard = (props) => {
           let temp = "";
           const settingText = selectedSettings.source[setting];
           let currIndex = 0;
-          while (settingText.indexOf("[[", currIndex) != -1) {
+          while (settingText.indexOf("[[", currIndex) !== -1) {
             temp += settingText.slice(
               currIndex,
               settingText.indexOf("[[", currIndex) + 2
@@ -312,7 +309,7 @@ const IntegrationWizard = (props) => {
           let temp = "";
           const settingText = values[setting];
           let currIndex = 0;
-          while (settingText.indexOf("[[", currIndex) != -1) {
+          while (settingText.indexOf("[[", currIndex) !== -1) {
             temp += settingText.slice(
               currIndex,
               settingText.indexOf("[[", currIndex) + 2
@@ -357,7 +354,7 @@ const IntegrationWizard = (props) => {
         allData.action = "create";
       }
 
-      const res = createIntegration(allData);
+      createIntegration(allData);
 
       props.onClose();
     }

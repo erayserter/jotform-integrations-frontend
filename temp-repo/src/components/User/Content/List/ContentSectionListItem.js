@@ -1,9 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import classes from "./ContentSectionListItem.module.css";
 
 const ContentSectionListItem = (props) => {
   const [isSelected, setIsSelected] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(0);
+
+  useEffect(() => {
+    setIsFavorite(Number(props.webhook["is_favorite"]));
+  }, [props]);
+
+  const favoriteHandler = (event) => {
+    setIsFavorite((prev) => {
+      let favorite = 0;
+      if (prev === 0) favorite = 1;
+      props.onFavorite(props.webhook.webhook_id, favorite);
+      return favorite;
+    });
+  };
 
   return (
     <div
@@ -29,17 +43,12 @@ const ContentSectionListItem = (props) => {
           <label></label>
         </div>
       </div>
-      <div
-        className={`${classes["content--list-item-sections"]} ${classes["isActive"]}`}
-      >
+      <div className={classes["content--list-item-sections"]}>
         <div
-          className={classes["content--list-item-favorite-icon"]}
-          onClick={() => {
-            props.onFavorite(
-              props.webhook.id,
-              props.webhook.is_favorite == 1 ? 0 : 1
-            );
-          }}
+          className={`${classes["content--list-item-favorite-icon"]} ${
+            isFavorite && classes["favorite-isActive"]
+          }`}
+          onClick={favoriteHandler}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -27,7 +27,7 @@ const UserLogin = (props) => {
       login_info: username,
       password: password,
     });
-    if (res.content.responseCode == 200) {
+    if (res.content.responseCode === 200) {
       props.onSignIn(true);
     }
   };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, HashRouter } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 
 import AppContainer from "./components/AppContainer";
 import UserLogin from "./components/User/Authentication/UserLogin";

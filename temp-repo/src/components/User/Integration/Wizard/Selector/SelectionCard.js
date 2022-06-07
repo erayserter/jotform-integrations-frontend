@@ -53,7 +53,7 @@ const SelectionCard = (props) => {
         />
       </div>
       <div className={classes["app-navigation"]}>
-        <ul>{searchedWord == "" ? fullContent : filteredContent}</ul>
+        <ul>{searchedWord === "" ? fullContent : filteredContent}</ul>
       </div>
     </Fragment>
   );

@@ -24,20 +24,6 @@ const AppContainer = (props) => {
     setOldContent({});
   };
 
-  const logedinContent = isIntegrationContent ? (
-    <IntegrationContent
-      onNewIntegration={setIsIntegrationContent}
-      onClose={closeHandler}
-      update={isUpdate}
-      oldContent={oldContent}
-    />
-  ) : (
-    <UserContent
-      onNewIntegration={setIsIntegrationContent}
-      onIntegrationUpdate={integrationUpdateHandler}
-    />
-  );
-
   if (!props.isLoggedIn)
     return (
       <Navigate
@@ -50,7 +36,20 @@ const AppContainer = (props) => {
   return (
     <div className={classes["container"]}>
       <Navbar />
-      {logedinContent}
+      {isIntegrationContent && (
+        <IntegrationContent
+          onNewIntegration={setIsIntegrationContent}
+          onClose={closeHandler}
+          update={isUpdate}
+          oldContent={oldContent}
+        />
+      )}
+      {!isIntegrationContent && (
+        <UserContent
+          onNewIntegration={setIsIntegrationContent}
+          onIntegrationUpdate={integrationUpdateHandler}
+        />
+      )}
     </div>
   );
 };

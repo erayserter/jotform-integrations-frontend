@@ -81,11 +81,11 @@
   color: #b5bde7;
 }
 
-.content--list-item-favorite-icon.isActive {
+.favorite-isActive {
   color: #ffb629;
 }
 
-.content--list-item.favorite-icon.isActive:hover {
+.favorite-isActive:hover {
   color: #ffad10;
 }
 

@@ -35,7 +35,6 @@ const IntegrationSettings = (props) => {
           props.appDatas["source"][props.settingsData["source"]["form_id"]][
             "fields"
           ];
-        let count = 0;
         for (const field in fields) {
           temp[props.app.name][props.appAction][1].whitelist.push({
             id: field,

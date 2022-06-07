@@ -79,7 +79,7 @@ const UserContent = (props) => {
       if (webhook)
         if (selectedWebhooks[webhook]) credentials.webhook_id.push(webhook);
 
-    const res = await postWebhookRequest(credentials);
+    await postWebhookRequest(credentials);
     getWebhooks();
   };
 
@@ -89,7 +89,8 @@ const UserContent = (props) => {
       is_favorite: bool,
       action: "favorite",
     };
-    const res = await postWebhookRequest(credentials);
+    await postWebhookRequest(credentials);
+    getWebhooks();
   };
 
   return (
@@ -103,7 +104,16 @@ const UserContent = (props) => {
           <ul>
             {LIST_ITEMS.map((item) => {
               return (
-                <li key={item.header}>
+                <li
+                  key={item.header}
+                  // style={
+                  //   sectionContent === item.header
+                  //     ? {
+                  //         backgroundColor: "#c3cad8",
+                  //       }
+                  //     : {}
+                  // }
+                >
                   <UserContentNavigationItem
                     item={item}
                     sectionChange={sectionContentHandler}
