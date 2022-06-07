@@ -13,57 +13,9 @@ const LIST_ITEMS = [
   { header: "Trash", value: "Deleted Integrations" },
 ];
 
-const getWebhookRequest = async () => {
-  return fetch("https://me-serter.jotform.dev/intern-api/getAllWebhooks").then(
-    (res) => res.json()
-  );
-};
-
-const postWebhookRequest = async (credentials) => {
-  return await fetch("https://me-serter.jotform.dev/intern-api/webhook", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
-};
-
 const UserContent = (props) => {
   const [sectionContent, setSectionContent] = useState(LIST_ITEMS[0]);
   const [searchedWord, setSearchedWord] = useState("");
-
-  const [webhooks, setWebhooks] = useState([]);
-  const [haveSelected, setHaveSelected] = useState(false);
-  const [selectedWebhooks, setSelectedWebhooks] = useState({});
-
-  const getWebhooks = async () => {
-    const res = await getWebhookRequest();
-    if (res.responseCode === 200) {
-      setWebhooks(res.content);
-      for (const webhook in res.content) {
-        setSelectedWebhooks((prev) => {
-          return { ...prev, [webhook["webhook_id"]]: false };
-        });
-      }
-    }
-    setHaveSelected(false);
-  };
-
-  useEffect(() => {
-    getWebhooks();
-  }, []);
-
-  const selectWebhookHandler = (webhookID, bool) => {
-    setSelectedWebhooks((prev) => {
-      let have = false;
-      const updatedSelectedWebhooks = { ...prev, [webhookID]: bool };
-      for (const webhook in updatedSelectedWebhooks)
-        have = have || updatedSelectedWebhooks[webhook];
-      setHaveSelected(have);
-      return updatedSelectedWebhooks;
-    });
-  };
 
   const sectionContentHandler = (content) => {
     setSectionContent(content);
@@ -71,26 +23,6 @@ const UserContent = (props) => {
 
   const clickHandler = (event) => {
     props.onNewIntegration(true);
-  };
-
-  const deleteWebhookHandler = async (event) => {
-    const credentials = { webhook_id: [], action: "delete" };
-    for (const webhook in selectedWebhooks)
-      if (webhook)
-        if (selectedWebhooks[webhook]) credentials.webhook_id.push(webhook);
-
-    await postWebhookRequest(credentials);
-    getWebhooks();
-  };
-
-  const favoriteWebhookHandler = async (webhook, bool) => {
-    const credentials = {
-      webhook_id: webhook,
-      is_favorite: bool,
-      action: "favorite",
-    };
-    await postWebhookRequest(credentials);
-    getWebhooks();
   };
 
   return (
@@ -104,16 +36,7 @@ const UserContent = (props) => {
           <ul>
             {LIST_ITEMS.map((item) => {
               return (
-                <li
-                  key={item.header}
-                  // style={
-                  //   sectionContent === item.header
-                  //     ? {
-                  //         backgroundColor: "#c3cad8",
-                  //       }
-                  //     : {}
-                  // }
-                >
+                <li key={item.header}>
                   <UserContentNavigationItem
                     item={item}
                     sectionChange={sectionContentHandler}
@@ -129,11 +52,13 @@ const UserContent = (props) => {
           <div className={classes["user--section-toolbar-wrapper"]}>
             <div
               className={classes["user--selection-menu"]}
-              style={{ display: haveSelected ? "block" : "none" }}
+              style={{
+                display: props.selectedWebhooks.length !== 0 ? "block" : "none",
+              }}
             >
               <button
                 className={classes["user--trash"]}
-                onClick={deleteWebhookHandler}
+                onClick={props.onDeleteWebhook}
               ></button>
             </div>
             <div className={classes["user--sectionsearch"]}>
@@ -158,11 +83,11 @@ const UserContent = (props) => {
         </div>
         <UserContentSection
           onIntegrationUpdate={props.onIntegrationUpdate}
+          webhooks={props.webhooks}
           content={sectionContent}
           searchedWord={searchedWord}
-          onSelect={selectWebhookHandler}
-          webhooks={webhooks}
-          onFavorite={favoriteWebhookHandler}
+          onSelect={props.onSelect}
+          onFavorite={props.onFavorite}
         />
       </div>
     </main>

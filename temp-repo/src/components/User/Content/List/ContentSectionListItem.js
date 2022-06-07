@@ -99,7 +99,7 @@ const ContentSectionListItem = (props) => {
       <div className={classes["content--list-item-actions"]}>
         <button
           onClick={(event) => {
-            props.onIntegrationUpdate(props.webhook, true);
+            props.onIntegrationUpdate(props.webhook);
           }}
           className={classes["content--list-item-actions-edit"]}
         >

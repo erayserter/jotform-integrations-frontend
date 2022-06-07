@@ -89,16 +89,6 @@ async function validateApiKey(credentials) {
   }).then((data) => data.json());
 }
 
-const createIntegration = async (credentials) => {
-  return await fetch("https://me-serter.jotform.dev/intern-api/webhook", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
-};
-
 const IntegrationWizard = (props) => {
   const [appType, setAppType] = useState("source");
   const [settingsChoice, setSettingsChoice] = useState("source");
@@ -295,7 +285,7 @@ const IntegrationWizard = (props) => {
             currIndex = settingText.indexOf("]]", currIndex) + 2;
           }
           temp += settingText.slice(currIndex);
-          settings.source[setting] = temp;
+          settings.source[setting] = temp.slice(0, temp.length - 1);
         } else {
           settings.source[setting] = selectedSettings.source[setting];
         }
@@ -325,7 +315,7 @@ const IntegrationWizard = (props) => {
             currIndex = settingText.indexOf("]]", currIndex) + 2;
           }
           temp += settingText.slice(currIndex);
-          settings.destination[setting] = temp;
+          settings.destination[setting] = temp.slice(0, temp.length - 1);
         } else {
           settings.destination[setting] = values[setting];
         }
@@ -344,7 +334,6 @@ const IntegrationWizard = (props) => {
           api_key: selectedDatas.destination[2],
           settings: settings.destination,
         },
-        // action: "create",
       };
 
       if (props.update) {
@@ -354,9 +343,7 @@ const IntegrationWizard = (props) => {
         allData.action = "create";
       }
 
-      createIntegration(allData);
-
-      props.onClose();
+      props.onIntegrationSave(allData, props.update);
     }
   };
 
