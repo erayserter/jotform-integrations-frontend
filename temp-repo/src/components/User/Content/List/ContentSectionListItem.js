@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import classes from "./ContentSectionListItem.module.css";
 
 const ContentSectionListItem = (props) => {
-  const [isSelected, setIsSelected] = useState(false);
   const [isFavorite, setIsFavorite] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -23,7 +22,11 @@ const ContentSectionListItem = (props) => {
   return (
     <div
       className={classes["content--list-item"]}
-      style={isSelected ? { backgroundColor: "#edf8ff" } : {}}
+      style={
+        props.selectedWebhooks.includes(props.webhook["webhook_id"])
+          ? { backgroundColor: "#edf8ff" }
+          : {}
+      }
     >
       <div
         className={[
@@ -35,13 +38,16 @@ const ContentSectionListItem = (props) => {
           <input
             type="checkbox"
             onChange={() => {
-              setIsSelected((prev) => {
-                props.onSelect(props.webhook["webhook_id"], !prev);
-                return !prev;
-              });
+              props.onSelect(props.webhook["webhook_id"]);
             }}
           ></input>
-          <label></label>
+          <label
+            className={
+              props.selectedWebhooks.includes(props.webhook["webhook_id"])
+                ? classes["checked-label"]
+                : null
+            }
+          ></label>
         </div>
       </div>
       <div className={classes["content--list-item-sections"]}>

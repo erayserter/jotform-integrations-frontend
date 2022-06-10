@@ -41,6 +41,7 @@ const UserContentSection = (props) => {
                   key={e}
                   apps={props.apps}
                   webhook={e}
+                  selectedWebhooks={props.selectedWebhooks}
                   onIntegrationUpdate={props.onIntegrationUpdate}
                   onSelect={props.onSelect}
                   onFavorite={props.onFavorite}

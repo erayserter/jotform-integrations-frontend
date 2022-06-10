@@ -55,7 +55,7 @@ const UserContent = (props) => {
             <div
               className={classes["user--selection-menu"]}
               style={{
-                display: props.selectedWebhooks.length !== 0 ? "block" : "none",
+                display: props.selectedWebhooks.length !== 0 ? "flex" : "none",
               }}
             >
               <button
@@ -66,6 +66,18 @@ const UserContent = (props) => {
                   else props.onStatusChangeWebhook("delete");
                 }}
               ></button>
+              {sectionContent.header === "Trash" && (
+                <div className={classes["trash-menu-only"]}>
+                  <button
+                    className={classes["user--restore"]}
+                    onClick={(event) => {
+                      props.onStatusChangeWebhook("enable");
+                    }}
+                  >
+                    <span>Restore</span>
+                  </button>
+                </div>
+              )}
             </div>
             <div className={classes["user--sectionsearch"]}>
               <div className={classes["user--sectionsearch-sort"]}>
@@ -97,6 +109,7 @@ const UserContent = (props) => {
             apps={props.apps}
             onIntegrationUpdate={props.onIntegrationUpdate}
             webhooks={props.webhooks}
+            selectedWebhooks={props.selectedWebhooks}
             content={sectionContent}
             searchedWord={searchedWord}
             onSelect={props.onSelect}
