@@ -9,7 +9,16 @@ const IntegrationAppCard = (props) => {
 
   return (
     <div className={classes["container"]} onClick={clickHandler}>
-      <div className={classes["card"]}>
+      <div
+        className={classes["card"]}
+        style={
+          props.isUpdate
+            ? props.isValid
+              ? { backgroundColor: "#8eff98" }
+              : { backgroundColor: "#ff7f8a" }
+            : {}
+        }
+      >
         {props.datas[0] ? (
           <img
             src={props.apps[props.datas[0] - 1].img}

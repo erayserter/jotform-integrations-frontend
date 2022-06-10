@@ -34,3 +34,14 @@
 .settingsButton:hover {
   background-color: #68a206;
 }
+
+.wizard--invalid-auth {
+  display: block;
+  color: red;
+  font-size: 1.15rem;
+  text-align: center;
+  width: 100%;
+  font-weight: 700;
+  margin: 50px auto 0px auto;
+  padding: 5px 25px;
+}

@@ -1,0 +1,36 @@
+.templates {
+  height: 100%;
+  overflow: auto;
+}
+
+.templates__search-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #c8ceed;
+  padding: 10px;
+  gap: 25%;
+}
+
+.search-bar__select-container {
+  flex-basis: 25%;
+}
+
+.templates__list {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px 1%;
+}
+
+.templates__list > li {
+  transition: transform 0.1s ease-in-out;
+  flex-basis: calc(15.8333%);
+  cursor: pointer;
+}
+
+.templates__list > li:hover {
+  transform: translateY(-5px);
+}

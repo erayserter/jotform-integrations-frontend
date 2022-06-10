@@ -1,5 +1,4 @@
 import React from "react";
-// import { usePopper } from "react-popper";
 
 import classes from "./IntegrationApp.module.css";
 

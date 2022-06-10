@@ -10,8 +10,12 @@ const IntegrationContent = (props) => {
       <div className={classes["content-wrapper"]}>
         <IntegrationHeader update={props.update} />
         <IntegrationWizard
+          apps={props.apps}
+          appSettingsInitial={props.appSettingsInitial}
           onIntegrationSave={props.onIntegrationSave}
+          apiStatus={props.apiStatus}
           update={props.update}
+          isTemplate={props.isTemplate}
           oldContent={props.oldContent}
         />
       </div>

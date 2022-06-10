@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import classes from "./UserContent.module.css";
-import UserContentNavigationItem from "./UserContentNavigationItem";
 
+import UserContentNavigationItem from "./UserContentNavigationItem";
 import UserContentSection from "./List/UserContentSection";
+import Templates from "./List/Templates/Templates";
 
 const LIST_ITEMS = [
   { header: "Integrations", value: "Integrations" },
@@ -39,6 +40,7 @@ const UserContent = (props) => {
                 <li key={item.header}>
                   <UserContentNavigationItem
                     item={item}
+                    current={sectionContent}
                     sectionChange={sectionContentHandler}
                   />
                 </li>
@@ -58,7 +60,11 @@ const UserContent = (props) => {
             >
               <button
                 className={classes["user--trash"]}
-                onClick={props.onDeleteWebhook}
+                onClick={(event) => {
+                  if (sectionContent.header === "Trash")
+                    props.onStatusChangeWebhook("purge");
+                  else props.onStatusChangeWebhook("delete");
+                }}
               ></button>
             </div>
             <div className={classes["user--sectionsearch"]}>
@@ -81,14 +87,23 @@ const UserContent = (props) => {
             </div>
           </div>
         </div>
-        <UserContentSection
-          onIntegrationUpdate={props.onIntegrationUpdate}
-          webhooks={props.webhooks}
-          content={sectionContent}
-          searchedWord={searchedWord}
-          onSelect={props.onSelect}
-          onFavorite={props.onFavorite}
-        />
+        {sectionContent.header === "Templates" ? (
+          <Templates
+            onTemplateSelect={props.onTemplateSelect}
+            apps={props.apps}
+          />
+        ) : (
+          <UserContentSection
+            apps={props.apps}
+            onIntegrationUpdate={props.onIntegrationUpdate}
+            webhooks={props.webhooks}
+            content={sectionContent}
+            searchedWord={searchedWord}
+            onSelect={props.onSelect}
+            onFavorite={props.onFavorite}
+            onStatusChangeWebhook={props.onStatusChangeWebhook}
+          />
+        )}
       </div>
     </main>
   );

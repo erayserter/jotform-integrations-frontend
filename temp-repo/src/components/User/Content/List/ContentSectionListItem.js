@@ -5,6 +5,7 @@ import classes from "./ContentSectionListItem.module.css";
 const ContentSectionListItem = (props) => {
   const [isSelected, setIsSelected] = useState(false);
   const [isFavorite, setIsFavorite] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsFavorite(Number(props.webhook["is_favorite"]));
@@ -69,7 +70,29 @@ const ContentSectionListItem = (props) => {
       </div>
       <div className={classes["content--list-item-sections"]}>
         <div className={classes["content--list-item-integration-icon"]}>
-          <span></span>
+          <img
+            width="40"
+            height="40"
+            src={
+              props.apps.filter(
+                (app) =>
+                  app.name.toLowerCase() ===
+                  props.webhook.value.source.app_name.toLowerCase()
+              )[0].img
+            }
+          />
+          <img
+            width="40"
+            height="40"
+            src={
+              props.apps.filter(
+                (app) =>
+                  app.name.toLowerCase() ===
+                  props.webhook.value.destination.app_name.toLowerCase()
+              )[0].img
+            }
+          />
+          {/* <span></span> */}
         </div>
       </div>
       <div className={classes["content--list-item-headline"]}>
@@ -97,14 +120,37 @@ const ContentSectionListItem = (props) => {
         </div>
       </div>
       <div className={classes["content--list-item-actions"]}>
-        <button
-          onClick={(event) => {
-            props.onIntegrationUpdate(props.webhook);
-          }}
-          className={classes["content--list-item-actions-edit"]}
-        >
-          Edit Integration
-        </button>
+        {props.webhook.status !== "DELETED" && (
+          <button
+            onClick={(event) => {
+              setIsLoading(true);
+              props.onIntegrationUpdate(props.webhook);
+            }}
+            className={classes["content--list-item-actions-edit"]}
+          >
+            {isLoading ? "..." : "Edit Integration"}
+          </button>
+        )}
+        {props.webhook.status === "DELETED" && (
+          <div className={classes["content--list-item-actions-deleted"]}>
+            <button
+              className={classes["purge"]}
+              onClick={(event) => {
+                props.onStatusChangeWebhook("purge", props.webhook.webhook_id);
+              }}
+            >
+              Purge
+            </button>
+            <button
+              className={classes["restore"]}
+              onClick={(event) => {
+                props.onStatusChangeWebhook("enable", props.webhook.webhook_id);
+              }}
+            >
+              Restore
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

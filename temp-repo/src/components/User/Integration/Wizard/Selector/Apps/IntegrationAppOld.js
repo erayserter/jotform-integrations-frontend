@@ -4,10 +4,6 @@ import { usePopper } from "react-popper";
 import classes from "./IntegrationApp.module.css";
 
 const IntegrationApp = (props) => {
-  // const referenceElement = useRef();
-  // const popperElement = useRef();
-  // const arrowElement = useRef();
-
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
   const [arrowElement, setArrowElement] = useState(null);

@@ -2,7 +2,7 @@
   flex-basis: 210px;
   height: 287.5px;
   cursor: pointer;
-  transition: 0.3s;
+  transition: 0.3s ease-in-out;
 }
 
 .card {
@@ -33,5 +33,5 @@
 }
 
 .container:hover {
-  margin-top: -20px;
+  transform: translateY(-15px);
 }

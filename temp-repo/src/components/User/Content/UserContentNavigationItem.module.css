@@ -1,3 +1,7 @@
 .navigation--button {
   cursor: pointer;
 }
+
+.navigation--button.isActive {
+  background-color: #c8ceed;
+}
