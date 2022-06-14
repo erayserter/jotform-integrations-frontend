@@ -35,3 +35,20 @@
 .container:hover {
   transform: translateY(-15px);
 }
+
+.card.invalidApp {
+  border: 2px solid red;
+}
+
+.card.invalidApp:hover {
+  border: 2px solid red;
+}
+
+.text.invalidApp {
+  border: none;
+  color: red;
+}
+
+.container:hover .text.invalidApp {
+  color: red;
+}

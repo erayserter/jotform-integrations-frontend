@@ -3,7 +3,11 @@
   border-top: 1px solid #091140;
 }
 
-.settings--container button {
+.settings--container h1 {
+  padding-left: 60px;
+}
+
+.settings--container .settings--sendButton {
   margin: 25px auto 0px auto;
   background-color: #ff6100;
   color: #fff;
@@ -21,7 +25,7 @@
   transition: 0.3s;
 }
 
-.settings--container button:hover {
+.settings--container .settings--sendButton:hover {
   background-color: #e65700;
 }
 
@@ -32,4 +36,16 @@
 .select--container label {
   margin: 10px 0px;
   display: block;
+}
+
+.prevButton {
+  cursor: pointer;
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  padding: 12px 12px 9px;
+  margin: 0px;
+  border-radius: 50%;
+  border-style: hidden;
+  background-color: #e3e5f5;
 }

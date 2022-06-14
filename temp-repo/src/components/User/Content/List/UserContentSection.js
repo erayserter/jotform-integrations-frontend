@@ -6,11 +6,13 @@ import ContentSectionListItem from "./ContentSectionListItem";
 
 const UserContentSection = (props) => {
   const askedContent = props.webhooks.filter((m) => {
-    if (props.content.header === "Integrations")
-      return m.status === "ENABLED" || m.status === "DISABLED";
-    if (props.content.header === "Trash") return m.status === "DELETED";
-    if (props.content.header === "Favorites")
-      return m.status !== "DELETED" && Number(m["is_favorite"]) === 1;
+    if (m.status !== "PURGED") {
+      if (props.content.header === "Integrations")
+        return m.status === "ENABLED" || m.status === "DISABLED";
+      if (props.content.header === "Trash") return m.status === "DELETED";
+      if (props.content.header === "Favorites")
+        return m.status !== "DELETED" && Number(m["is_favorite"]) === 1;
+    }
     return false;
   });
 
@@ -32,7 +34,11 @@ const UserContentSection = (props) => {
                   .includes(props.searchedWord.toLowerCase()) ||
                 m.value.destination["app_action"]
                   .toLowerCase()
-                  .includes(props.searchedWord.toLowerCase())
+                  .includes(props.searchedWord.toLowerCase()) ||
+                (m.webhook_name &&
+                  m.webhook_name
+                    .toLowerCase()
+                    .includes(props.searchedWord.toLowerCase()))
               );
             })
             .map((e) => {

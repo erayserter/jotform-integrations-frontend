@@ -1,10 +1,12 @@
-import React, { forwardRef } from "react";
+import React, { useRef } from "react";
 
 import classes from "./ModalBox.module.css";
 
 import useOnClickOutside from "../Hooks/useOnClickOutside";
 
-const ModalBox = forwardRef(function ModalBox(props, ref) {
+const ModalBox = (props) => {
+  const ref = useRef();
+
   useOnClickOutside(ref, () => props.onModalBoxClose(false));
 
   return (
@@ -31,6 +33,6 @@ const ModalBox = forwardRef(function ModalBox(props, ref) {
       </div>
     </div>
   );
-});
+};
 
 export default ModalBox;

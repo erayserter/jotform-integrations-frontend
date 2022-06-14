@@ -1,5 +1,4 @@
 .app-search {
-  margin: 20px;
   padding: 0px 15px;
   display: flex;
   align-items: center;
@@ -23,7 +22,7 @@
 }
 
 .app-navigation {
-  padding: 15px 50px 55px;
+  margin: 25px 0px;
 }
 
 .app-navigation ul {

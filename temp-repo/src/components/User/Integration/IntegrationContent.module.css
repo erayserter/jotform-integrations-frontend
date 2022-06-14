@@ -20,3 +20,40 @@
   border-style: hidden;
   background-color: #e3e5f5;
 }
+
+.back-button-container {
+  top: 20px;
+  left: 20px;
+  position: absolute;
+}
+
+.back-button-container__button {
+  border-radius: 30px;
+  max-width: 100%;
+  padding: 0 12px;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  background-color: #e3e5f5;
+  height: 10vw;
+  max-height: 40px;
+  transition: 0.3s;
+  border-width: 0;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.back-button-container svg {
+  height: 19px;
+  width: 17px;
+}
+
+.back-button-container__text {
+  color: #6f76a7;
+  font-weight: 500;
+  line-height: 19px;
+  margin-left: 8px;
+  text-transform: uppercase;
+}

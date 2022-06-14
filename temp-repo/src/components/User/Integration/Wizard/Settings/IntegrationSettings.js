@@ -148,9 +148,21 @@ const IntegrationSettings = (props) => {
             />
           );
       })}
-      <button onClick={saveHandler}>
+      <button className={classes["settings--sendButton"]} onClick={saveHandler}>
         {props.type === "source" ? "Next" : "Save Settings"}
       </button>
+      {props.type !== "source" && (
+        <button
+          className={classes["prevButton"]}
+          onClick={() => props.onPreviousModal("source")}
+        >
+          <img
+            width="16"
+            height="16"
+            src="https://img.icons8.com/external-dreamstale-lineal-dreamstale/32/undefined/external-left-arrow-arrows-dreamstale-lineal-dreamstale.png"
+          />
+        </button>
+      )}
     </div>
   );
 };

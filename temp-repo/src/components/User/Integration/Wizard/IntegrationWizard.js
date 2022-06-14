@@ -6,8 +6,11 @@ import IntegrationAppCard from "./IntegrationAppCard";
 import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
+import InlineEdit from "../../../UI/InlineEdit";
 
 const IntegrationWizard = (props) => {
+  const [webhookName, setWebhookName] = useState("Integration");
+
   const [appType, setAppType] = useState("source");
   const [settingsChoice, setSettingsChoice] = useState("source");
 
@@ -55,6 +58,8 @@ const IntegrationWizard = (props) => {
           setIsModelOpen(true);
           setIsSettingsChoice(true);
         }
+
+        setWebhookName(props.oldContent.webhook_name);
 
         setSelectedDatas({
           source: [
@@ -107,8 +112,6 @@ const IntegrationWizard = (props) => {
     }
   }, [props.update, props.isTemplate]);
 
-  const modalClickRef = useRef();
-
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
     if (!bool) {
@@ -131,7 +134,6 @@ const IntegrationWizard = (props) => {
       };
     });
     setSelectedSettings({ source: {}, destination: {} });
-    setApiStatus({ source: false, destination: false });
   };
 
   const authHandler = (datas, type, appDatas) => {
@@ -259,6 +261,7 @@ const IntegrationWizard = (props) => {
           api_key: selectedDatas.destination[2],
           settings: settings.destination,
         },
+        webhook_name: webhookName,
       };
 
       if (props.update) {
@@ -272,16 +275,31 @@ const IntegrationWizard = (props) => {
     }
   };
 
+  const typeChangeHandler = (type) => {
+    setAppType(type);
+  };
+
   return (
     <div className={classes["wizard"]}>
+      <div className={classes["settingsInlineEdit"]}>
+        <InlineEdit
+          value={webhookName}
+          setValue={setWebhookName}
+          style={{ margin: "0px auto 0px auto" }}
+        />
+      </div>
+      <h2 className={classes["wizard__subheading"]}>
+        Select applications to easly create an integration between them.
+      </h2>
       <div className={classes["cards"]}>
         <IntegrationAppCard
           isValid={apiStatus.source}
           isUpdate={props.update}
           apps={props.apps}
-          onClick={(bool, type) => {
-            integrationChoiceHandler(bool, type);
+          onClick={(data) => {
+            integrationChoiceHandler(true, data.type);
           }}
+          text="Source"
           datas={selectedDatas.source}
           type="source"
         />
@@ -295,9 +313,10 @@ const IntegrationWizard = (props) => {
           isValid={apiStatus.destination}
           isUpdate={props.update}
           apps={props.apps}
-          onClick={(bool, type) => {
-            integrationChoiceHandler(bool, type);
+          onClick={(data) => {
+            integrationChoiceHandler(true, data.type);
           }}
+          text="Destination"
           datas={selectedDatas.destination}
           type="destination"
         />
@@ -319,12 +338,13 @@ const IntegrationWizard = (props) => {
       )}
 
       {isModelOpen && (
-        <ModalBox onModalBoxClose={modalBoxHandler} ref={modalClickRef}>
+        <ModalBox onModalBoxClose={modalBoxHandler}>
           {isAppChoice && (
             <IntegrationAppSelector
               apps={props.apps}
               onAuthenticate={authHandler}
               type={appType}
+              onTypeChange={typeChangeHandler}
               datas={selectedDatas}
               appDatas={appDatas}
               isValid={apiStatus[appType]}
@@ -340,6 +360,7 @@ const IntegrationWizard = (props) => {
               appSettingsInitial={props.appSettingsInitial}
               onSettingsChange={settingsChangeHandler}
               onSave={saveSettingsHandler}
+              onPreviousModal={setSettingsChoice}
               appAction={selectedDatas[settingsChoice][1]}
               type={settingsChoice}
               settingsData={selectedSettings}

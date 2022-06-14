@@ -1,9 +1,15 @@
+.wizard {
+  padding-top: 55px;
+  display: flex;
+  flex-direction: column;
+}
+
 .cards {
   display: flex;
   gap: 30px;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
+  /* margin-top: 50px; */
 }
 
 .switch-icon img {
@@ -24,7 +30,7 @@
   font-size: 1rem;
   height: 40px;
   justify-content: center;
-  margin: 50px auto 0px auto;
+  margin: 20px auto 0px auto;
   padding: 5px 25px;
   text-align: center;
   text-transform: uppercase;
@@ -42,6 +48,22 @@
   text-align: center;
   width: 100%;
   font-weight: 700;
-  margin: 50px auto 0px auto;
+  margin: 20px auto 0px auto;
   padding: 5px 25px;
+}
+
+.settingsInlineEdit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wizard__subheading {
+  color: #6f76a7;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.001px;
+  line-height: 1.15;
+  margin: 10px 0 50px;
+  text-align: center;
 }

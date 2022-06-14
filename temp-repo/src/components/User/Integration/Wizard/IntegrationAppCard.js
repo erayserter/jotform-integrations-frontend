@@ -4,22 +4,17 @@ import classes from "./IntegrationAppCard.module.css";
 
 const IntegrationAppCard = (props) => {
   const clickHandler = (event) => {
-    props.onClick(true, props.type);
+    props.onClick(props);
   };
 
   return (
     <div className={classes["container"]} onClick={clickHandler}>
       <div
-        className={classes["card"]}
-        style={
-          props.isUpdate
-            ? props.isValid
-              ? { backgroundColor: "#8eff98" }
-              : { backgroundColor: "#ff7f8a" }
-            : {}
-        }
+        className={`${classes["card"]} ${
+          props.isUpdate && !props.isValid && classes["invalidApp"]
+        }`}
       >
-        {props.datas[0] ? (
+        {props.datas && props.datas[0] ? (
           <img
             src={props.apps[props.datas[0] - 1].img}
             width="90"
@@ -43,7 +38,13 @@ const IntegrationAppCard = (props) => {
           </svg>
         )}
       </div>
-      <div className={classes["text"]}>{props.type}</div>
+      <div
+        className={`${classes["text"]} ${
+          props.isUpdate && !props.isValid && classes["invalidApp"]
+        }`}
+      >
+        {props.text}
+      </div>
     </div>
   );
 };

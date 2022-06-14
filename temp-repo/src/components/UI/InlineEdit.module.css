@@ -1,0 +1,13 @@
+.inline-edit {
+  background-color: transparent;
+  border: 0;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #0a1551;
+  text-align: center;
+}
+
+.inline-edit:hover {
+  cursor: pointer;
+}

@@ -14,6 +14,7 @@ const APPS = [
     img: "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg",
     triggers: ["Get Submission"],
     actions: ["Temporary Jotform Action", "Temporary Jotform Action 2"],
+    oauth: false,
   },
   {
     id: 2,
@@ -21,6 +22,7 @@ const APPS = [
     img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
     triggers: [],
     actions: ["Send Message", "Send Attachments"],
+    oauth: false,
   },
   {
     id: 3,
@@ -28,6 +30,7 @@ const APPS = [
     img: "https://files.jotform.com/jotformapps/cde74cfb4f0ca88ebc50767e1e211553.png",
     triggers: ["Temporary ClickUp Trigger", "Temporary ClickUp Trigger 2"],
     actions: ["Create Action", "Create Subtask", "Create Comment"],
+    oauth: true,
   },
 ];
 
@@ -127,13 +130,6 @@ const AppContainer = (props) => {
     };
     await postWebhookRequest(credentials);
 
-    // setWebhooks((prev) => {
-    //   prev.map((e) => {
-    //     if (changedWebhookID && e.webhook_id === changedWebhookID)
-    //       return { ...e, status: (status + "d").toUpperCase() };
-    //     return e;
-    //   });
-    // });
     setWebhooks((prev) =>
       prev.map((e) => {
         if (
@@ -210,6 +206,7 @@ const AppContainer = (props) => {
           if (webhook.webhook_id === res.content.webhookId)
             return {
               ...webhook,
+              webhook_name: data.webhook_name,
               value: { source: data.source, destination: data.destination },
             };
           return webhook;
@@ -221,6 +218,7 @@ const AppContainer = (props) => {
           ...prev,
           {
             webhook_id: res.content.webhookId,
+            webhook_name: data.webhook_name,
             value: { source: data.source, destination: data.destination },
             status: "ENABLED",
             is_favorite: "0",
