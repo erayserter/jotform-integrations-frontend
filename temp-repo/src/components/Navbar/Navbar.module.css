@@ -8,19 +8,12 @@
   height: 70px;
 }
 
-.navbar--logo {
-  /* padding-left: 3px; */
-  /* background-color: aqua; */
-}
-
 .navbar--navigation {
-  /* background-color: black; */
   flex-grow: 1;
 }
 
 .navbar--profile {
   padding-right: 20px;
-  /* background-color: red; */
 }
 
 .navbar--profile img {

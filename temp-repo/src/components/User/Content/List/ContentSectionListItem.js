@@ -21,7 +21,9 @@ const ContentSectionListItem = (props) => {
 
   return (
     <div
-      className={classes["content--list-item"]}
+      className={`${classes["content--list-item"]} ${
+        isLoading && classes["loading"]
+      }`}
       style={
         props.selectedWebhooks.includes(props.webhook["webhook_id"])
           ? { backgroundColor: "#edf8ff" }
@@ -119,7 +121,8 @@ const ContentSectionListItem = (props) => {
         >
           <div className={classes["content--list-item-headline-title"]}>
             <div className={classes["content--title"]}>
-              {props.webhook.webhook_name === "Integration" ? (
+              {props.webhook.webhook_name === "Integration" ||
+              props.webhook.webhook_name === "" ? (
                 <span>
                   {props.webhook.value.source["app_name"]}
                   {"  "}
@@ -152,7 +155,9 @@ const ContentSectionListItem = (props) => {
               setIsLoading(true);
               props.onIntegrationUpdate(props.webhook);
             }}
-            className={classes["content--list-item-actions-edit"]}
+            className={`${classes["content--list-item-actions-edit"]} ${
+              isLoading && classes["loading"]
+            }`}
           >
             {isLoading ? "..." : "Edit Integration"}
           </button>

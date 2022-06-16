@@ -13,7 +13,7 @@ const APPS = [
     name: "Jotform",
     img: "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg",
     triggers: ["Get Submission"],
-    actions: ["Temporary Jotform Action", "Temporary Jotform Action 2"],
+    actions: [],
     oauth: false,
   },
   {
@@ -28,8 +28,8 @@ const APPS = [
     id: 3,
     name: "ClickUp",
     img: "https://files.jotform.com/jotformapps/cde74cfb4f0ca88ebc50767e1e211553.png",
-    triggers: ["Temporary ClickUp Trigger", "Temporary ClickUp Trigger 2"],
-    actions: ["Create Action", "Create Subtask", "Create Comment"],
+    triggers: [],
+    actions: ["Create Task", "Create Subtask", "Create Comment"],
     oauth: true,
   },
 ];
@@ -77,6 +77,118 @@ const appSettingsInitial = {
       },
     ],
   },
+  ClickUp: {
+    "Create Task": [
+      {
+        label: "Choose a Workspace",
+        type: "Select",
+        isMulti: false,
+        selection: "workspace",
+        data: [],
+      },
+      {
+        label: "Choose a Space",
+        type: "Select",
+        isMulti: false,
+        selection: "space",
+        data: [],
+      },
+      {
+        label: "Choose a Folder",
+        type: "Select",
+        isMulti: false,
+        selection: "folder",
+        data: [],
+      },
+      {
+        label: "Choose a List",
+        type: "Select",
+        isMulti: false,
+        selection: "list_id",
+        data: [],
+      },
+    ],
+    "Create Subtask": [
+      {
+        label: "Choose a Workspace",
+        type: "Select",
+        isMulti: false,
+        selection: "workspace",
+        data: [],
+      },
+      {
+        label: "Choose a Space",
+        type: "Select",
+        isMulti: false,
+        selection: "space",
+        data: [],
+      },
+      {
+        label: "Choose a Folder",
+        type: "Select",
+        isMulti: false,
+        selection: "folder",
+        data: [],
+      },
+      {
+        label: "Choose a List",
+        type: "Select",
+        isMulti: false,
+        selection: "list_id",
+        data: [],
+      },
+      {
+        label: "Choose a Task",
+        type: "Select",
+        isMulti: false,
+        selection: "task",
+        data: [],
+      },
+    ],
+    "Create Comment": [
+      {
+        label: "Choose a Workspace",
+        type: "Select",
+        isMulti: false,
+        selection: "workspace",
+        data: [],
+      },
+      {
+        label: "Choose a Space",
+        type: "Select",
+        isMulti: false,
+        selection: "space",
+        data: [],
+      },
+      {
+        label: "Choose a Folder",
+        type: "Select",
+        isMulti: false,
+        selection: "folder",
+        data: [],
+      },
+      {
+        label: "Choose a List",
+        type: "Select",
+        isMulti: false,
+        selection: "list_id",
+        data: [],
+      },
+      {
+        label: "Choose a Task",
+        type: "Select",
+        isMulti: false,
+        selection: "task",
+        data: [],
+      },
+      {
+        label: "Enter a Comment",
+        type: "tagInput",
+        selection: "comment",
+        whitelist: [],
+      },
+    ],
+  },
 };
 
 const getWebhookRequest = async () => {
@@ -120,7 +232,9 @@ const AppContainer = (props) => {
 
   const getWebhooks = async () => {
     const res = await getWebhookRequest();
-    if (res.responseCode === 200) setWebhooks(res.content);
+    if (res.responseCode === 200) {
+      setWebhooks(res.content);
+    }
   };
 
   const statusChangeWebhookHandler = async (status, changedWebhookID) => {
@@ -195,6 +309,7 @@ const AppContainer = (props) => {
   const closeHandler = () => {
     setIsIntegrationContent(false);
     setIsUpdate(false);
+    setIsTemplate(false);
     setOldContent({});
   };
 
@@ -289,6 +404,7 @@ const AppContainer = (props) => {
           onIntegrationSave={integrationSaveHandler}
           update={isUpdate}
           isTemplate={isTemplate}
+          onTemplateSelect={templateSelectHandler}
           oldContent={oldContent}
           apiStatus={apiStatus}
         />

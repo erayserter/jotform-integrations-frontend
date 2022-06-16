@@ -65,9 +65,115 @@ const IntegrationSettings = (props) => {
           });
         }
       }
+    } else if (props.app.name === "ClickUp") {
+      const fields = temp[props.app.name][props.appAction];
+      const user = props.appDatas.destination;
+      const workspaces = user.workspaces;
+      if (fields[0].data.length === 0) {
+        for (const workspace of workspaces)
+          fields[0].data.push({ value: workspace.id, label: workspace.name });
+      }
+      if (
+        fields[1].data.length === 0 &&
+        fields[0].selection in inputValues[props.type]
+      ) {
+        const workspace = workspaces.filter((workspace) => {
+          return inputValues[props.type][fields[0].selection] === workspace.id;
+        })[0];
+        const spaces = workspace.spaces;
+        for (const space of spaces)
+          fields[1].data.push({ value: space.id, label: space.name });
+      }
+      if (
+        fields[2].data.length === 0 &&
+        fields[1].selection in inputValues[props.type]
+      ) {
+        const workspace = workspaces.find(
+          (workspace) =>
+            workspace.id === inputValues[props.type][fields[0].selection]
+        );
+        const space = workspace.spaces.find(
+          (space) => space.id === inputValues[props.type][fields[1].selection]
+        );
+        const folders = space.folders;
+        for (const folder of folders)
+          fields[2].data.push({ value: folder.id, label: folder.name });
+      }
+      if (
+        fields[3].data.length === 0 &&
+        fields[2].selection in inputValues[props.type]
+      ) {
+        const workspace = workspaces.find(
+          (workspace) =>
+            workspace.id === inputValues[props.type][fields[0].selection]
+        );
+        const space = workspace.spaces.find(
+          (space) => space.id === inputValues[props.type][fields[1].selection]
+        );
+        const folder = space.folders.find(
+          (folder) => folder.id === inputValues[props.type][fields[2].selection]
+        );
+        const lists = folder.lists;
+        for (const list of lists)
+          fields[3].data.push({ value: list.id, label: list.name });
+      }
+      if (
+        (props.appAction === "Create Subtask" ||
+          props.appAction === "Create Comment") &&
+        fields[4].data.length === 0 &&
+        fields[3].selection in inputValues[props.type]
+      ) {
+        const workspace = workspaces.find(
+          (workspace) =>
+            workspace.id === inputValues[props.type][fields[0].selection]
+        );
+        const space = workspace.spaces.find(
+          (space) => space.id === inputValues[props.type][fields[1].selection]
+        );
+        const folder = space.folders.find(
+          (folder) => folder.id === inputValues[props.type][fields[2].selection]
+        );
+        const list = folder.lists.find((list2) => {
+          return list2.id === inputValues[props.type][fields[3].selection];
+        });
+        const tasks = list.tasks;
+        for (const task of tasks)
+          fields[4].data.push({ value: task.id, label: task.name });
+      }
+      if (
+        props.appAction === "Create Comment" &&
+        fields[5].whitelist.length === 0 &&
+        fields[4].selection in inputValues[props.type]
+      ) {
+        const form_fields =
+          props.appDatas["source"][props.settingsData["source"]["form_id"]][
+            "fields"
+          ];
+        for (const field in form_fields) {
+          fields[5].whitelist.push({
+            id: field,
+            value: form_fields[field]["field_name"],
+          });
+          if (form_fields[field]["subfields"]) {
+            const subfields = form_fields[field]["subfields"];
+            for (const subfield in subfields) {
+              fields[5].whitelist.push({
+                id: field + ":" + form_fields,
+                value: subfields[subfield],
+              });
+            }
+          }
+        }
+      }
     }
     setAppSettings(temp);
-  }, [props.app.name, props.appAction, props.appDatas, props.type]);
+  }, [
+    props.app.name,
+    props.appAction,
+    props.appDatas,
+    props.type,
+    props.settingsData,
+  ]);
 
   const newValueHandler = (label, value) => {
     inputValues[props.type][label] = value;
@@ -83,6 +189,8 @@ const IntegrationSettings = (props) => {
       <h1>{props.app.name} Settings</h1>
       {appSettings[props.app.name][props.appAction].map((e) => {
         if (e.type === "Select") {
+          if (e.data.length <= 0 && !(e.selection in inputValues[props.type]))
+            return;
           return (
             <div className={classes["select--container"]}>
               <label>{e.label}</label>
@@ -119,11 +227,7 @@ const IntegrationSettings = (props) => {
             </div>
           );
         } else if (e.type === "tagInput") {
-          if (
-            appSettings[props.app.name][props.appAction][1].whitelist.length <=
-            0
-          )
-            return;
+          if (e.whitelist.length <= 0) return;
           return (
             <TagInputContainer
               key={e.selection}
@@ -132,9 +236,7 @@ const IntegrationSettings = (props) => {
                 newValueHandler(e.selection, value);
               }}
               defaultValue={inputValues[props.type][e.selection]}
-              whitelist={
-                appSettings[props.app.name][props.appAction][1].whitelist
-              }
+              whitelist={e.whitelist}
             />
           );
         } else

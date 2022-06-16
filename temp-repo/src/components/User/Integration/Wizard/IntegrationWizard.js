@@ -27,8 +27,8 @@ const IntegrationWizard = (props) => {
     destination: {},
   });
   const [selectedDatas, setSelectedDatas] = useState({
-    source: [null, null, null],
-    destination: [null, null, null],
+    source: { id: null, action: null, key: null, auth_id: null },
+    destination: { id: null, action: null, key: null, auth_id: null },
   });
   const [selectedSettings, setSelectedSettings] = useState({
     source: {},
@@ -62,16 +62,18 @@ const IntegrationWizard = (props) => {
         setWebhookName(props.oldContent.webhook_name);
 
         setSelectedDatas({
-          source: [
-            source_app.id,
-            props.oldContent.value.source["app_action"],
-            props.oldContent.value.source["api_key"],
-          ],
-          destination: [
-            destination_app.id,
-            props.oldContent.value.destination["app_action"],
-            props.oldContent.value.destination["api_key"],
-          ],
+          source: {
+            id: source_app.id,
+            action: props.oldContent.value.source["app_action"],
+            key: props.oldContent.value.source["api_key"],
+            auth_id: null,
+          },
+          destination: {
+            id: destination_app.id,
+            action: props.oldContent.value.destination["app_action"],
+            key: props.oldContent.value.destination["api_key"],
+            auth_id: null,
+          },
         });
         setSelectedSettings({
           source: props.apiStatus.source
@@ -92,16 +94,18 @@ const IntegrationWizard = (props) => {
         });
       } else if (props.isTemplate) {
         setSelectedDatas({
-          source: [
-            source_app.id,
-            props.oldContent.value.source["app_action"],
-            null,
-          ],
-          destination: [
-            destination_app.id,
-            props.oldContent.value.destination["app_action"],
-            null,
-          ],
+          source: {
+            id: source_app.id,
+            action: props.oldContent.value.source["app_action"],
+            key: null,
+            auth_id: null,
+          },
+          destination: {
+            id: destination_app.id,
+            action: props.oldContent.value.destination["app_action"],
+            key: null,
+            auth_id: null,
+          },
         });
         setSelectedSettings({
           source: props.oldContent.value.source.settings,
@@ -129,14 +133,19 @@ const IntegrationWizard = (props) => {
   const switchHandler = (event) => {
     setSelectedDatas((prev) => {
       return {
-        source: [prev.destination[0], "", prev.destination[2]],
-        destination: [prev.source[0], "", prev.source[2]],
+        source: {
+          id: prev.destination.id,
+          action: "",
+          key: prev.destination.key,
+        },
+        destination: { id: prev.source.id, action: "", key: prev.source.key },
       };
     });
     setSelectedSettings({ source: {}, destination: {} });
   };
 
   const authHandler = (datas, type, appDatas) => {
+    const valid = { ...apiStatus, [type]: true };
     setIsModelOpen(false);
     setIsAppChoice(false);
     setSelectedDatas((prev) => {
@@ -145,19 +154,9 @@ const IntegrationWizard = (props) => {
     setAppDatas((prev) => {
       return { ...prev, [type]: appDatas };
     });
-    setApiStatus((prev) => {
-      return { ...prev, [type]: true };
-    });
-    if (
-      (selectedDatas.source[2] === null && type !== "source") ||
-      (selectedDatas.destination[2] === null && type !== "destination")
-    ) {
-      if (selectedDatas.source[2] === null && type !== "source") {
-        integrationChoiceHandler(true, "source");
-      } else {
-        integrationChoiceHandler(true, "destination");
-      }
-    }
+    setApiStatus(valid);
+    if (!valid.source) integrationChoiceHandler(true, "source");
+    else if (!valid.destination) integrationChoiceHandler(true, "destination");
   };
 
   const settingsHandler = (event) => {
@@ -177,10 +176,10 @@ const IntegrationWizard = (props) => {
       setSettingsChoice("destination");
     } else {
       const source_app = props.apps.filter((e) => {
-        return e.id === selectedDatas.source[0];
+        return e.id === selectedDatas.source.id;
       })[0];
       const destination_app = props.apps.filter((e) => {
-        return e.id === selectedDatas.destination[0];
+        return e.id === selectedDatas.destination.id;
       })[0];
 
       const settings = {
@@ -190,7 +189,7 @@ const IntegrationWizard = (props) => {
       for (const setting in selectedSettings.source) {
         if (
           props.appSettingsInitial[source_app.name][
-            selectedDatas.source[1]
+            selectedDatas.source.action
           ].filter((e) => e.selection === setting)[0].type === "tagInput"
         ) {
           let temp = "";
@@ -220,7 +219,7 @@ const IntegrationWizard = (props) => {
       for (const setting in values) {
         if (
           props.appSettingsInitial[destination_app.name][
-            selectedDatas.destination[1]
+            selectedDatas.destination.action
           ].filter((e) => e.selection === setting)[0].type === "tagInput"
         ) {
           let temp = "";
@@ -251,14 +250,16 @@ const IntegrationWizard = (props) => {
       const allData = {
         source: {
           app_name: source_app.name.toLowerCase(),
-          app_action: selectedDatas.source[1],
-          api_key: selectedDatas.source[2],
+          app_action: selectedDatas.source.action,
+          api_key: selectedDatas.source.key,
+          auth_user_id: selectedDatas.source.auth_id,
           settings: settings.source,
         },
         destination: {
           app_name: destination_app.name.toLowerCase(),
-          app_action: selectedDatas.destination[1],
-          api_key: selectedDatas.destination[2],
+          app_action: selectedDatas.destination.action,
+          api_key: selectedDatas.destination.key,
+          auth_user_id: selectedDatas.destination.auth_id,
           settings: settings.destination,
         },
         webhook_name: webhookName,
@@ -354,14 +355,14 @@ const IntegrationWizard = (props) => {
             <IntegrationSettings
               app={
                 props.apps.filter((e) => {
-                  return e.id === selectedDatas[settingsChoice][0];
+                  return e.id === selectedDatas[settingsChoice].id;
                 })[0]
               }
               appSettingsInitial={props.appSettingsInitial}
               onSettingsChange={settingsChangeHandler}
               onSave={saveSettingsHandler}
               onPreviousModal={setSettingsChoice}
-              appAction={selectedDatas[settingsChoice][1]}
+              appAction={selectedDatas[settingsChoice].action}
               type={settingsChoice}
               settingsData={selectedSettings}
               appDatas={appDatas}

@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import classes from "./InlineEdit.module.css";
 
 const InlineEdit = ({ value, setValue, style }) => {
   const [editingValue, setEditingValue] = useState(value);
+
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    setEditingValue(value);
+  }, [value]);
 
   const onChange = (event) => setEditingValue(event.target.value);
 
@@ -25,6 +31,7 @@ const InlineEdit = ({ value, setValue, style }) => {
     <input
       style={style}
       className={classes["inline-edit"]}
+      ref={inputRef}
       type="text"
       aria-label="Field name"
       value={editingValue}

@@ -10,8 +10,8 @@ const IntegrationContent = (props) => {
   const [currentContent, setCurrentContent] = useState("choice");
 
   useEffect(() => {
-    if (props.update) setCurrentContent("wizard");
-  }, []);
+    if (props.update || props.isTemplate) setCurrentContent("wizard");
+  }, [props.update, props.isTemplate]);
 
   return (
     <div className={classes["container"]}>
@@ -30,8 +30,13 @@ const IntegrationContent = (props) => {
             oldContent={props.oldContent}
           />
         )}
-        {currentContent === "template" && <Templates />}
       </div>
+      {currentContent === "template" && (
+        <Templates
+          apps={props.apps}
+          onTemplateSelect={props.onTemplateSelect}
+        />
+      )}
       <button className={classes["closeButton"]} onClick={props.onClose}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +51,7 @@ const IntegrationContent = (props) => {
           ></path>
         </svg>
       </button>
-      {!props.update && currentContent !== "choice" && (
+      {!props.update && !props.isTemplate && currentContent !== "choice" && (
         <div
           className={classes["back-button-container"]}
           onClick={(event) => {
