@@ -124,3 +124,7 @@
 .pointer__circle.pointer__circle-active {
   background-color: #0a1551;
 }
+
+.oauth {
+  margin-top: 10px;
+}

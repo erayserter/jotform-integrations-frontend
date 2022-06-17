@@ -158,7 +158,7 @@ const IntegrationSettings = (props) => {
             const subfields = form_fields[field]["subfields"];
             for (const subfield in subfields) {
               fields[5].whitelist.push({
-                id: field + ":" + form_fields,
+                id: field + ":" + subfield,
                 value: subfields[subfield],
               });
             }

@@ -175,7 +175,7 @@ const IntegrationAppSelector = (props) => {
               />
             </div>
             {app && app.oauth ? (
-              <div>
+              <div className={classes["oauth"]}>
                 {accountDetails && accountDetails.length > 0 ? (
                   <div>
                     <span>Account</span>
@@ -206,12 +206,6 @@ const IntegrationAppSelector = (props) => {
                           selectedAccount
                         );
                       }}
-                      defaultValue={
-                        selectedApp.action !== "" && {
-                          value: selectedApp.action,
-                          label: selectedApp.action,
-                        }
-                      }
                     />
                   </div>
                 ) : (

@@ -249,14 +249,14 @@ const IntegrationWizard = (props) => {
 
       const allData = {
         source: {
-          app_name: source_app.name.toLowerCase(),
+          app_name: source_app.name,
           app_action: selectedDatas.source.action,
           api_key: selectedDatas.source.key,
           auth_user_id: selectedDatas.source.auth_id,
           settings: settings.source,
         },
         destination: {
-          app_name: destination_app.name.toLowerCase(),
+          app_name: destination_app.name,
           app_action: selectedDatas.destination.action,
           api_key: selectedDatas.destination.key,
           auth_user_id: selectedDatas.destination.auth_id,

@@ -217,6 +217,13 @@ async function validateApiKey(credentials) {
   }).then((data) => data.json());
 }
 
+async function getAllUserData(appName) {
+  return fetch(
+    "https://me-serter.jotform.dev/intern-api/getAllUserData?app_name=" +
+      appName
+  ).then((res) => res.json());
+}
+
 const AppContainer = (props) => {
   const [webhooks, setWebhooks] = useState([]);
   const [selectedWebhooks, setSelectedWebhooks] = useState([]);
@@ -280,27 +287,70 @@ const AppContainer = (props) => {
   };
 
   const integrationUpdateHandler = async (webhook) => {
-    const res_source = await validateApiKey({
-      app_name: webhook.value.source["app_name"].toLowerCase(),
-      action: webhook.value.source["app_action"],
-      api_key: webhook.value.source["api_key"],
-    });
-    const res_destination = await validateApiKey({
-      app_name: webhook.value.destination["app_name"].toLowerCase(),
-      action: webhook.value.destination["app_action"],
-      api_key: webhook.value.destination["api_key"],
-    });
+    const source_app = APPS.find(
+      (e) =>
+        e.name.toLowerCase() === webhook.value.source.app_name.toLowerCase()
+    );
+    const destination_app = APPS.find(
+      (e) =>
+        e.name.toLowerCase() ===
+        webhook.value.destination.app_name.toLowerCase()
+    );
+
+    const info = {
+      source: { res: null, status: false, content: null },
+      destination: { res: null, status: false, content: null },
+    };
+
+    if (source_app.oauth) {
+      info.source.res = await getAllUserData(webhook.value.source.app_name);
+      const user = info.source.res.content.find(
+        (e) => e.auth_user_id === webhook.value.source.auth_user_id
+      );
+      if (user) info.source.status = true;
+      info.source.content = user;
+    } else {
+      info.source.res = await validateApiKey({
+        app_name: webhook.value.source["app_name"].toLowerCase(),
+        action: webhook.value.source["app_action"],
+        api_key: webhook.value.source["api_key"],
+      });
+      info.source.status = info.source.res.content.responseCode === 200;
+      info.source.content = info.source.res.content.content;
+    }
+    if (destination_app.oauth) {
+      info.destination.res = await getAllUserData(
+        webhook.value.destination.app_name
+      );
+      const user = info.destination.res.content.find(
+        (e) => e.auth_user_id === webhook.value.destination.auth_user_id
+      );
+      if (user) info.destination.status = true;
+      info.destination.content = user;
+    } else {
+      info.destination.res = await validateApiKey({
+        app_name: webhook.value.destination["app_name"].toLowerCase(),
+        action: webhook.value.destination["app_action"],
+        api_key: webhook.value.destination["api_key"],
+      });
+      info.destination.status =
+        info.destination.res.content.responseCode === 200;
+      info.destination.content = info.destination.res.content.content;
+    }
 
     setOldContent((prev) => {
       return {
         ...webhook,
-        app_datas: { source: res_source.content.content, destination: {} },
+        app_datas: {
+          source: info.source.content,
+          destination: info.destination.content,
+        },
       };
     });
 
     setApiStatus({
-      source: res_source.content.responseCode === 200,
-      destination: res_destination.content.responseCode === 200,
+      source: info.source.status,
+      destination: info.destination.status,
     });
     setIsUpdate(true);
     setIsIntegrationContent(true);
