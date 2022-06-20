@@ -6,44 +6,61 @@ import InputContainer from "../../../../UI/InputContainer";
 import TagInputContainer from "../../../../UI/TagInputContainer";
 
 import classes from "./IntegrationSettings.module.css";
+import MatchFieldsContainer from "../../../../UI/MatchFieldsContainer";
 
 const IntegrationSettings = (props) => {
   const [appSettings, setAppSettings] = useState(props.appSettingsInitial);
 
   const inputValues = props.settingsData;
 
+  const appAction = props.datas[props.type].action;
+
+  const source_app = props.apps.find((e) => {
+    return e.id === props.datas.source.id;
+  });
+
+  const destination_app = props.apps.find((e) => {
+    return e.id === props.datas.destination.id;
+  });
+
+  const app = props.apps.find((e) => {
+    return e.id === props.datas[props.type].id;
+  });
+
+  const appName = app.name;
+
   useEffect(() => {
     const temp = cloneDeep(appSettings);
 
     if (
-      props.app.name === "Jotform" &&
-      temp[props.app.name][props.appAction][0].data.length === 0
+      appName === "Jotform" &&
+      temp[appName][appAction][0].data.length === 0
     ) {
       for (const key in props.appDatas[props.type]) {
-        temp[props.app.name][props.appAction][0].data.push({
+        temp[appName][appAction][0].data.push({
           value: key,
           label: props.appDatas[props.type][key]["title"],
         });
       }
     }
-    if (props.app.name === "Telegram") {
+    if (appName === "Telegram") {
       if (
-        props.appAction === "Send Message" &&
-        temp[props.app.name][props.appAction][1].whitelist.length === 0
+        appAction === "Send Message" &&
+        temp[appName][appAction][1].whitelist.length === 0
       ) {
         const fields =
           props.appDatas["source"][props.settingsData["source"]["form_id"]][
             "fields"
           ];
         for (const field in fields) {
-          temp[props.app.name][props.appAction][1].whitelist.push({
+          temp[appName][appAction][1].whitelist.push({
             id: field,
             value: fields[field]["field_name"],
           });
           if (fields[field]["subfields"]) {
             const subfields = fields[field]["subfields"];
             for (const subfield in subfields) {
-              temp[props.app.name][props.appAction][1].whitelist.push({
+              temp[appName][appAction][1].whitelist.push({
                 id: field + ":" + subfield,
                 value: subfields[subfield],
               });
@@ -51,22 +68,22 @@ const IntegrationSettings = (props) => {
           }
         }
       } else if (
-        props.appAction === "Send Attachments" &&
-        temp[props.app.name][props.appAction][1].data.length === 0
+        appAction === "Send Attachments" &&
+        temp[appName][appAction][1].data.length === 0
       ) {
         const upload_fields =
           props.appDatas["source"][props.settingsData["source"]["form_id"]][
             "file_upload_fields"
           ];
         for (const field in upload_fields) {
-          temp[props.app.name][props.appAction][1].data.push({
+          temp[appName][appAction][1].data.push({
             value: field,
             label: upload_fields[field]["field_name"],
           });
         }
       }
-    } else if (props.app.name === "ClickUp") {
-      const fields = temp[props.app.name][props.appAction];
+    } else if (appName === "ClickUp") {
+      const fields = temp[appName][appAction];
       const user = props.appDatas.destination;
       const workspaces = user.workspaces;
       if (fields[0].data.length === 0) {
@@ -118,8 +135,7 @@ const IntegrationSettings = (props) => {
           fields[3].data.push({ value: list.id, label: list.name });
       }
       if (
-        (props.appAction === "Create Subtask" ||
-          props.appAction === "Create Comment") &&
+        (appAction === "Create Subtask" || appAction === "Create Comment") &&
         fields[4].data.length === 0 &&
         fields[3].selection in inputValues[props.type]
       ) {
@@ -141,7 +157,7 @@ const IntegrationSettings = (props) => {
           fields[4].data.push({ value: task.id, label: task.name });
       }
       if (
-        props.appAction === "Create Comment" &&
+        appAction === "Create Comment" &&
         fields[5].whitelist.length === 0 &&
         fields[4].selection in inputValues[props.type]
       ) {
@@ -167,13 +183,7 @@ const IntegrationSettings = (props) => {
       }
     }
     setAppSettings(temp);
-  }, [
-    props.app.name,
-    props.appAction,
-    props.appDatas,
-    props.type,
-    props.settingsData,
-  ]);
+  }, [props.datas, props.apps, props.appDatas, props.type, props.settingsData]);
 
   const newValueHandler = (label, value) => {
     inputValues[props.type][label] = value;
@@ -186,8 +196,8 @@ const IntegrationSettings = (props) => {
 
   return (
     <div className={classes["settings--container"]}>
-      <h1>{props.app.name} Settings</h1>
-      {appSettings[props.app.name][props.appAction].map((e) => {
+      <h1>{appName} Settings</h1>
+      {appSettings[appName][appAction].map((e) => {
         if (e.type === "Select") {
           if (e.data.length <= 0 && !(e.selection in inputValues[props.type]))
             return;
@@ -237,6 +247,14 @@ const IntegrationSettings = (props) => {
               }}
               defaultValue={inputValues[props.type][e.selection]}
               whitelist={e.whitelist}
+            />
+          );
+        } else if (e.type === "matchFields") {
+          return (
+            <MatchFieldsContainer
+              label={e.label}
+              apps={{ source: source_app, destination: destination_app }}
+              maxLength={4}
             />
           );
         } else

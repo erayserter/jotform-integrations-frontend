@@ -90,7 +90,10 @@ const TagInputContainer = (props) => {
                           onClick={(event) => {
                             if (props.defaultValue)
                               props.onChange(
-                                props.defaultValue +
+                                props.defaultValue.substring(
+                                  0,
+                                  props.defaultValue.length
+                                ) +
                                   "[[" +
                                   JSON.stringify(e) +
                                   "]]"

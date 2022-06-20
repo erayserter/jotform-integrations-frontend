@@ -353,15 +353,12 @@ const IntegrationWizard = (props) => {
           )}
           {isSettingsChoice && (
             <IntegrationSettings
-              app={
-                props.apps.filter((e) => {
-                  return e.id === selectedDatas[settingsChoice].id;
-                })[0]
-              }
+              apps={props.apps}
               appSettingsInitial={props.appSettingsInitial}
               onSettingsChange={settingsChangeHandler}
               onSave={saveSettingsHandler}
               onPreviousModal={setSettingsChoice}
+              datas={selectedDatas}
               appAction={selectedDatas[settingsChoice].action}
               type={settingsChoice}
               settingsData={selectedSettings}
