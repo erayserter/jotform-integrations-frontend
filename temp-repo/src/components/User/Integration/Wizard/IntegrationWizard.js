@@ -182,85 +182,20 @@ const IntegrationWizard = (props) => {
         return e.id === selectedDatas.destination.id;
       })[0];
 
-      const settings = {
-        source: {},
-        destination: {},
-      };
-      for (const setting in selectedSettings.source) {
-        if (
-          props.appSettingsInitial[source_app.name][
-            selectedDatas.source.action
-          ].filter((e) => e.selection === setting)[0].type === "tagInput"
-        ) {
-          let temp = "";
-          const settingText = selectedSettings.source[setting];
-          let currIndex = 0;
-          while (settingText.indexOf("[[", currIndex) !== -1) {
-            temp += settingText.slice(
-              currIndex,
-              settingText.indexOf("[[", currIndex) + 2
-            );
-            const textJson = JSON.parse(
-              settingText.slice(
-                settingText.indexOf("[[", currIndex) + 2,
-                settingText.indexOf("]]", currIndex)
-              )
-            );
-            temp += textJson.id;
-            temp += "]]";
-            currIndex = settingText.indexOf("]]", currIndex) + 2;
-          }
-          temp += settingText.slice(currIndex);
-          settings.source[setting] = temp.slice(0, temp.length - 1);
-        } else {
-          settings.source[setting] = selectedSettings.source[setting];
-        }
-      }
-      for (const setting in values) {
-        if (
-          props.appSettingsInitial[destination_app.name][
-            selectedDatas.destination.action
-          ].filter((e) => e.selection === setting)[0].type === "tagInput"
-        ) {
-          let temp = "";
-          const settingText = values[setting];
-          let currIndex = 0;
-          while (settingText.indexOf("[[", currIndex) !== -1) {
-            temp += settingText.slice(
-              currIndex,
-              settingText.indexOf("[[", currIndex) + 2
-            );
-            const textJson = JSON.parse(
-              settingText.slice(
-                settingText.indexOf("[[", currIndex) + 2,
-                settingText.indexOf("]]", currIndex)
-              )
-            );
-            temp += textJson.id;
-            temp += "]]";
-            currIndex = settingText.indexOf("]]", currIndex) + 2;
-          }
-          temp += settingText.slice(currIndex);
-          settings.destination[setting] = temp.slice(0, temp.length - 1);
-        } else {
-          settings.destination[setting] = values[setting];
-        }
-      }
-
       const allData = {
         source: {
           app_name: source_app.name,
           app_action: selectedDatas.source.action,
           api_key: selectedDatas.source.key,
           auth_user_id: selectedDatas.source.auth_id,
-          settings: settings.source,
+          settings: selectedSettings.source,
         },
         destination: {
           app_name: destination_app.name,
           app_action: selectedDatas.destination.action,
           api_key: selectedDatas.destination.key,
           auth_user_id: selectedDatas.destination.auth_id,
-          settings: settings.destination,
+          settings: selectedSettings.destination,
         },
         webhook_name: webhookName,
       };

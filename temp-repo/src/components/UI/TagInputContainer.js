@@ -32,6 +32,56 @@ const TagInputContainer = (props) => {
     setIsToggled(false);
   });
 
+  let str = "";
+  let index = 0;
+  if (props.defaultValue) {
+    while (props.defaultValue.includes("[[", index)) {
+      str += props.defaultValue.substring(
+        index,
+        props.defaultValue.indexOf("[[", index) + 2
+      );
+      index = props.defaultValue.indexOf("[[", index) + 2;
+      let tag = { id: null, value: null };
+      tag.id = props.defaultValue.substring(
+        index,
+        props.defaultValue.indexOf("]]", index)
+      );
+
+      tag.value = props.whitelist.find((e) => {
+        return (
+          e.id ===
+          props.defaultValue.substring(
+            index,
+            props.defaultValue.indexOf("]]", index)
+          )
+        );
+      }).value;
+
+      str += JSON.stringify(tag);
+
+      str += "]]";
+      index = props.defaultValue.indexOf("]]", index) + 2;
+    }
+    if (index < props.defaultValue.length)
+      str += props.defaultValue.substring(index);
+  }
+
+  const convertString = (str) => {
+    let temp = "";
+    let index = 0;
+    while (str.includes("[[", index)) {
+      temp += str.substring(index, str.indexOf("[[", index) + 2);
+      index = str.indexOf("[[", index) + 2;
+      let tag = JSON.parse(str.substring(index, str.indexOf("]]", index)));
+
+      temp += tag.id + "]]";
+
+      index = str.indexOf("]]", index) + 2;
+    }
+    if (index < str.length) temp += str.substring(index);
+    return temp;
+  };
+
   return (
     <div className={classes["tag-input"]}>
       <div className={classes["tag-input__title"]}>
@@ -44,9 +94,9 @@ const TagInputContainer = (props) => {
           settings={{ ...settings, whitelist: props.whitelist }}
           className="myTags"
           onChange={(e) => {
-            props.onChange(e.detail.value);
+            props.onChange(convertString(e.detail.value));
           }}
-          value={props.defaultValue}
+          value={str}
         />
         <div className={classes["input__form-fields"]}>
           <button
@@ -88,18 +138,11 @@ const TagInputContainer = (props) => {
                       return (
                         <li
                           onClick={(event) => {
-                            if (props.defaultValue)
+                            if (props.defaultValue) {
                               props.onChange(
-                                props.defaultValue.substring(
-                                  0,
-                                  props.defaultValue.length
-                                ) +
-                                  "[[" +
-                                  JSON.stringify(e) +
-                                  "]]"
+                                props.defaultValue + "[[" + e.id + "]]"
                               );
-                            else
-                              props.onChange("[[" + JSON.stringify(e) + "]]");
+                            } else props.onChange("[[" + e.id + "]]");
                           }}
                         >
                           {e.value}

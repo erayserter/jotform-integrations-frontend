@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { usePopper } from "react-popper";
 import useOnClickOutside from "../Hooks/useOnClickOutside";
 
@@ -7,35 +7,43 @@ import classes from "./MatchFieldsContainer.module.css";
 const MatchFieldsContainer = (props) => {
   const [referenceElementLeft, setReferenceElementLeft] = useState(null);
   const [popperElementLeft, setPopperElementLeft] = useState(null);
-  let popper = usePopper(referenceElementLeft, popperElementLeft, {});
+  let popper = usePopper(referenceElementLeft, popperElementLeft, {
+    placement: "bottom",
+  });
   const stylesLeft = popper.styles;
   const attributesLeft = popper.attributes;
 
   const [referenceElementRight, setReferenceElementRight] = useState(null);
   const [popperElementRight, setPopperElementRight] = useState(null);
-  popper = usePopper(referenceElementRight, popperElementRight);
+  popper = usePopper(referenceElementRight, popperElementRight, {
+    placement: "bottom",
+  });
   const stylesRight = popper.styles;
   const attributesRight = popper.attributes;
 
-  const [leftPopperOpen, setLeftPopperOpen] = useState(false);
-  const [rightPopperOpen, setRightPopperOpen] = useState(false);
+  const [leftPopperOpen, setLeftPopperOpen] = useState({});
+  const [rightPopperOpen, setRightPopperOpen] = useState({});
 
   const leftDropdownRef = useRef(null);
   const rightDropdownRef = useRef(null);
 
   useOnClickOutside(leftDropdownRef, () => {
-    setLeftPopperOpen(false);
+    setLeftPopperOpen({});
   });
   useOnClickOutside(rightDropdownRef, () => {
-    setRightPopperOpen(false);
+    setRightPopperOpen({});
   });
 
   const [mappingChoices, setMappingChoices] = useState([
     {
-      left: { placeholder: "Name", is_required: true, constant: true },
+      left: { id: 0, placeholder: "Name", is_required: true, constant: true },
       right: {},
     },
   ]);
+
+  useEffect(() => {
+    if (props.default) setMappingChoices(props.default);
+  }, [props.default]);
 
   const [searchLeft, setSearchLeft] = useState("");
   const [searchRight, setSearchRight] = useState("");
@@ -61,9 +69,9 @@ const MatchFieldsContainer = (props) => {
               <span>{props.apps.source.name}</span>
             </div>
           </div>
-          {mappingChoices.map((choice) => {
+          {mappingChoices.map((choice, index) => {
             return (
-              <div className={classes["match-fields__mapping"]}>
+              <div className={classes["match-fields__mapping"]} key={index}>
                 <div className={classes["mapping__leftside"]}>
                   <div className={classes["mapping__dropdown"]}>
                     <div
@@ -75,6 +83,13 @@ const MatchFieldsContainer = (props) => {
                           choice.left.constant && classes["disabled"]
                         } ${classes["dropdown__button"]}`}
                         ref={setReferenceElementLeft}
+                        onClick={(event) => {
+                          if (!choice.left.constant) {
+                            setLeftPopperOpen((prev) => {
+                              return { ...prev, [index]: !prev[index] };
+                            });
+                          }
+                        }}
                       >
                         <div
                           className={`${classes["dropdown__text"]} ${
@@ -84,7 +99,7 @@ const MatchFieldsContainer = (props) => {
                           {choice.left.placeholder || "Please select..."}
                         </div>
                       </button>
-                      {leftPopperOpen && (
+                      {leftPopperOpen[index] && (
                         <div
                           className={classes["dropdown__popper"]}
                           ref={setPopperElementLeft}
@@ -99,13 +114,45 @@ const MatchFieldsContainer = (props) => {
                             }}
                           ></input>
                           <ul>
-                            <li
-                              onClick={(event) => {
-                                setLeftPopperOpen(false);
-                              }}
-                            >
-                              Description
-                            </li>
+                            {props.datas.destination
+                              .filter((data) => {
+                                if (searchLeft !== "")
+                                  return (
+                                    data.value.includes(searchLeft) &&
+                                    !mappingChoices.find(
+                                      (element) => element.left.id == data.id
+                                    )
+                                  );
+                                return !mappingChoices.find(
+                                  (element) => element.left.id == data.id
+                                );
+                              })
+                              .map((data) => {
+                                return (
+                                  <li
+                                    onClick={(event) => {
+                                      setLeftPopperOpen((prev) => {
+                                        return { ...prev, [index]: false };
+                                      });
+                                      const changed = [...mappingChoices];
+                                      changed[index] = {
+                                        ...mappingChoices[index],
+                                        left: {
+                                          id: data.id,
+                                          placeholder: data.value,
+                                          constant: false,
+                                          is_required: false,
+                                        },
+                                      };
+                                      setMappingChoices(changed);
+                                      props.onChange(changed);
+                                    }}
+                                    key={`${index}-${data}-left`}
+                                  >
+                                    {data.value}
+                                  </li>
+                                );
+                              })}
                           </ul>
                         </div>
                       )}
@@ -125,7 +172,9 @@ const MatchFieldsContainer = (props) => {
                         ref={setReferenceElementRight}
                         onClick={(event) => {
                           if (!choice.right.constant) {
-                            setRightPopperOpen((prev) => !prev);
+                            setRightPopperOpen((prev) => {
+                              return { ...prev, [index]: !prev[index] };
+                            });
                           }
                         }}
                       >
@@ -137,7 +186,7 @@ const MatchFieldsContainer = (props) => {
                           {choice.right.placeholder || "Please select..."}
                         </div>
                       </button>
-                      {rightPopperOpen && (
+                      {rightPopperOpen[index] && (
                         <div
                           className={classes["dropdown__popper"]}
                           ref={setPopperElementRight}
@@ -152,13 +201,45 @@ const MatchFieldsContainer = (props) => {
                             }}
                           ></input>
                           <ul>
-                            <li
-                              onClick={(event) => {
-                                setRightPopperOpen(false);
-                              }}
-                            >
-                              Address
-                            </li>
+                            {props.datas.source
+                              .filter((data) => {
+                                if (searchRight !== "")
+                                  return (
+                                    data.value.includes(searchRight) &&
+                                    !mappingChoices.find(
+                                      (element) => element.right.id == data.id
+                                    )
+                                  );
+                                return !mappingChoices.find(
+                                  (element) => element.right.id == data.id
+                                );
+                              })
+                              .map((data) => {
+                                return (
+                                  <li
+                                    onClick={(event) => {
+                                      setRightPopperOpen((prev) => {
+                                        return { ...prev, [index]: false };
+                                      });
+                                      const changed = [...mappingChoices];
+                                      changed[index] = {
+                                        ...mappingChoices[index],
+                                        right: {
+                                          id: data.id,
+                                          placeholder: data.value,
+                                          constant: false,
+                                          is_required: false,
+                                        },
+                                      };
+                                      setMappingChoices(changed);
+                                      props.onChange(changed);
+                                    }}
+                                    key={`${index}-${data}-right`}
+                                  >
+                                    {data.value}
+                                  </li>
+                                );
+                              })}
                           </ul>
                         </div>
                       )}
@@ -168,23 +249,30 @@ const MatchFieldsContainer = (props) => {
               </div>
             );
           })}
-
           <div className={classes["match-fields__add-mapping"]}>
             <button
               className={`${
-                (!mappingChoices[0].right.placeholder ||
+                (mappingChoices.find(
+                  (element) =>
+                    !element.left.placeholder || !element.right.placeholder
+                ) ||
                   mappingChoices.length >= props.maxLength) &&
                 classes["disabled"]
               }`}
               onClick={(event) => {
                 if (
-                  mappingChoices[0].right.placeholder &&
+                  !mappingChoices.find(
+                    (element) =>
+                      !element.left.placeholder || !element.right.placeholder
+                  ) &&
                   mappingChoices.length < props.maxLength
-                )
-                  setMappingChoices((prev) => [
-                    ...prev,
+                ) {
+                  setMappingChoices([
+                    ...mappingChoices,
                     { left: {}, right: {} },
                   ]);
+                  props.onChange([...mappingChoices, { left: {}, right: {} }]);
+                }
               }}
             >
               + Add new field

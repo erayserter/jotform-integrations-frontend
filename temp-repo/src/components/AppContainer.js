@@ -111,7 +111,14 @@ const appSettingsInitial = {
         label: "Match Your Fields",
         type: "matchFields",
         selection: "match_fields",
-        data: {},
+        data: {
+          source: [],
+          destination: [
+            { id: 1, value: "Description" },
+            { id: 2, value: "Priority" },
+            { id: 3, value: "Status" },
+          ],
+        },
       },
     ],
     "Create Subtask": [
@@ -154,6 +161,14 @@ const appSettingsInitial = {
         label: "Match Your Fields",
         type: "matchFields",
         selection: "match_fields",
+        data: {
+          source: [],
+          destination: [
+            { id: 1, value: "Description" },
+            { id: 2, value: "Priority" },
+            { id: 3, value: "Status" },
+          ],
+        },
       },
     ],
     "Create Comment": [

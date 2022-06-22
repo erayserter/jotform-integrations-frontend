@@ -157,6 +157,34 @@ const IntegrationSettings = (props) => {
           fields[4].data.push({ value: task.id, label: task.name });
       }
       if (
+        (appAction === "Create Task" || appAction === "Create Subtask") &&
+        fields[fields.length - 1].data.source.length === 0 &&
+        fields[fields.length - 2].selection in inputValues[props.type]
+      ) {
+        const form_fields =
+          props.appDatas["source"][props.settingsData["source"]["form_id"]][
+            "fields"
+          ];
+        for (const field in form_fields) {
+          fields[fields.length - 1].data.source.push({
+            id: field,
+            value: form_fields[field]["field_name"],
+          });
+          if (form_fields[field]["subfields"]) {
+            const subfields = form_fields[field]["subfields"];
+            for (const subfield in subfields) {
+              fields[fields.length - 1].data.source.push({
+                id: field + ":" + subfield,
+                value:
+                  form_fields[field]["field_name"] +
+                  " - " +
+                  subfields[subfield],
+              });
+            }
+          }
+        }
+      }
+      if (
         appAction === "Create Comment" &&
         fields[5].whitelist.length === 0 &&
         fields[4].selection in inputValues[props.type]
@@ -250,11 +278,18 @@ const IntegrationSettings = (props) => {
             />
           );
         } else if (e.type === "matchFields") {
+          if (e.data.source.length <= 0 || e.data.destination.length <= 0)
+            return;
           return (
             <MatchFieldsContainer
               label={e.label}
               apps={{ source: source_app, destination: destination_app }}
               maxLength={4}
+              datas={e.data}
+              onChange={(value) => {
+                newValueHandler(e.selection, value);
+              }}
+              default={inputValues[props.type][e.selection]}
             />
           );
         } else
