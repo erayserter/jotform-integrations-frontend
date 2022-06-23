@@ -94,7 +94,10 @@ const TagInputContainer = (props) => {
           settings={{ ...settings, whitelist: props.whitelist }}
           className="myTags"
           onChange={(e) => {
-            props.onChange(convertString(e.detail.value));
+            const converted = convertString(
+              e.detail.value.substring(0, e.detail.value.length - 1)
+            );
+            props.onChange(converted);
           }}
           value={str}
         />

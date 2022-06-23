@@ -54,6 +54,7 @@ const IntegrationWizard = (props) => {
           props.apiStatus.source && props.apiStatus.destination;
 
         setApiStatus(props.apiStatus);
+
         if (allAuthsValid) {
           setIsModelOpen(true);
           setIsSettingsChoice(true);
@@ -66,13 +67,13 @@ const IntegrationWizard = (props) => {
             id: source_app.id,
             action: props.oldContent.value.source["app_action"],
             key: props.oldContent.value.source["api_key"],
-            auth_id: null,
+            auth_id: props.oldContent.value.source.auth_user_id,
           },
           destination: {
             id: destination_app.id,
             action: props.oldContent.value.destination["app_action"],
             key: props.oldContent.value.destination["api_key"],
-            auth_id: null,
+            auth_id: props.oldContent.value.destination.auth_user_id,
           },
         });
         setSelectedSettings({

@@ -1,52 +1,84 @@
-import React, { useState, useRef, useEffect } from "react";
-import { usePopper } from "react-popper";
-import useOnClickOutside from "../Hooks/useOnClickOutside";
+import { isEmpty } from "lodash";
+import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+
+import Select from "react-select";
 
 import classes from "./MatchFieldsContainer.module.css";
 
+const convertInput = (inputObject, fieldDatas) => {
+  let temporaryArray = [];
+
+  for (const fieldId in inputObject) {
+    const destinationField = fieldDatas.destination.find(
+      (field) => field.value == inputObject[fieldId]
+    );
+
+    if (destinationField == null && fieldDatas.predefined[fieldId]) {
+      destinationField = fieldDatas.destination.predefined[fieldId].find(
+        (field) => field.value == fieldId
+      );
+    }
+
+    const sourceField = fieldDatas.source.find(
+      (field) => field.value == fieldId
+    );
+    if (sourceField == null && fieldDatas.predefined[inputObject[fieldId]])
+      sourceField = fieldDatas.predefined[inputObject[fieldId]].find(
+        (field) => field.value == fieldId
+      );
+
+    temporaryArray.push({
+      destination: destinationField
+        ? {
+            value: destinationField.value,
+            label: destinationField.label,
+          }
+        : {},
+      source: sourceField
+        ? {
+            value: sourceField.value,
+            label: sourceField.label,
+          }
+        : {},
+    });
+  }
+
+  return temporaryArray;
+};
+
+const convertOutput = (outputArray) => {
+  let temporaryObject = {};
+
+  for (var element of outputArray)
+    temporaryObject[element.source.value] = element.destination.value;
+
+  return temporaryObject;
+};
+
 const MatchFieldsContainer = (props) => {
-  const [referenceElementLeft, setReferenceElementLeft] = useState(null);
-  const [popperElementLeft, setPopperElementLeft] = useState(null);
-  let popper = usePopper(referenceElementLeft, popperElementLeft, {
-    placement: "bottom",
-  });
-  const stylesLeft = popper.styles;
-  const attributesLeft = popper.attributes;
-
-  const [referenceElementRight, setReferenceElementRight] = useState(null);
-  const [popperElementRight, setPopperElementRight] = useState(null);
-  popper = usePopper(referenceElementRight, popperElementRight, {
-    placement: "bottom",
-  });
-  const stylesRight = popper.styles;
-  const attributesRight = popper.attributes;
-
-  const [leftPopperOpen, setLeftPopperOpen] = useState({});
-  const [rightPopperOpen, setRightPopperOpen] = useState({});
-
-  const leftDropdownRef = useRef(null);
-  const rightDropdownRef = useRef(null);
-
-  useOnClickOutside(leftDropdownRef, () => {
-    setLeftPopperOpen({});
-  });
-  useOnClickOutside(rightDropdownRef, () => {
-    setRightPopperOpen({});
-  });
-
   const [mappingChoices, setMappingChoices] = useState([
-    {
-      left: { id: 0, placeholder: "Name", is_required: true, constant: true },
-      right: {},
-    },
+    { destination: { value: "name", label: "Name" }, source: {} },
   ]);
 
   useEffect(() => {
-    if (props.default) setMappingChoices(props.default);
-  }, [props.default]);
+    if (props.default && !isEmpty(props.default))
+      setMappingChoices(convertInput(props.default, props.datas));
+  }, []);
 
-  const [searchLeft, setSearchLeft] = useState("");
-  const [searchRight, setSearchRight] = useState("");
+  const destinationRequiredOptions = props.datas.destination.filter(
+    (option) => {
+      if (props.default)
+        return !Object.values(props.default).includes(option.value);
+      return true;
+    }
+  );
+
+  const sourceRequiredOptions = props.datas.source.filter((option) => {
+    if (props.default) return !(option.value in props.default);
+    return true;
+  });
+
+  console.log(props.default);
 
   return (
     <div className={classes["match-fields"]}>
@@ -74,175 +106,71 @@ const MatchFieldsContainer = (props) => {
               <div className={classes["match-fields__mapping"]} key={index}>
                 <div className={classes["mapping__leftside"]}>
                   <div className={classes["mapping__dropdown"]}>
-                    <div
-                      className={classes["dropdown__wrapper"]}
-                      ref={leftDropdownRef}
-                    >
-                      <button
-                        className={`${
-                          choice.left.constant && classes["disabled"]
-                        } ${classes["dropdown__button"]}`}
-                        ref={setReferenceElementLeft}
-                        onClick={(event) => {
-                          if (!choice.left.constant) {
-                            setLeftPopperOpen((prev) => {
-                              return { ...prev, [index]: !prev[index] };
-                            });
+                    <div className={classes["dropdown__wrapper"]}>
+                      <Select
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        isSearchable={true}
+                        name="actions"
+                        options={destinationRequiredOptions}
+                        placeholder="Please select..."
+                        styles={{
+                          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                        }}
+                        menuPortalTarget={document.body}
+                        menuPlacement="bottom"
+                        onChange={(value) => {
+                          let temp = [...mappingChoices];
+                          temp[index] = {
+                            ...temp[index],
+                            destination: value,
+                          };
+                          setMappingChoices(temp);
+                          if (choice.source.value) {
+                            props.onChange(convertOutput(temp));
                           }
                         }}
-                      >
-                        <div
-                          className={`${classes["dropdown__text"]} ${
-                            !choice.left.placeholder && classes["placeholder"]
-                          } ${choice.left.is_required && classes["required"]}`}
-                        >
-                          {choice.left.placeholder || "Please select..."}
-                        </div>
-                      </button>
-                      {leftPopperOpen[index] && (
-                        <div
-                          className={classes["dropdown__popper"]}
-                          ref={setPopperElementLeft}
-                          style={stylesLeft}
-                          {...attributesLeft.popper}
-                        >
-                          <input
-                            placeholder="Search fields..."
-                            value={searchLeft}
-                            onChange={(event) => {
-                              setSearchLeft(event.target.value);
-                            }}
-                          ></input>
-                          <ul>
-                            {props.datas.destination
-                              .filter((data) => {
-                                if (searchLeft !== "")
-                                  return (
-                                    data.value.includes(searchLeft) &&
-                                    !mappingChoices.find(
-                                      (element) => element.left.id == data.id
-                                    )
-                                  );
-                                return !mappingChoices.find(
-                                  (element) => element.left.id == data.id
-                                );
-                              })
-                              .map((data) => {
-                                return (
-                                  <li
-                                    onClick={(event) => {
-                                      setLeftPopperOpen((prev) => {
-                                        return { ...prev, [index]: false };
-                                      });
-                                      const changed = [...mappingChoices];
-                                      changed[index] = {
-                                        ...mappingChoices[index],
-                                        left: {
-                                          id: data.id,
-                                          placeholder: data.value,
-                                          constant: false,
-                                          is_required: false,
-                                        },
-                                      };
-                                      setMappingChoices(changed);
-                                      props.onChange(changed);
-                                    }}
-                                    key={`${index}-${data}-left`}
-                                  >
-                                    {data.value}
-                                  </li>
-                                );
-                              })}
-                          </ul>
-                        </div>
-                      )}
+                        value={choice.destination}
+                      />
                     </div>
                   </div>
                 </div>
                 <div className={classes["mapping__rightside"]}>
                   <div className={classes["mapping__dropdown"]}>
-                    <div
-                      className={classes["dropdown__wrapper"]}
-                      ref={rightDropdownRef}
-                    >
-                      <button
-                        className={`${
-                          choice.right.constant && classes["disabled"]
-                        } ${classes["dropdown__button"]}`}
-                        ref={setReferenceElementRight}
-                        onClick={(event) => {
-                          if (!choice.right.constant) {
-                            setRightPopperOpen((prev) => {
-                              return { ...prev, [index]: !prev[index] };
-                            });
-                          }
+                    <div className={classes["dropdown__wrapper"]}>
+                      <Select
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        placeholder="Please select..."
+                        isSearchable={true}
+                        name="actions"
+                        options={
+                          !isEmpty(choice.destination) &&
+                          props.datas.predefined[choice.destination.value]
+                            ? [
+                                ...props.datas.predefined[
+                                  choice.destination.value
+                                ],
+                                ...sourceRequiredOptions,
+                              ]
+                            : sourceRequiredOptions
+                        }
+                        styles={{
+                          menuPortal: (base) => ({ ...base, zIndex: 9998 }),
                         }}
-                      >
-                        <div
-                          className={`${classes["dropdown__text"]} ${
-                            !choice.right.placeholder && classes["placeholder"]
-                          } ${choice.right.is_required && classes["required"]}`}
-                        >
-                          {choice.right.placeholder || "Please select..."}
-                        </div>
-                      </button>
-                      {rightPopperOpen[index] && (
-                        <div
-                          className={classes["dropdown__popper"]}
-                          ref={setPopperElementRight}
-                          style={stylesRight.popper}
-                          {...attributesRight.popper}
-                        >
-                          <input
-                            placeholder="Search fields..."
-                            value={searchRight}
-                            onChange={(event) => {
-                              setSearchRight(event.target.value);
-                            }}
-                          ></input>
-                          <ul>
-                            {props.datas.source
-                              .filter((data) => {
-                                if (searchRight !== "")
-                                  return (
-                                    data.value.includes(searchRight) &&
-                                    !mappingChoices.find(
-                                      (element) => element.right.id == data.id
-                                    )
-                                  );
-                                return !mappingChoices.find(
-                                  (element) => element.right.id == data.id
-                                );
-                              })
-                              .map((data) => {
-                                return (
-                                  <li
-                                    onClick={(event) => {
-                                      setRightPopperOpen((prev) => {
-                                        return { ...prev, [index]: false };
-                                      });
-                                      const changed = [...mappingChoices];
-                                      changed[index] = {
-                                        ...mappingChoices[index],
-                                        right: {
-                                          id: data.id,
-                                          placeholder: data.value,
-                                          constant: false,
-                                          is_required: false,
-                                        },
-                                      };
-                                      setMappingChoices(changed);
-                                      props.onChange(changed);
-                                    }}
-                                    key={`${index}-${data}-right`}
-                                  >
-                                    {data.value}
-                                  </li>
-                                );
-                              })}
-                          </ul>
-                        </div>
-                      )}
+                        menuPortalTarget={document.body}
+                        menuPlacement="bottom"
+                        onChange={(value) => {
+                          let temp = [...mappingChoices];
+                          temp[index] = {
+                            ...temp[index],
+                            source: value,
+                          };
+                          setMappingChoices(temp);
+                          props.onChange(convertOutput(temp));
+                        }}
+                        value={choice.source}
+                      />
                     </div>
                   </div>
                 </div>
@@ -254,7 +182,7 @@ const MatchFieldsContainer = (props) => {
               className={`${
                 (mappingChoices.find(
                   (element) =>
-                    !element.left.placeholder || !element.right.placeholder
+                    !element.destination.label || !element.source.label
                 ) ||
                   mappingChoices.length >= props.maxLength) &&
                 classes["disabled"]
@@ -263,15 +191,13 @@ const MatchFieldsContainer = (props) => {
                 if (
                   !mappingChoices.find(
                     (element) =>
-                      !element.left.placeholder || !element.right.placeholder
+                      !element.destination.label || !element.source.label
                   ) &&
                   mappingChoices.length < props.maxLength
                 ) {
-                  setMappingChoices([
-                    ...mappingChoices,
-                    { left: {}, right: {} },
-                  ]);
-                  props.onChange([...mappingChoices, { left: {}, right: {} }]);
+                  setMappingChoices((prev) => {
+                    return [...mappingChoices, { source: {}, destination: {} }];
+                  });
                 }
               }}
             >

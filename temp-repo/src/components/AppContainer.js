@@ -114,10 +114,23 @@ const appSettingsInitial = {
         data: {
           source: [],
           destination: [
-            { id: 1, value: "Description" },
-            { id: 2, value: "Priority" },
-            { id: 3, value: "Status" },
+            { value: "name", label: "Name" },
+            { value: "description", label: "Description" },
+            { value: "priority", label: "Priority" },
+            { value: "status", label: "Status" },
           ],
+          predefined: {
+            priority: [
+              { value: "urgent", label: "Urgent" },
+              { value: "high", label: "High" },
+              { value: "normal", label: "Normal" },
+              { value: "low", label: "Low" },
+            ],
+            status: [
+              { value: "todo", label: "TO DO" },
+              { value: "complete", label: "COMPLETE" },
+            ],
+          },
         },
       },
     ],
@@ -164,9 +177,10 @@ const appSettingsInitial = {
         data: {
           source: [],
           destination: [
-            { id: 1, value: "Description" },
-            { id: 2, value: "Priority" },
-            { id: 3, value: "Status" },
+            { value: 0, label: "Name" },
+            { value: 1, label: "Description" },
+            { value: 2, label: "Priority" },
+            { value: 3, label: "Status" },
           ],
         },
       },

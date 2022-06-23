@@ -167,15 +167,15 @@ const IntegrationSettings = (props) => {
           ];
         for (const field in form_fields) {
           fields[fields.length - 1].data.source.push({
-            id: field,
-            value: form_fields[field]["field_name"],
+            value: field,
+            label: form_fields[field]["field_name"],
           });
           if (form_fields[field]["subfields"]) {
             const subfields = form_fields[field]["subfields"];
             for (const subfield in subfields) {
               fields[fields.length - 1].data.source.push({
-                id: field + ":" + subfield,
-                value:
+                value: field + ":" + subfield,
+                label:
                   form_fields[field]["field_name"] +
                   " - " +
                   subfields[subfield],
@@ -183,6 +183,25 @@ const IntegrationSettings = (props) => {
             }
           }
         }
+        const workspace = workspaces.find(
+          (workspace) =>
+            workspace.id === inputValues[props.type][fields[0].selection]
+        );
+        const space = workspace.spaces.find(
+          (space) => space.id === inputValues[props.type][fields[1].selection]
+        );
+        const folder = space.folders.find(
+          (folder) => folder.id === inputValues[props.type][fields[2].selection]
+        );
+        const list = folder.lists.find((list2) => {
+          return list2.id === inputValues[props.type][fields[3].selection];
+        });
+        const clickup_fields = list.fields;
+        for (const field of clickup_fields)
+          fields[fields.length - 1].data.destination.push({
+            value: field.id,
+            label: field.name,
+          });
       }
       if (
         appAction === "Create Comment" &&
@@ -213,9 +232,13 @@ const IntegrationSettings = (props) => {
     setAppSettings(temp);
   }, [props.datas, props.apps, props.appDatas, props.type, props.settingsData]);
 
-  const newValueHandler = (label, value) => {
-    inputValues[props.type][label] = value;
-    props.onSettingsChange(inputValues[props.type], props.type);
+  const newValueHandler = (value, labelData, isExternal) => {
+    if (isExternal == null || isExternal === false) {
+      inputValues[props.type][labelData] = value;
+      props.onSettingsChange(inputValues[props.type], props.type);
+    } else {
+      inputValues[props.type] = { ...inputValues[props.type], ...labelData };
+    }
   };
 
   const saveHandler = (event) => {
@@ -247,12 +270,12 @@ const IntegrationSettings = (props) => {
                 onChange={(event) => {
                   if (e.isMulti) {
                     newValueHandler(
-                      e.selection,
                       event.map((element) => {
                         return parseInt(element.value, 10);
-                      })
+                      }),
+                      e.selection
                     );
-                  } else newValueHandler(e.selection, event.value);
+                  } else newValueHandler(event.value, e.selection);
                 }}
                 value={
                   e.data.filter((element) => {
@@ -271,7 +294,7 @@ const IntegrationSettings = (props) => {
               key={e.selection}
               label={e.label}
               onChange={(value) => {
-                newValueHandler(e.selection, value);
+                newValueHandler(value, e.selection);
               }}
               defaultValue={inputValues[props.type][e.selection]}
               whitelist={e.whitelist}
@@ -286,10 +309,10 @@ const IntegrationSettings = (props) => {
               apps={{ source: source_app, destination: destination_app }}
               maxLength={4}
               datas={e.data}
-              onChange={(value) => {
-                newValueHandler(e.selection, value);
-              }}
               default={inputValues[props.type][e.selection]}
+              onChange={(value) => {
+                newValueHandler(value, e.selection);
+              }}
             />
           );
         } else
@@ -298,7 +321,7 @@ const IntegrationSettings = (props) => {
               key={e.selection}
               inputLabel={e.label}
               inputType={e.type}
-              setter={(value) => newValueHandler(e.selection, value)}
+              setter={(value) => newValueHandler(value, e.selection)}
               default={inputValues[props.type][e.selection]}
             />
           );
