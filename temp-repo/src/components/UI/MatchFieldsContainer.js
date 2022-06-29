@@ -78,8 +78,6 @@ const MatchFieldsContainer = (props) => {
     return true;
   });
 
-  console.log(props.default);
-
   return (
     <div className={classes["match-fields"]}>
       <div className={classes["match-fields__title"]}>
@@ -115,7 +113,7 @@ const MatchFieldsContainer = (props) => {
                         options={destinationRequiredOptions}
                         placeholder="Please select..."
                         styles={{
-                          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                          menuPortal: (base) => ({ ...base, zIndex: 9998 }),
                         }}
                         menuPortalTarget={document.body}
                         menuPlacement="bottom"

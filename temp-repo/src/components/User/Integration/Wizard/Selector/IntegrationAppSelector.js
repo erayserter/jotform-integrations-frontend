@@ -119,7 +119,7 @@ const IntegrationAppSelector = (props) => {
     }
   }, [props.datas, props.type]);
 
-  const app = props.apps.filter((e) => e.id === selectedApp.id)[0];
+  const app = props.apps.find((e) => e.id === selectedApp.id);
 
   return (
     <div className={classes["app-selector__container"]}>

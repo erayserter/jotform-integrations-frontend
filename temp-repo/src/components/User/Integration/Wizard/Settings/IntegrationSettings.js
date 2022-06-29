@@ -1,19 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Select from "react-select";
-import cloneDeep from "lodash/cloneDeep";
 
 import InputContainer from "../../../../UI/InputContainer";
 import TagInputContainer from "../../../../UI/TagInputContainer";
-
-import classes from "./IntegrationSettings.module.css";
 import MatchFieldsContainer from "../../../../UI/MatchFieldsContainer";
 
+import classes from "./IntegrationSettings.module.css";
+
+import Jotform from "../../../../../data/apps/Jotform";
+import ClickUp from "../../../../../data/apps/ClickUp";
+import Telegram from "../../../../../data/apps/Telegram";
+
 const IntegrationSettings = (props) => {
-  const [appSettings, setAppSettings] = useState(props.appSettingsInitial);
-
   const inputValues = props.settingsData;
-
-  const appAction = props.datas[props.type].action;
 
   const source_app = props.apps.find((e) => {
     return e.id === props.datas.source.id;
@@ -27,209 +26,34 @@ const IntegrationSettings = (props) => {
     return e.id === props.datas[props.type].id;
   });
 
+  const appAction = props.datas[props.type].action;
+  const appOptions = props.appOptions;
   const appName = app.name;
 
   useEffect(() => {
-    const temp = cloneDeep(appSettings);
+    let data = {};
 
-    if (
-      appName === "Jotform" &&
-      temp[appName][appAction][0].data.length === 0
-    ) {
-      for (const key in props.appDatas[props.type]) {
-        temp[appName][appAction][0].data.push({
-          value: key,
-          label: props.appDatas[props.type][key]["title"],
-        });
-      }
+    if (appName === "Jotform") {
+      data = new Jotform().init(props.appDatas, appAction, props.type);
     }
     if (appName === "Telegram") {
-      if (
-        appAction === "Send Message" &&
-        temp[appName][appAction][1].whitelist.length === 0
-      ) {
-        const fields =
-          props.appDatas["source"][props.settingsData["source"]["form_id"]][
-            "fields"
-          ];
-        for (const field in fields) {
-          temp[appName][appAction][1].whitelist.push({
-            id: field,
-            value: fields[field]["field_name"],
-          });
-          if (fields[field]["subfields"]) {
-            const subfields = fields[field]["subfields"];
-            for (const subfield in subfields) {
-              temp[appName][appAction][1].whitelist.push({
-                id: field + ":" + subfield,
-                value: subfields[subfield],
-              });
-            }
-          }
-        }
-      } else if (
-        appAction === "Send Attachments" &&
-        temp[appName][appAction][1].data.length === 0
-      ) {
-        const upload_fields =
-          props.appDatas["source"][props.settingsData["source"]["form_id"]][
-            "file_upload_fields"
-          ];
-        for (const field in upload_fields) {
-          temp[appName][appAction][1].data.push({
-            value: field,
-            label: upload_fields[field]["field_name"],
-          });
-        }
-      }
-    } else if (appName === "ClickUp") {
-      const fields = temp[appName][appAction];
-      const user = props.appDatas.destination;
-      const workspaces = user.workspaces;
-      if (fields[0].data.length === 0) {
-        for (const workspace of workspaces)
-          fields[0].data.push({ value: workspace.id, label: workspace.name });
-      }
-      if (
-        fields[1].data.length === 0 &&
-        fields[0].selection in inputValues[props.type]
-      ) {
-        const workspace = workspaces.filter((workspace) => {
-          return inputValues[props.type][fields[0].selection] === workspace.id;
-        })[0];
-        const spaces = workspace.spaces;
-        for (const space of spaces)
-          fields[1].data.push({ value: space.id, label: space.name });
-      }
-      if (
-        fields[2].data.length === 0 &&
-        fields[1].selection in inputValues[props.type]
-      ) {
-        const workspace = workspaces.find(
-          (workspace) =>
-            workspace.id === inputValues[props.type][fields[0].selection]
-        );
-        const space = workspace.spaces.find(
-          (space) => space.id === inputValues[props.type][fields[1].selection]
-        );
-        const folders = space.folders;
-        for (const folder of folders)
-          fields[2].data.push({ value: folder.id, label: folder.name });
-      }
-      if (
-        fields[3].data.length === 0 &&
-        fields[2].selection in inputValues[props.type]
-      ) {
-        const workspace = workspaces.find(
-          (workspace) =>
-            workspace.id === inputValues[props.type][fields[0].selection]
-        );
-        const space = workspace.spaces.find(
-          (space) => space.id === inputValues[props.type][fields[1].selection]
-        );
-        const folder = space.folders.find(
-          (folder) => folder.id === inputValues[props.type][fields[2].selection]
-        );
-        const lists = folder.lists;
-        for (const list of lists)
-          fields[3].data.push({ value: list.id, label: list.name });
-      }
-      if (
-        (appAction === "Create Subtask" || appAction === "Create Comment") &&
-        fields[4].data.length === 0 &&
-        fields[3].selection in inputValues[props.type]
-      ) {
-        const workspace = workspaces.find(
-          (workspace) =>
-            workspace.id === inputValues[props.type][fields[0].selection]
-        );
-        const space = workspace.spaces.find(
-          (space) => space.id === inputValues[props.type][fields[1].selection]
-        );
-        const folder = space.folders.find(
-          (folder) => folder.id === inputValues[props.type][fields[2].selection]
-        );
-        const list = folder.lists.find((list2) => {
-          return list2.id === inputValues[props.type][fields[3].selection];
-        });
-        const tasks = list.tasks;
-        for (const task of tasks)
-          fields[4].data.push({ value: task.id, label: task.name });
-      }
-      if (
-        (appAction === "Create Task" || appAction === "Create Subtask") &&
-        fields[fields.length - 1].data.source.length === 0 &&
-        fields[fields.length - 2].selection in inputValues[props.type]
-      ) {
-        const form_fields =
-          props.appDatas["source"][props.settingsData["source"]["form_id"]][
-            "fields"
-          ];
-        for (const field in form_fields) {
-          fields[fields.length - 1].data.source.push({
-            value: field,
-            label: form_fields[field]["field_name"],
-          });
-          if (form_fields[field]["subfields"]) {
-            const subfields = form_fields[field]["subfields"];
-            for (const subfield in subfields) {
-              fields[fields.length - 1].data.source.push({
-                value: field + ":" + subfield,
-                label:
-                  form_fields[field]["field_name"] +
-                  " - " +
-                  subfields[subfield],
-              });
-            }
-          }
-        }
-        const workspace = workspaces.find(
-          (workspace) =>
-            workspace.id === inputValues[props.type][fields[0].selection]
-        );
-        const space = workspace.spaces.find(
-          (space) => space.id === inputValues[props.type][fields[1].selection]
-        );
-        const folder = space.folders.find(
-          (folder) => folder.id === inputValues[props.type][fields[2].selection]
-        );
-        const list = folder.lists.find((list2) => {
-          return list2.id === inputValues[props.type][fields[3].selection];
-        });
-        const clickup_fields = list.fields;
-        for (const field of clickup_fields)
-          fields[fields.length - 1].data.destination.push({
-            value: field.id,
-            label: field.name,
-          });
-      }
-      if (
-        appAction === "Create Comment" &&
-        fields[5].whitelist.length === 0 &&
-        fields[4].selection in inputValues[props.type]
-      ) {
-        const form_fields =
-          props.appDatas["source"][props.settingsData["source"]["form_id"]][
-            "fields"
-          ];
-        for (const field in form_fields) {
-          fields[5].whitelist.push({
-            id: field,
-            value: form_fields[field]["field_name"],
-          });
-          if (form_fields[field]["subfields"]) {
-            const subfields = form_fields[field]["subfields"];
-            for (const subfield in subfields) {
-              fields[5].whitelist.push({
-                id: field + ":" + subfield,
-                value: subfields[subfield],
-              });
-            }
-          }
-        }
-      }
+      data = new Telegram().init(props.appDatas, appAction, props.type, {
+        formId: inputValues.source.form_id,
+      });
     }
-    setAppSettings(temp);
+    if (appName === "ClickUp") {
+      data = new ClickUp().init(props.appDatas, appAction, props.type, {
+        workspace: inputValues[props.type].workspace,
+        space: inputValues[props.type].space,
+        folder: inputValues[props.type].folder,
+        list: inputValues[props.type].list_id,
+        task: inputValues[props.type].task,
+        formId: inputValues.source.form_id,
+        subtask: appAction === "Create Subtask",
+      });
+    }
+
+    props.onOptionChange(appName, data);
   }, [props.datas, props.apps, props.appDatas, props.type, props.settingsData]);
 
   const newValueHandler = (value, labelData, isExternal) => {
@@ -248,9 +72,12 @@ const IntegrationSettings = (props) => {
   return (
     <div className={classes["settings--container"]}>
       <h1>{appName} Settings</h1>
-      {appSettings[appName][appAction].map((e) => {
+      {props.appSettingsInitial[appName][appAction].map((e) => {
         if (e.type === "Select") {
-          if (e.data.length <= 0 && !(e.selection in inputValues[props.type]))
+          if (
+            props.appOptions[appName][e.selection] == null ||
+            props.appOptions[appName][e.selection].length <= 0
+          )
             return;
           return (
             <div className={classes["select--container"]}>
@@ -263,7 +90,7 @@ const IntegrationSettings = (props) => {
                 isClearable={true}
                 isSearchable={true}
                 name="actions"
-                options={e.data}
+                options={props.appOptions[appName][e.selection]}
                 styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                 menuPortalTarget={document.body}
                 menuPlacement="bottom"
@@ -278,17 +105,28 @@ const IntegrationSettings = (props) => {
                   } else newValueHandler(event.value, e.selection);
                 }}
                 value={
-                  e.data.filter((element) => {
+                  inputValues[props.type][e.selection] != null &&
+                  props.appOptions[appName][e.selection].find((element) => {
+                    if (e.isMulti)
+                      return (
+                        inputValues[props.type][e.selection].find(
+                          (dataId) => element.value == dataId
+                        ) != null
+                      );
                     return (
                       element.value === inputValues[props.type][e.selection]
                     );
-                  })[0]
+                  })
                 }
               />
             </div>
           );
         } else if (e.type === "tagInput") {
-          if (e.whitelist.length <= 0) return;
+          if (
+            props.appOptions[appName][e.selection] == null ||
+            props.appOptions[appName][e.selection].length <= 0
+          )
+            return;
           return (
             <TagInputContainer
               key={e.selection}
@@ -297,18 +135,22 @@ const IntegrationSettings = (props) => {
                 newValueHandler(value, e.selection);
               }}
               defaultValue={inputValues[props.type][e.selection]}
-              whitelist={e.whitelist}
+              whitelist={props.appOptions[appName][e.selection]}
             />
           );
         } else if (e.type === "matchFields") {
-          if (e.data.source.length <= 0 || e.data.destination.length <= 0)
+          if (
+            props.appOptions[appName][e.selection] == null ||
+            props.appOptions[appName][e.selection].source.length <= 0 ||
+            props.appOptions[appName][e.selection].destination.length <= 0
+          )
             return;
           return (
             <MatchFieldsContainer
               label={e.label}
               apps={{ source: source_app, destination: destination_app }}
               maxLength={4}
-              datas={e.data}
+              datas={props.appOptions[appName][e.selection]}
               default={inputValues[props.type][e.selection]}
               onChange={(value) => {
                 newValueHandler(value, e.selection);

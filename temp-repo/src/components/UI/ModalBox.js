@@ -11,7 +11,7 @@ const ModalBox = (props) => {
 
   return (
     <div className={classes["modalbox"]}>
-      <div className={classes["modal-content"]} ref={ref}>
+      <div id="modal-content" className={classes["modal-content"]} ref={ref}>
         {props.children}
         <button
           className={classes["closeButton"]}

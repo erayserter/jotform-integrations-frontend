@@ -38,18 +38,18 @@ const IntegrationWizard = (props) => {
   const apiStatusValid = apiStatus.source && apiStatus.destination;
 
   useEffect(() => {
-    if (Object.keys(props.oldContent).length !== 0) {
-      const source_app = props.apps.filter(
+    if (Object.keys(props.oldContent).length > 0) {
+      const source_app = props.apps.find(
         (e) =>
           e.name.toLowerCase() ===
           props.oldContent.value.source["app_name"].toLowerCase()
-      )[0];
-      const destination_app = props.apps.filter(
+      );
+      const destination_app = props.apps.find(
         (e) =>
           e.name.toLowerCase() ===
           props.oldContent.value.destination["app_name"].toLowerCase()
-      )[0];
-      if (props.update) {
+      );
+      if (props.isUpdate) {
         const allAuthsValid =
           props.apiStatus.source && props.apiStatus.destination;
 
@@ -115,7 +115,7 @@ const IntegrationWizard = (props) => {
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [props.update, props.isTemplate]);
+  }, [props.isUpdate, props.isTemplate]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
@@ -176,12 +176,12 @@ const IntegrationWizard = (props) => {
     if (settingsChoice === "source") {
       setSettingsChoice("destination");
     } else {
-      const source_app = props.apps.filter((e) => {
+      const source_app = props.apps.find((e) => {
         return e.id === selectedDatas.source.id;
-      })[0];
-      const destination_app = props.apps.filter((e) => {
+      });
+      const destination_app = props.apps.find((e) => {
         return e.id === selectedDatas.destination.id;
-      })[0];
+      });
 
       const allData = {
         source: {
@@ -201,14 +201,14 @@ const IntegrationWizard = (props) => {
         webhook_name: webhookName,
       };
 
-      if (props.update) {
+      if (props.isUpdate) {
         allData.action = "update";
         allData["webhook_id"] = props.oldContent["webhook_id"];
       } else {
         allData.action = "create";
       }
 
-      props.onIntegrationSave(allData, props.update);
+      props.onIntegrationSave(allData, props.isUpdate);
     }
   };
 
@@ -231,7 +231,7 @@ const IntegrationWizard = (props) => {
       <div className={classes["cards"]}>
         <IntegrationAppCard
           isValid={apiStatus.source}
-          isUpdate={props.update}
+          isUpdate={props.isUpdate}
           apps={props.apps}
           onClick={(data) => {
             integrationChoiceHandler(true, data.type);
@@ -248,7 +248,7 @@ const IntegrationWizard = (props) => {
         </div>
         <IntegrationAppCard
           isValid={apiStatus.destination}
-          isUpdate={props.update}
+          isUpdate={props.isUpdate}
           apps={props.apps}
           onClick={(data) => {
             integrationChoiceHandler(true, data.type);
@@ -258,7 +258,7 @@ const IntegrationWizard = (props) => {
           type="destination"
         />
       </div>
-      {props.update && !apiStatusValid && (
+      {props.isUpdate && !apiStatusValid && (
         <span className={classes["wizard--invalid-auth"]}>
           Authentication is required!
         </span>
@@ -283,7 +283,6 @@ const IntegrationWizard = (props) => {
               type={appType}
               onTypeChange={typeChangeHandler}
               datas={selectedDatas}
-              appDatas={appDatas}
               isValid={apiStatus[appType]}
             />
           )}
@@ -291,11 +290,12 @@ const IntegrationWizard = (props) => {
             <IntegrationSettings
               apps={props.apps}
               appSettingsInitial={props.appSettingsInitial}
+              appOptions={props.appOptions}
+              onOptionChange={props.onOptionChange}
               onSettingsChange={settingsChangeHandler}
               onSave={saveSettingsHandler}
               onPreviousModal={setSettingsChoice}
               datas={selectedDatas}
-              appAction={selectedDatas[settingsChoice].action}
               type={settingsChoice}
               settingsData={selectedSettings}
               appDatas={appDatas}

@@ -93,22 +93,22 @@ const ContentSectionListItem = (props) => {
               width="40"
               height="40"
               src={
-                props.apps.filter(
+                props.apps.find(
                   (app) =>
                     app.name.toLowerCase() ===
                     props.webhook.value.source.app_name.toLowerCase()
-                )[0].img
+                ).img
               }
             />
             <img
               width="40"
               height="40"
               src={
-                props.apps.filter(
+                props.apps.find(
                   (app) =>
                     app.name.toLowerCase() ===
                     props.webhook.value.destination.app_name.toLowerCase()
-                )[0].img
+                ).img
               }
             />
           </div>

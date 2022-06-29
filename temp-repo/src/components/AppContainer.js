@@ -177,11 +177,23 @@ const appSettingsInitial = {
         data: {
           source: [],
           destination: [
-            { value: 0, label: "Name" },
-            { value: 1, label: "Description" },
-            { value: 2, label: "Priority" },
-            { value: 3, label: "Status" },
+            { value: "name", label: "Name" },
+            { value: "description", label: "Description" },
+            { value: "priority", label: "Priority" },
+            { value: "status", label: "Status" },
           ],
+          predefined: {
+            priority: [
+              { value: "urgent", label: "Urgent" },
+              { value: "high", label: "High" },
+              { value: "normal", label: "Normal" },
+              { value: "low", label: "Low" },
+            ],
+            status: [
+              { value: "todo", label: "TO DO" },
+              { value: "complete", label: "COMPLETE" },
+            ],
+          },
         },
       },
     ],
@@ -276,6 +288,18 @@ const AppContainer = (props) => {
     source: false,
     destination: false,
   });
+
+  const [appOptions, setAppOptions] = useState({
+    Jotform: {},
+    Telegram: {},
+    ClickUp: {},
+  });
+
+  const optionChangeHandler = (appName, options) => {
+    setAppOptions((prev) => {
+      return { ...prev, [appName]: options };
+    });
+  };
 
   const getWebhooks = async () => {
     const res = await getWebhookRequest();
@@ -405,9 +429,9 @@ const AppContainer = (props) => {
 
   const integrationSaveHandler = async (data, isUpdate) => {
     const res = await postWebhookRequest(data);
-    if (isUpdate) {
-      setWebhooks((prev) =>
-        prev.map((webhook) => {
+    setWebhooks((prev) => {
+      if (isUpdate)
+        return prev.map((webhook) => {
           if (webhook.webhook_id === res.content.webhookId)
             return {
               ...webhook,
@@ -415,22 +439,19 @@ const AppContainer = (props) => {
               value: { source: data.source, destination: data.destination },
             };
           return webhook;
-        })
-      );
-    } else {
-      setWebhooks((prev) => {
-        return [
-          ...prev,
-          {
-            webhook_id: res.content.webhookId,
-            webhook_name: data.webhook_name,
-            value: { source: data.source, destination: data.destination },
-            status: "ENABLED",
-            is_favorite: "0",
-          },
-        ];
-      });
-    }
+        });
+
+      return [
+        ...prev,
+        {
+          webhook_id: res.content.webhookId,
+          webhook_name: data.webhook_name,
+          value: { source: data.source, destination: data.destination },
+          status: "ENABLED",
+          is_favorite: "0",
+        },
+      ];
+    });
 
     closeHandler();
   };
@@ -490,9 +511,11 @@ const AppContainer = (props) => {
         <IntegrationContent
           apps={APPS}
           appSettingsInitial={appSettingsInitial}
+          appOptions={appOptions}
+          onOptionChange={optionChangeHandler}
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
-          update={isUpdate}
+          isUpdate={isUpdate}
           isTemplate={isTemplate}
           onTemplateSelect={templateSelectHandler}
           oldContent={oldContent}

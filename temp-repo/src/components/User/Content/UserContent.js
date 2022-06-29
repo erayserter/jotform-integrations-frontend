@@ -28,12 +28,16 @@ const SORT_LIST_ITEMS = [
   "Last Submission",
 ];
 
+const FIRST_ITEM = 0;
+
 const UserContent = (props) => {
-  const [sectionContent, setSectionContent] = useState(LIST_ITEMS[0]);
+  const [sectionContent, setSectionContent] = useState(LIST_ITEMS[FIRST_ITEM]);
   const [searchedWord, setSearchedWord] = useState("");
 
   const [isSortingPopperOpen, setIsSortingPopperOpen] = useState(false);
-  const [sortedItemsBy, setSortedItemsBy] = useState(SORT_LIST_ITEMS[0]);
+  const [sortedItemsBy, setSortedItemsBy] = useState(
+    SORT_LIST_ITEMS[FIRST_ITEM]
+  );
 
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);
@@ -201,7 +205,7 @@ const UserContent = (props) => {
                   type="text"
                   placeholder="Search Integration"
                   onChange={(event) => {
-                    setSectionContent(LIST_ITEMS[0]);
+                    setSectionContent(LIST_ITEMS[FIRST_ITEM]);
                     setSearchedWord(event.target.value);
                   }}
                 />
