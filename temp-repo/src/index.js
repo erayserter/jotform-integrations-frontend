@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "@jotforminc/jotform.css";
 import "./index.css";
 import "@yaireo/tagify/dist/tagify.css";
 import App from "./App";

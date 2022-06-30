@@ -1,36 +1,125 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import classes from "./Navbar.module.css";
 
-function Navbar(props) {
+const Navbar = (props) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const expandMenuHandler = (event) => {
+    setIsExpanded((prev) => !prev);
+  };
+
   return (
-    <header className={classes["navbar"]}>
-      <div className={classes["navbar--logo"]}>
-        <Link to="/">
-          <img
-            src="https://www.jotform.com/resources/assets/svg/jotform-icon-dark.svg"
-            alt="Logo"
-            height="70"
-          />
+    <header
+      className={
+        "navbar flex items-center z-9 shrink-1 justify-between bg-navy-700 color-white w-full max-w-100vw m-auto" +
+        (isExpanded ? " isExpanded" : "")
+      }
+    >
+      <div className="navbar-logo flex items-center m-0 px-5">
+        <Link
+          className="logo flex h-full max-h-14 p-0 w-auto overflow-hidden"
+          to="/"
+        >
+          <svg
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 367 66"
+            class="max-w-full w-full"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M256.78 50.67a8.46 8.46 0 01-6.05-2.44c-1.6-1.6-2.68-4.03-2.68-7.31 0-3.32 1.08-5.74 2.68-7.34a8.47 8.47 0 016.05-2.4c2.28 0 4.45.8 6.05 2.4 1.6 1.6 2.67 4.02 2.67 7.34 0 3.32-1.07 5.74-2.67 7.34a8.47 8.47 0 01-6.05 2.4zm0-30.1c-11.58 0-20.35 8.52-20.35 20.35 0 11.75 8.77 20.35 20.35 20.35 11.58 0 20.35-8.6 20.35-20.35 0-11.83-8.77-20.35-20.35-20.35zM160.5 50.95a8.46 8.46 0 01-6.05-2.44c-1.6-1.6-2.67-4.02-2.67-7.3 0-3.32 1.08-5.75 2.67-7.34a8.47 8.47 0 016.06-2.41c2.28 0 4.45.81 6.05 2.4 1.6 1.6 2.67 4.03 2.67 7.34 0 3.32-1.08 5.75-2.67 7.34a8.47 8.47 0 01-6.06 2.41zm0-30.1c-11.57 0-20.34 8.53-20.34 20.35 0 11.76 8.77 20.35 20.34 20.35 11.58 0 20.35-8.6 20.35-20.35 0-11.82-8.77-20.34-20.34-20.34zM308.77 61.14h11.55V38.2c0-1.9.6-3.55 1.64-4.71a5.9 5.9 0 014.56-1.9c2.08 0 3.5.7 4.41 1.76.93 1.08 1.4 2.65 1.4 4.55v23.24h11.48V38.2c0-1.85.6-3.5 1.64-4.69a5.78 5.78 0 014.48-1.92c2.13 0 3.54.7 4.44 1.76.92 1.08 1.38 2.65 1.38 4.55v23.24H367v-25.3c0-5.17-1.7-8.94-4.39-11.4-2.67-2.45-6.23-3.54-9.8-3.54-2.55 0-4.88.44-6.97 1.49-1.79.9-3.36 2.22-4.74 4.06-2.23-3.63-6.3-5.55-11.1-5.55-3.52 0-7.57 1.4-10.13 4.1v-3.16h-11.1v39.3zM304.42 21.87v11.77l-.9-.18c-1.07-.21-2-.29-2.86-.29-2.45 0-4.63.6-6.19 2.06-1.55 1.45-2.62 3.86-2.62 7.74v18.17h-11.52v-39.3h11.22v3.8c2.77-3.34 7.08-4 9.79-4 .86 0 1.65.09 2.4.16l.68.07zM96.72 42.2h11.26l.13.13c.08.08.14.2.15.33a7.98 7.98 0 002.64 5.57 8 8 0 005.26 1.8 7.3 7.3 0 005.65-2.39 8.91 8.91 0 002.03-5.98V8.74h12.18V42c0 10.65-8.15 19.55-19.78 19.55-5.8 0-10.68-1.93-14.1-5.28-3.34-3.27-5.33-7.94-5.42-13.62v-.45zM234.8 14.07l.64.19V5.34l-.3-.13a8.63 8.63 0 00-2.01-.53c-.85-.14-1.85-.23-2.87-.23-3.97 0-8.43 1.32-10.74 3.69-2.31 2.36-3.59 5.73-3.59 9.77v1.88h-5.8v10.24h5.8v31.11h11.65V30.03h7.86V19.79h-7.86v-1.74c0-1.81.63-2.86 1.44-3.46a4.92 4.92 0 012.94-.85c1.5 0 2.38.2 2.84.33zM205.96 51.95l.6-.19v8.95l-.28.14c-.42.2-1.1.39-1.89.53-.8.13-1.73.22-2.7.22-3.72 0-7.9-1.32-10.07-3.7-2.17-2.37-3.37-5.75-3.37-9.8V30.03h-5.45V19.84h5.45V8.8h10.93v11.05h7.38v10.2h-7.38v17.91c0 1.82.6 2.87 1.36 3.48.78.63 1.81.85 2.76.85 1.41 0 2.23-.2 2.66-.33z"
+              class="jl-text"
+              fill="#fff"
+            ></path>
+            <path
+              d="M16.43 62.73c1.24 1.2.36 3.27-1.4 3.27H3.95A3.9 3.9 0 010 62.16V51.44c0-1.72 2.13-2.57 3.38-1.36l13.05 12.65z"
+              class="jl-pen-tip"
+              fill="#fff"
+            ></path>
+            <path
+              d="M33.72 63.56a8.3 8.3 0 010-11.78l11.82-11.74a8.42 8.42 0 0111.86 0 8.3 8.3 0 010 11.78L45.58 63.56a8.42 8.42 0 01-11.86 0z"
+              class="jl-pen-bottom"
+              fill="#FFB629"
+            ></path>
+            <path
+              d="M2.5 34.05a8.3 8.3 0 010-11.78L22.39 2.5a8.42 8.42 0 0111.86 0 8.3 8.3 0 010 11.78l-19.9 19.77a8.42 8.42 0 01-11.85 0z"
+              class="jl-pen-top"
+              fill="#09F"
+            ></path>
+            <path
+              d="M18.76 48.15a8.3 8.3 0 010-11.78l26.87-26.7a8.42 8.42 0 0111.86 0 8.3 8.3 0 010 11.78l-26.87 26.7a8.42 8.42 0 01-11.86 0z"
+              class="jl-pen-middle"
+              fill="#FF6100"
+            ></path>
+          </svg>
         </Link>
       </div>
-      <div className={classes["navbar--navigation"]}>
-        <ul>
-          <li>All Integrations</li>
-          <li>Login</li>
-          <li>Logout</li>
-        </ul>
+      <div className="menu-mobile hidden justify-center items-center ml-3 flex-nowrap">
+        <button
+          className="mobile__hamburger mr-0 cursor-pointer relative bg-transparent"
+          onClick={expandMenuHandler}
+        >
+          <label
+            className={
+              "pointer-events-none absolute top-2/4 left-2/4 color-white cursor-pointer" +
+              (isExpanded ? " active" : "")
+            }
+          >
+            <div class="bar-wrapper">
+              <div class="bar top-bar"></div>
+              <div class="bar middle-bar"></div>
+              <div class="bar bottom-bar"></div>
+            </div>
+          </label>
+        </button>
       </div>
-      <div className={classes["navbar--profile"]}>
-        <img
-          src="data:image/jpeg;base64,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"
-          alt="User Image"
-          height="50"
-        />
+      <div className="menu flex color-white mx-2 my-0 w-full justify-end">
+        <ul className="flex items-center justify-end flex-nowrap m-0">
+          <li className="cursor-pointer">
+            <Link
+              to="/"
+              className="inline-block relative px-4 whitespace-nowrap font-normal line-height-70"
+            >
+              All Integrations
+            </Link>
+          </li>
+          <li className="cursor-pointer">
+            <Link
+              to="/"
+              className="inline-block relative px-4 whitespace-nowrap font-normal line-height-70"
+            >
+              Login
+            </Link>
+          </li>
+          <li className="cursor-pointer">
+            <Link
+              to="/"
+              className="inline-block relative px-4 whitespace-nowrap font-normal line-height-70"
+            >
+              Logout
+            </Link>
+          </li>
+        </ul>
+        <div className={classes["navbar--profile"]}>
+          <ul className="p-0 m-0 items-center flex-nowrap justify-end">
+            <li className="cursor-pointer p-3 relative menu-list-item">
+              <Link
+                to="/"
+                className="menu-list-item__link cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal"
+                style={{
+                  backgroundImage: `url("https://lh3.googleusercontent.com/a/AATXAJw7-enkIx0trd2ZVHHpIU_2BzI70ZqeA5gqR_QU=s96-c")`,
+                }}
+              ></Link>
+            </li>
+          </ul>
+        </div>
       </div>
     </header>
   );
-}
+};
 
 export default Navbar;

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
-import classes from "./AppContainer.module.css";
-
 import Navbar from "./Navbar/Navbar";
 import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
@@ -505,7 +503,7 @@ const AppContainer = (props) => {
     );
 
   return (
-    <div className={classes["container"]}>
+    <div className="flex flex-col bg-white relative items-stretch color-black font-circular overflow-x-hidden">
       <Navbar />
       {isIntegrationContent ? (
         <IntegrationContent
