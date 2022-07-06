@@ -13,11 +13,15 @@ const Navbar = (props) => {
   return (
     <header
       className={
-        "navbar flex items-center z-9 shrink-1 justify-between bg-navy-700 color-white w-full max-w-100vw m-auto" +
+        "navbar min-h-18 flex items-center z-8 shrink-1 justify-between bg-navy-700 color-white w-full max-w-100vw mx-auto" +
         (isExpanded ? " isExpanded" : "")
       }
     >
-      <div className="navbar-logo flex items-center m-0 px-5">
+      <div
+        className={
+          "navbar-logo flex items-center m-0 p-0 xs:px-5 md:px-3 lg:px-5"
+        }
+      >
         <Link
           className="logo flex h-full max-h-14 p-0 w-auto overflow-hidden"
           to="/"
@@ -106,10 +110,10 @@ const Navbar = (props) => {
         </ul>
         <div className={classes["navbar--profile"]}>
           <ul className="p-0 m-0 items-center flex-nowrap justify-end">
-            <li className="cursor-pointer p-3 relative menu-list-item">
+            <li className="menu-list-item cursor-pointer p-3 relative w-18 h-18">
               <Link
                 to="/"
-                className="menu-list-item__link cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal"
+                className="menu-list-item__link radius-full border-2 border-solid border-black border-opacity-30 w-12 h-12 cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal"
                 style={{
                   backgroundImage: `url("https://lh3.googleusercontent.com/a/AATXAJw7-enkIx0trd2ZVHHpIU_2BzI70ZqeA5gqR_QU=s96-c")`,
                 }}

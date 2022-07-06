@@ -42,9 +42,11 @@ const Templates = (props) => {
   }, []);
 
   return (
-    <div className={classes["templates"]}>
-      <div className={classes["templates__search-bar"]}>
-        <div className={classes["search-bar__select-container"]}>
+    <div className={`${classes["templates"]} h-full overflow-auto`}>
+      <div
+        className={`${classes["templates__search-bar"]} flex justify-center items-center border-b border-solid border-navy-100 py-3 px-5 gap-3`}
+      >
+        <div className={`${classes["search-bar__select-container"]} w-full`}>
           <Select
             className="basic-single"
             classNamePrefix="select"
@@ -72,7 +74,7 @@ const Templates = (props) => {
             placeholder="Search a source app..."
           />
         </div>
-        <div className={classes["search-bar__select-container"]}>
+        <div className={`${classes["search-bar__select-container"]} w-full`}>
           <Select
             className="basic-single"
             classNamePrefix="select"
@@ -101,7 +103,9 @@ const Templates = (props) => {
           />
         </div>
       </div>
-      <ul className={classes["templates__list"]}>
+      <ul
+        className={`${classes["templates__list"]} flex justify-center items-center gap-3 py-4 px-5 flex-wrap`}
+      >
         {allPermutations
           .filter((permutation) => {
             let bool = true;
@@ -117,6 +121,7 @@ const Templates = (props) => {
           .map((permutation) => {
             return (
               <li
+                className="cursor-pointer transform ease-in-out duration-300"
                 key={permutation.id}
                 onClick={(event) => {
                   props.onTemplateSelect(permutation);

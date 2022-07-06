@@ -503,7 +503,7 @@ const AppContainer = (props) => {
     );
 
   return (
-    <div className="flex flex-col bg-white relative items-stretch color-black font-circular overflow-x-hidden">
+    <div className="min-h-100vh flex flex-col bg-white relative items-stretch color-black font-circular overflow-x-hidden">
       <Navbar />
       {isIntegrationContent ? (
         <IntegrationContent

@@ -1,48 +1,8 @@
-.template-item--container {
-  background-color: #f3f3fe;
-  border: 1px solid #c8ceed;
-  border-radius: 4px;
-  padding: 32px 5px 0;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  height: 200px;
-}
-
-.template-item--images {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.image-container {
-  position: relative;
-}
-
-.template-item--app-names {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5%;
-  margin-top: 16px;
-}
-
 .template-item--app-names h5 {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 22px;
-  overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   color: #564632;
 }
 
 .template-item--paragraph {
-  display: inline-block;
-  margin-top: 3px;
-  padding: 0 16px;
-  overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 12px;
-  line-height: 18px;
 }

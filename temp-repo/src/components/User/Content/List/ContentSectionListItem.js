@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useRef } from "react";
 
 import classes from "./ContentSectionListItem.module.css";
 
 const ContentSectionListItem = (props) => {
   const [isFavorite, setIsFavorite] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const itemTitleRef = useRef();
 
   useEffect(() => {
     setIsFavorite(Number(props.webhook["is_favorite"]));
@@ -22,47 +25,58 @@ const ContentSectionListItem = (props) => {
   return (
     <div
       className={`${classes["content--list-item"]} ${
-        isLoading && classes["loading"]
-      }`}
+        isLoading ? "bg-navy-25" : ""
+      } flex justify-between items-center w-full h-16 radius-md hover:bg-navy-25`}
       style={
         props.selectedWebhooks.includes(props.webhook["webhook_id"])
           ? { backgroundColor: "#edf8ff" }
           : {}
       }
+      onClick={(event) => {
+        if (itemTitleRef && !itemTitleRef.current.contains(event.target))
+          props.onSelect(props.webhook["webhook_id"]);
+      }}
     >
-      <div className={classes["content--list-item-main"]}>
+      <div
+        className={`${classes["content--list-item-main"]} flex cursor-pointer items-center h-full duration-300 py-3.5 px-6 grow-1`}
+      >
         <div
-          className={[
-            classes["content--list-item-sections"],
-            classes["content--list-item-checkbox"],
-          ].join(" ")}
+          className={`${classes["content--list-item-sections"]} ${
+            props.selectedWebhooks.includes(props.webhook["webhook_id"])
+              ? "flex"
+              : "hidden"
+          } relative z-1 md:mr-4 md:flex w-20 md:w-auto ${
+            classes["content--list-item-checkbox"]
+          }`}
         >
-          <div>
-            <input
-              type="checkbox"
-              onChange={() => {
-                props.onSelect(props.webhook["webhook_id"]);
-              }}
-            ></input>
-            <label
-              className={
-                props.selectedWebhooks.includes(props.webhook["webhook_id"])
-                  ? classes["checked-label"]
-                  : null
-              }
-            ></label>
-          </div>
+          <input
+            className="opacity-0 absolute h-6 w-6 cursor-pointer z-3"
+            type="checkbox"
+            onChange={() => {
+              props.onSelect(props.webhook["webhook_id"]);
+            }}
+          ></input>
+          <label
+            className={`${
+              props.selectedWebhooks.includes(props.webhook["webhook_id"])
+                ? classes["checked-label"]
+                : null
+            } relative mr-6 h-6 `}
+          ></label>
         </div>
         <div
           className={`${classes["content--list-item-sections"]} ${
-            props.webhook.status.toLowerCase() === "disabled" &&
-            classes["item-disable"]
+            classes["content--list-item-favorite-icon-wrapper"]
+          } relative z-1 mr-4 ${
+            props.webhook.status.toLowerCase() === "disabled"
+              ? "opacity-50"
+              : ""
           }`}
         >
           <div
             className={`${classes["content--list-item-favorite-icon"]} ${
               isFavorite && classes["favorite-isActive"]
-            }`}
+            } color-navy-100 inline-block duration-300`}
             onClick={favoriteHandler}
           >
             <svg
@@ -83,12 +97,21 @@ const ContentSectionListItem = (props) => {
           </div>
         </div>
         <div
-          className={`${classes["content--list-item-sections"]} ${
-            props.webhook.status.toLowerCase() === "disabled" &&
-            classes["item-disable"]
+          className={`${
+            classes["content--list-item-sections"]
+          } relative z-1 mr-4 ${
+            props.webhook.status.toLowerCase() === "disabled"
+              ? "opacity-50"
+              : ""
           }`}
         >
-          <div className={classes["content--list-item-integration-icon"]}>
+          <div
+            className={`${classes["content--list-item-integration-icon"]} ${
+              props.selectedWebhooks.includes(props.webhook["webhook_id"])
+                ? "hidden"
+                : "flex"
+            } md:flex items-center justify-center`}
+          >
             <img
               width="40"
               height="40"
@@ -115,18 +138,29 @@ const ContentSectionListItem = (props) => {
         </div>
         <div
           className={`${classes["content--list-item-headline"]}  ${
-            props.webhook.status.toLowerCase() === "disabled" &&
-            classes["item-disable"]
-          }`}
+            props.webhook.status.toLowerCase() === "disabled"
+              ? "opacity-50"
+              : ""
+          } grow-1 shrink-1 min-w-0 flex flex-col items-start overflow-hidden`}
         >
-          <div className={classes["content--list-item-headline-title"]}>
-            <div className={classes["content--title"]}>
+          <div
+            className={`${classes["content--list-item-headline-title"]} flex items-center whitespace-nowrap pointer-events-none`}
+            ref={itemTitleRef}
+            onClick={(event) => {
+              setIsLoading(true);
+              props.onIntegrationUpdate(props.webhook);
+            }}
+          >
+            <div
+              className={`${classes["content--title"]} inline-flex items-center text-lg font-medium py-0.5 px-1.5 mr-1 -ml-1.5 color-navy-700 overflow-hidden whitespace-nowrap`}
+            >
               {props.webhook.webhook_name === "Integration" ||
               props.webhook.webhook_name === "" ? (
-                <span>
+                <span className="overflow-hidden whitespace-nowrap text-capitalize">
                   {props.webhook.value.source["app_name"]}
                   {"  "}
                   <img
+                    className="inline-block"
                     src="https://img.icons8.com/ios-glyphs/30/undefined/right--v1.png"
                     width="15px"
                   />
@@ -134,11 +168,15 @@ const ContentSectionListItem = (props) => {
                   {props.webhook.value.destination["app_name"]}
                 </span>
               ) : (
-                <span>{props.webhook.webhook_name}</span>
+                <span className="overflow-hidden whitespace-nowrap text-capitalize">
+                  {props.webhook.webhook_name}
+                </span>
               )}
             </div>
           </div>
-          <div className={classes["content--list-item-headline-desc"]}>
+          <div
+            className={`${classes["content--list-item-headline-desc"]} w-full text-sm font-medium overflow-hidden whitespace-nowrap text-capitalize mt-0.5`}
+          >
             <span>
               When {props.webhook.value.source["app_action"]} on{" "}
               {props.webhook.value.source["app_name"]},{" "}
@@ -148,7 +186,11 @@ const ContentSectionListItem = (props) => {
           </div>
         </div>
       </div>
-      <div className={classes["content--list-item-actions"]}>
+      <div
+        className={`${classes["content--list-item-actions"]} ${
+          isLoading ? "md:flex items-center relative" : "md:hidden"
+        } hidden h-full whitespace-nowrap mr-2`}
+      >
         {props.webhook.status !== "DELETED" && (
           <button
             onClick={(event) => {
@@ -157,15 +199,17 @@ const ContentSectionListItem = (props) => {
             }}
             className={`${classes["content--list-item-actions-edit"]} ${
               isLoading && classes["loading"]
-            }`}
+            } cursor-pointer items-center inline-flex h-full justify-center px-5 bg-transparent text-sm font-medium relative pointer-events-auto opacity-100 min-w-25 z-1`}
           >
-            {isLoading ? "..." : "Edit Integration"}
+            Edit Integration
           </button>
         )}
         {props.webhook.status === "DELETED" && (
-          <div className={classes["content--list-item-actions-deleted"]}>
+          <div
+            className={`${classes["content--list-item-actions-deleted"]} h-full`}
+          >
             <button
-              className={classes["purge"]}
+              className={`${classes["purge"]} cursor-pointer items-center inline-flex h-full justify-center px-5 bg-transparent text-sm font-medium relative pointer-events-auto opacity-100 min-w-25 z-1`}
               onClick={(event) => {
                 props.onStatusChangeWebhook("purge", props.webhook.webhook_id);
               }}
@@ -173,7 +217,7 @@ const ContentSectionListItem = (props) => {
               Purge
             </button>
             <button
-              className={classes["restore"]}
+              className={`${classes["restore"]} cursor-pointer items-center inline-flex h-full justify-center px-5 bg-transparent text-sm font-medium relative pointer-events-auto opacity-100 min-w-25 z-1`}
               onClick={(event) => {
                 props.onStatusChangeWebhook("enable", props.webhook.webhook_id);
               }}

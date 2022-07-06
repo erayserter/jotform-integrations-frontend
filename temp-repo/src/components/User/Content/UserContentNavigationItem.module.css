@@ -1,7 +1,6 @@
-.navigation--button {
-  cursor: pointer;
-}
-
-.navigation--button.isActive {
-  background-color: #c8ceed;
+@media screen and (max-width: 768px) {
+  .navigation--button {
+    background-color: #f7f7f8;
+    border-color: #f7f7f8;
+  }
 }

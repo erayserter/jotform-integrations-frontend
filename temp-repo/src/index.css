@@ -3,7 +3,7 @@ html {
 }
 
 #root {
-  min-height: calc(100vh - 74px);
+  min-height: 100vh;
 }
 
 .logo {
@@ -11,17 +11,8 @@ html {
   max-height: 55px;
 }
 
-.menu-list-item {
-  width: 70px;
-  height: 70px;
-}
-
 .menu-list-item__link {
   line-height: 70px;
-  width: 48px;
-  border-radius: 50%;
-  border: 2px solid hsla(0, 0%, 100%, 0.25);
-  height: 48px;
   background-clip: content-box;
   background-position: 50% 50%;
 }
@@ -141,10 +132,6 @@ html {
   background-color: #ffffff;
 }
 
-.navbar.isExpanded .navbar-logo {
-  margin: 0;
-}
-
 .navbar.isExpanded .menu {
   display: -webkit-flex;
   display: flex;
@@ -207,20 +194,6 @@ html {
   top: 0;
 }
 @media screen and (max-width: 480px) {
-  .navbar {
-    min-height: 70px;
-  }
-
-  .navbar-logo {
-    margin: 0 2px;
-    padding: 0;
-  }
-
-  .navbar.isExpanded .navbar-logo {
-    margin: 0;
-    padding: 0;
-  }
-
   .logo {
     width: 30px;
     height: 30px;
@@ -261,14 +234,6 @@ html {
 }
 
 @media screen and (min-width: 481px) and (max-width: 768px) {
-  .navbar {
-    min-height: 70px;
-  }
-
-  .navbar.isExpanded .navbar-logo {
-    padding: 0 20px;
-  }
-
   .logo {
     display: block;
   }
