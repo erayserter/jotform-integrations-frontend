@@ -27,7 +27,6 @@ const IntegrationSettings = (props) => {
   });
 
   const appAction = props.datas[props.type].action;
-  const appOptions = props.appOptions;
   const appName = app.name;
 
   useEffect(() => {
@@ -79,6 +78,7 @@ const IntegrationSettings = (props) => {
             props.appOptions[appName][e.selection].length <= 0
           )
             return;
+          console.log(props.appOptions[appName][e.selection]);
           return (
             <div className={classes["select--container"]}>
               <label>{e.label}</label>

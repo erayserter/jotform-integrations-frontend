@@ -1,21 +1,16 @@
-.wizard {
-  padding-top: 35px;
-  display: flex;
-  flex-direction: column;
+.body {
+  margin: 4vh 0 0;
 }
 
-.cards {
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  align-items: center;
-}
+@media screen and (min-width: 769px) {
+  .body {
+    margin: 50px 0;
+  }
 
-.switch-icon img {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  margin-bottom: 60px;
+  .cards {
+    flex-direction: row;
+    margin: 0 -2.15%;
+  }
 }
 
 .settingsButton {

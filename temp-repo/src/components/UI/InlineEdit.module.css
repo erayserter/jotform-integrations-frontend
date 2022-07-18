@@ -1,17 +1,24 @@
 .inline-edit {
-  width: 350px;
-  background-color: transparent;
-  border: 0;
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.15;
-  color: #0a1551;
-  text-align: center;
-  white-space: nowrap;
+  max-width: calc(100% - 172px);
   text-overflow: ellipsis;
-  overflow: hidden;
+  line-height: 1.15;
 }
 
-.inline-edit:hover {
-  cursor: pointer;
+.inline-edit.title {
+  font-size: calc(16.57143px + 1.07143vw);
+}
+
+.inline-edit.subtitle {
+  font-size: calc(12.28571px + 0.53571vw);
+  letter-spacing: 0.001px;
+}
+
+@media screen and (min-width: 769px) {
+  .inline-edit.title {
+    font-size: 28px;
+  }
+
+  .inline-edit.subtitle {
+    font-size: 16px;
+  }
 }

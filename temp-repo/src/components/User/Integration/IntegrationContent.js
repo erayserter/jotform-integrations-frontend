@@ -14,8 +14,12 @@ const IntegrationContent = (props) => {
   }, [props.isUpdate, props.isTemplate]);
 
   return (
-    <div className={classes["container"]}>
-      <div className={classes["content-wrapper"]}>
+    <div
+      className={`${classes["container"]} flex flex-col items-center bg-white fixed top-0 right-0 left-0 bottom-0 min-h-auto overflow-auto color-navy-700 md:min-h-sm md:relative`}
+    >
+      <div
+        className={`${classes["content-wrapper"]} flex flex-col my-0 mx-auto grow-1`}
+      >
         {currentContent === "choice" && (
           <IntegrationHeader onSelect={setCurrentContent} />
         )}
@@ -32,14 +36,17 @@ const IntegrationContent = (props) => {
             oldContent={props.oldContent}
           />
         )}
+        {currentContent === "template" && (
+          <Templates
+            apps={props.apps}
+            onTemplateSelect={props.onTemplateSelect}
+          />
+        )}
       </div>
-      {currentContent === "template" && (
-        <Templates
-          apps={props.apps}
-          onTemplateSelect={props.onTemplateSelect}
-        />
-      )}
-      <button className={classes["closeButton"]} onClick={props.onClose}>
+      <button
+        className={`${classes["closeButton"]} absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75`}
+        onClick={props.onClose}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 17 16"
@@ -55,17 +62,19 @@ const IntegrationContent = (props) => {
       </button>
       {!props.isUpdate && !props.isTemplate && currentContent !== "choice" && (
         <div
-          className={classes["back-button-container"]}
+          className={`${classes["back-button-container"]} absolute top-4 left-4 md:top-5 md:left-5`}
           onClick={(event) => {
             setCurrentContent("choice");
           }}
         >
-          <button className={classes["back-button-container__button"]}>
+          <button
+            className={`${classes["back-button-container__button"]} flex items-center justify-center m-0 bg-navy-75 h-10vw max-h-10 duration-300 cursor-pointer border-0 max-w-full px-3 w-full`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 26 19"
               class="backButton-svg"
-              width="26"
+              width="17"
               height="19"
             >
               <path
@@ -73,7 +82,11 @@ const IntegrationContent = (props) => {
                 fill="#A0A3AF"
               ></path>
             </svg>
-            <span className={classes["back-button-container__text"]}>back</span>
+            <span
+              className={`${classes["back-button-container__text"]} border-navy-300 font-medium line-height-sm ml-2 text-uppercase`}
+            >
+              back
+            </span>
           </button>
         </div>
       )}

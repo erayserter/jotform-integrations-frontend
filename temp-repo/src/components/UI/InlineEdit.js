@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 import classes from "./InlineEdit.module.css";
 
-const InlineEdit = ({ value, setValue, style }) => {
+const InlineEdit = ({ value, setValue, isTitle, isSubtitle }) => {
   const [editingValue, setEditingValue] = useState(value);
 
   const inputRef = useRef(null);
@@ -29,8 +29,9 @@ const InlineEdit = ({ value, setValue, style }) => {
 
   return (
     <input
-      style={style}
-      className={classes["inline-edit"]}
+      className={`${classes["inline-edit"]} ${isTitle && classes["title"]} ${
+        isSubtitle && classes["isSubtitle"]
+      } text-center border-0 bg-transparent font-semibold whitespace-nowrap overflow-hidden my-0 mx-auto color-navy-700 cursor-pointer`}
       ref={inputRef}
       type="text"
       aria-label="Field name"

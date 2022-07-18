@@ -1,6 +1,14 @@
-.integration-header__cards {
-  display: flex;
-  gap: 30px;
-  justify-content: center;
-  align-items: center;
+.integration-header__body {
+  margin: 4vh 0 0;
+}
+
+@media screen and (min-width: 769px) {
+  .integration-header__body {
+    margin: 50px 0;
+  }
+
+  .integration-header__cards {
+    flex-direction: row;
+    margin: 0 -2.15%;
+  }
 }

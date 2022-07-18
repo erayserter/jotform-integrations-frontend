@@ -34,24 +34,34 @@ const TEMPLATE_IMG = (
 
 const IntegrationHeader = (props) => {
   return (
-    <div className={classes["integration-header"]}>
-      <IntegrationTitle />
-      <div className={classes["integration-header__cards"]}>
-        <IntegrationAppCard
-          text="Create with Wizard"
-          onClick={() => {
-            props.onSelect("wizard");
-          }}
-        />
-        <IntegrationAppCard
-          text="Use Template"
-          img={TEMPLATE_IMG}
-          onClick={() => {
-            props.onSelect("template");
-          }}
-        />
+    <>
+      <IntegrationTitle
+        title="Create An Integration"
+        subtitle="Select applications to easly create an integration between them."
+      />
+      <div
+        className={`${classes["integration-header__body"]} flex flex-col grow-1 min-h-76`}
+      >
+        <div
+          className={`${classes["integration-header__cards"]} flex flex-col m-0 justify-center items-center duration-700 delay-500`}
+        >
+          <IntegrationAppCard
+            first={true}
+            text="Create with Wizard"
+            onClick={() => {
+              props.onSelect("wizard");
+            }}
+          />
+          <IntegrationAppCard
+            text="Use Template"
+            img={TEMPLATE_IMG}
+            onClick={() => {
+              props.onSelect("template");
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

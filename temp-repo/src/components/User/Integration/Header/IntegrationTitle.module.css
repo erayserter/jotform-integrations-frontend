@@ -1,23 +1,31 @@
 .integration-title {
-  padding-top: 35px;
-  margin-bottom: 50px;
+  margin-top: 6.5vh;
 }
 
 .integration-title h1 {
-  color: #0a1551;
-  font-size: 28px;
-  font-weight: 600;
+  font-size: calc(16.57143px + 1.07143vw);
   line-height: 1.15;
-  margin: 0;
-  text-align: center;
 }
 
 .integration-title h2 {
-  color: #6f76a7;
-  font-size: 16px;
-  font-weight: 400;
-  letter-spacing: 0.001px;
+  font-size: calc(12.28571px + 0.53571vw);
   line-height: 1.15;
-  margin: 10px 0 0;
-  text-align: center;
+  margin: 5px 0 0;
+  letter-spacing: 0.001px;
+}
+
+@media screen and (min-width: 769px) {
+  .integration-title {
+    margin-top: 55px;
+    position: relative;
+  }
+
+  .integration-title h1 {
+    font-size: 28px;
+  }
+
+  .integration-title h2 {
+    font-size: 16px;
+    margin: 10px 0 0;
+  }
 }

@@ -7,6 +7,7 @@ import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
 import InlineEdit from "../../../UI/InlineEdit";
+import IntegrationTitle from "../Header/IntegrationTitle";
 
 const IntegrationWizard = (props) => {
   const [webhookName, setWebhookName] = useState("Integration");
@@ -217,93 +218,96 @@ const IntegrationWizard = (props) => {
   };
 
   return (
-    <div className={classes["wizard"]}>
-      <div className={classes["settingsInlineEdit"]}>
-        <InlineEdit
-          value={webhookName}
-          setValue={setWebhookName}
-          style={{ margin: "0px auto 0px auto" }}
-        />
-      </div>
-      <h2 className={classes["wizard__subheading"]}>
-        Select applications to easly create an integration between them.
-      </h2>
-      <div className={classes["cards"]}>
-        <IntegrationAppCard
-          isValid={apiStatus.source}
-          isUpdate={props.isUpdate}
-          apps={props.apps}
-          onClick={(data) => {
-            integrationChoiceHandler(true, data.type);
-          }}
-          text="Source"
-          datas={selectedDatas.source}
-          type="source"
-        />
-        <div className={classes["switch-icon"]} onClick={switchHandler}>
-          <img
-            src="https://img.icons8.com/ios-glyphs/100/000000/refresh--v2.png"
-            alt=""
+    <>
+      <IntegrationTitle
+        isTitleInlineEdit={true}
+        titleValue={webhookName}
+        titleSetValue={setWebhookName}
+        subtitle="Select applications to easly create an integration between them."
+      />
+      <div className={`${classes["body"]} flex flex-col grow-1 min-h-76`}>
+        <div
+          className={`${classes["cards"]} flex flex-col m-0 justify-center items-center duration-700 delay-500`}
+        >
+          <IntegrationAppCard
+            isValid={apiStatus.source}
+            isUpdate={props.isUpdate}
+            apps={props.apps}
+            onClick={(data) => {
+              integrationChoiceHandler(true, data.type);
+            }}
+            text="Source"
+            datas={selectedDatas.source}
+            type="source"
+          />
+          <div
+            className={`${classes["switch-icon"]} flex justify-center items-center mt-6 md:mt-0 w-10 h-10 md:h-auto cursor-pointer`}
+            onClick={switchHandler}
+          >
+            <img
+              src="https://img.icons8.com/ios-glyphs/100/000000/refresh--v2.png"
+              alt=""
+            />
+          </div>
+          <IntegrationAppCard
+            isValid={apiStatus.destination}
+            isUpdate={props.isUpdate}
+            apps={props.apps}
+            onClick={(data) => {
+              integrationChoiceHandler(true, data.type);
+            }}
+            text="Destination"
+            datas={selectedDatas.destination}
+            type="destination"
           />
         </div>
-        <IntegrationAppCard
-          isValid={apiStatus.destination}
-          isUpdate={props.isUpdate}
-          apps={props.apps}
-          onClick={(data) => {
-            integrationChoiceHandler(true, data.type);
-          }}
-          text="Destination"
-          datas={selectedDatas.destination}
-          type="destination"
-        />
-      </div>
-      {props.isUpdate && !apiStatusValid && (
-        <span className={classes["wizard--invalid-auth"]}>
-          Authentication is required!
-        </span>
-      )}
-      {apiStatusValid && (
-        <div className={classes["settingContainer"]}>
-          <button
-            className={classes["settingsButton"]}
-            onClick={settingsHandler}
-          >
-            Settings
-          </button>
-        </div>
-      )}
+        {props.isUpdate && !apiStatusValid && (
+          <span className={classes["wizard--invalid-auth"]}>
+            Authentication is required!
+          </span>
+        )}
+        {apiStatusValid && (
+          <div className={classes["settingContainer"]}>
+            <button
+              className={`${classes["settingsButton"]}`}
+              onClick={settingsHandler}
+            >
+              Settings
+            </button>
+          </div>
+        )}
 
-      {isModelOpen && (
-        <ModalBox onModalBoxClose={modalBoxHandler}>
-          {isAppChoice && (
-            <IntegrationAppSelector
-              apps={props.apps}
-              onAuthenticate={authHandler}
-              type={appType}
-              onTypeChange={typeChangeHandler}
-              datas={selectedDatas}
-              isValid={apiStatus[appType]}
-            />
-          )}
-          {isSettingsChoice && (
-            <IntegrationSettings
-              apps={props.apps}
-              appSettingsInitial={props.appSettingsInitial}
-              appOptions={props.appOptions}
-              onOptionChange={props.onOptionChange}
-              onSettingsChange={settingsChangeHandler}
-              onSave={saveSettingsHandler}
-              onPreviousModal={setSettingsChoice}
-              datas={selectedDatas}
-              type={settingsChoice}
-              settingsData={selectedSettings}
-              appDatas={appDatas}
-            />
-          )}
-        </ModalBox>
-      )}
-    </div>
+        {isModelOpen && (
+          <ModalBox onModalBoxClose={modalBoxHandler}>
+            {isAppChoice && (
+              <IntegrationAppSelector
+                apps={props.apps}
+                onAuthenticate={authHandler}
+                type={appType}
+                onTypeChange={typeChangeHandler}
+                datas={selectedDatas}
+                isValid={apiStatus[appType]}
+              />
+            )}
+            {isSettingsChoice && (
+              <IntegrationSettings
+                apps={props.apps}
+                appSettingsInitial={props.appSettingsInitial}
+                appOptions={props.appOptions}
+                onOptionChange={props.onOptionChange}
+                onSettingsChange={settingsChangeHandler}
+                onSave={saveSettingsHandler}
+                onPreviousModal={setSettingsChoice}
+                datas={selectedDatas}
+                type={settingsChoice}
+                settingsData={selectedSettings}
+                appDatas={appDatas}
+              />
+            )}
+          </ModalBox>
+        )}
+      </div>
+    </>
   );
 };
 

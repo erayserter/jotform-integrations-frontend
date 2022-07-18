@@ -164,7 +164,7 @@ const IntegrationAppSelector = (props) => {
                 menuPortalTarget={document.body}
                 menuPlacement="bottom"
                 onChange={(e) => {
-                  actionSelectHandler(e.value);
+                  if (e) actionSelectHandler(e.value);
                 }}
                 defaultValue={
                   selectedApp.action !== "" && {
