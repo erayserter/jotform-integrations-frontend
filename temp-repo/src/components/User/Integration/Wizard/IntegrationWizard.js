@@ -262,14 +262,16 @@ const IntegrationWizard = (props) => {
           />
         </div>
         {props.isUpdate && !apiStatusValid && (
-          <span className={classes["wizard--invalid-auth"]}>
+          <span
+            className={`${classes["wizard--invalid-auth"]} block color-red-500 text-center w-full font-bold mx-auto mt-5 mb-0 py-1 px-6`}
+          >
             Authentication is required!
           </span>
         )}
         {apiStatusValid && (
           <div className={classes["settingContainer"]}>
             <button
-              className={`${classes["settingsButton"]}`}
+              className={`${classes["settingsButton"]} flex justify-center items-center text-md h-10 mx-auto mt-5 mb-0 py-1 px-6 text-center text-uppercase duration-300 cursor-pointer color-white border border-solid radius `}
               onClick={settingsHandler}
             >
               Settings

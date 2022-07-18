@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 import IntegrationApp from "./Apps/IntegrationApp";
 
 import classes from "./SelectionCard.module.css";
@@ -14,6 +14,7 @@ const SelectionCard = (props) => {
     return (
       <li key={e.id}>
         <IntegrationApp
+          className="flex justify-center"
           onAppSelect={appSelectHandler}
           id={e.id}
           img={e.img}
@@ -29,6 +30,7 @@ const SelectionCard = (props) => {
       return (
         <li key={e.id}>
           <IntegrationApp
+            className="flex justify-center"
             onAppSelect={appSelectHandler}
             id={e.id}
             img={e.img}
@@ -39,23 +41,29 @@ const SelectionCard = (props) => {
     });
 
   return (
-    <Fragment>
-      <div className={classes["app-search"]}>
+    <>
+      <div
+        className={`${classes["app-search"]} flex items-center justify-start border border-solid radius border-navy-100 py-0 px-4`}
+      >
         <img
+          className="w-5"
           src="https://img.icons8.com/material-outlined/384/000000/search--v1.png"
           alt=""
         />
         <input
+          className="bg-navy-700 font-light h-10 px-4 w-full"
           onChange={(e) => {
             setSearchedWord(e.target.value);
           }}
           placeholder="Search Available App"
         />
       </div>
-      <div className={classes["app-navigation"]}>
-        <ul>{searchedWord === "" ? fullContent : filteredContent}</ul>
+      <div className={`${classes["app-navigation"]} my-6`}>
+        <ul className="flex flex-wrap items-center">
+          {searchedWord === "" ? fullContent : filteredContent}
+        </ul>
       </div>
-    </Fragment>
+    </>
   );
 };
 

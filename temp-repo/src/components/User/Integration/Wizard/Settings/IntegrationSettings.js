@@ -69,8 +69,10 @@ const IntegrationSettings = (props) => {
   };
 
   return (
-    <div className={classes["settings--container"]}>
-      <h1>{appName} Settings</h1>
+    <div
+      className={`${classes["settings--container"]} p-5 border border-solid bg-navy-800`}
+    >
+      <h1 className="pl-14">{appName} Settings</h1>
       {props.appSettingsInitial[appName][appAction].map((e) => {
         if (e.type === "Select") {
           if (
@@ -80,8 +82,12 @@ const IntegrationSettings = (props) => {
             return;
           console.log(props.appOptions[appName][e.selection]);
           return (
-            <div className={classes["select--container"]}>
-              <label>{e.label}</label>
+            <div
+              className={`${classes["select--container"]} py-5 border border-solid`}
+            >
+              <label className="block mb-2 text-sm font-semibold">
+                {e.label}
+              </label>
               <Select
                 key={e.selection}
                 isMulti={e.isMulti}
@@ -168,12 +174,15 @@ const IntegrationSettings = (props) => {
             />
           );
       })}
-      <button className={classes["settings--sendButton"]} onClick={saveHandler}>
+      <button
+        className={`${classes["settings--sendButton"]} flex items-center justify-center mt-6 mx-auto bg-orange-500 color-white border border-solid radius h-10 min-w-28 px-4 text-center text-uppercase duration-300`}
+        onClick={saveHandler}
+      >
         {props.type === "source" ? "Next" : "Save Settings"}
       </button>
       {props.type !== "source" && (
         <button
-          className={classes["prevButton"]}
+          className={`${classes["prevButton"]} cursor-pointer absolute left-5 top-5 pt-3 pb-2 px-3`}
           onClick={() => props.onPreviousModal("source")}
         >
           <img

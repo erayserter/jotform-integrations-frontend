@@ -122,19 +122,28 @@ const IntegrationAppSelector = (props) => {
   const app = props.apps.find((e) => e.id === selectedApp.id);
 
   return (
-    <div className={classes["app-selector__container"]}>
-      <div className={classes["app-layout-header"]}>
-        <h1>Choose {props.type} App</h1>
+    <div className={`${classes["app-selector__container"]} relative px-6 pt-6`}>
+      <div className={`${classes["app-layout-header"]}`}>
+        <h1 className="color-navy-700 text-3xl font-semibold m-0 text-left text-capitalize mb-2">
+          Choose {props.type} App
+        </h1>
       </div>
-      <div className={classes["app-layout-body"]}>
+      <div className={`${classes["app-layout-body"]} flex items-start mb-6`}>
         <div
-          className={classes["app-selector"]}
+          className={`${classes["app-selector"]} flex items-center justify-center relative`}
           onClick={appSelectorSectionHandler}
         >
-          {selectedApp.id && <img src={app.img} width="86.3" height="86.3" />}
           {selectedApp.id && (
             <img
-              className={classes["switch-app-icon"]}
+              className="cursor-pointer bg-navy-100 p-2 radius"
+              src={app.img}
+              width="86.3"
+              height="86.3"
+            />
+          )}
+          {selectedApp.id && (
+            <img
+              className={`${classes["switch-app-icon"]} absolute bg-navy-100 opacity-0 duration-300 ease-in-out cursor-pointer bg-navy-100 p-2 radius`}
               src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAABmJLR0QA/wD/AP+gvaeTAAAFD0lEQVR4nO2bTWwbRRTH/2/WTltie/1FEgGqhBBSBVXUAk2KEFfUSi0NLXBA4s4JcQFBoUh8RZzgzIUDAnGApgkttBIHDghUmiIqxMcBKiEUpCb1erPrNBDHO49DbGudxN5Pb7xOfrednX1+/7/ezuzMyMAOO2xrKIwgmsYZJMxPJeMQMVaJ+Ku8qj5HRFYY8btJYAPmy0ujQlg/ELB7Xeh/Cmp6LxHJoL/RTUSQh+fLS6OKsK5sFA8AfOdNw3gpSPwo8G3AfHlpVFHkFQC7uE0fYjzmN35U+DKgKZ55F6P9eyRIlP2nFg0Jrw/Uy34WjIFO4gGgBvmB/9SiwVMFLOhLBxRhzQLO4sH4eDib/TpIclHgeha4UansVyx5lervfKcHSdBnhUzm6eDpdR9XBvSreMCFAf0sHnAw4Ealsj9hyavoU/FAB03bQTwAKJs1Luj6gQRjFn0uHthEm67rByUplxnsPNURrRLTr13LLkSY+U+L5MvD2ex1e3uLPk3T7oKSvO5KfBxhyBrkyZFcbqbR1PIhxCJ5qW/FAwBBJEl8Ym9q/RIk3rfWr39hYLBUMsYa1+s/hftZexOpyObyvcUACfwdfTrRQkD19mz2u8Z16xjAygSAnt7BCQoTXrRv1W0o+XLZPM6Cp9ndStECUSnUDLsF8xxZ/Eqh0LpC3fSd1wzjCEv+EkTOJkiaLOYzr4aUZuS0HfS2iwltxRVU9ZIUdAzMzmOC4NOlsvlOqJlFhOO0t2AYR4XkC1tZCYZh5KtSfkEkHqzncR2CThXT6d+DxnY172+lCcyc1AxzAUB23R0pRPJEPjN4IUh8V3uCQ6p6cateB71SeRMbxAMACSlrM2Xz1rEg8V1vig6p6kVAnCQX3wlM8rSmG2eCJNaMxXikw+26CeZxv/E97QoXc5kZrtEpJxOICEx4Q9O0+/wm1kCC5xy6CCl5+qZuPu4nvueDkWIxM02SJlxUAklFCTwWWEJMMqPd4VMDQcTnSrp5wmt8XydD+XzmvOCEYyWAMeInvp2RdPoXFnid2ckDCBBPeTXB99lgLjc47WQCQfnGb3w7Q6r6Ngs6AxcmEPGUri8/4TZ24OWvrt+akFQ7u8naQSuomTuIqBr0NxosGMZrQvJboM5pEyAFJ5/M5W475xQz0PE4sFYJNVYeAPAHATUAq8z4dkDQvjDFA2uVIF1UAgNC0urnbiohlhsg3ipBPJXLpac69IknYZkQWwOAcEzY8KRhGEdqTO8yBZ/CIoG5iDYHPHbamdB6LmAYLzDj/ZBT7BnWTEg8lMsN/mRrW4OZE5phLgNIbkl2EUHAX4WsenfjujkNlhYXH0Wfi6+z137RNEBI+W/0uUQPo3Vd0TSgUChcZsZyvVP/wvyb/bLlS9CCfAYMGeu5sTNVWLWj9oYNWucXF+8RoEkC7iWInveCie8Hs5uxqyoTyvhQKnXN3tjzAjtR0o2PQHjWqR8BVcGJw/bpz3YvnoQhvn4/foQlvt4nXngSn9gznksNXHPoFx/CFl/vGw+6IR4IYUcoCrRF80M34gFUawnlkFvxQAwqQFtefphXqt87rflBtGIpYmw4lfrZS3zP/xeInGr1eUfxQFVRdh8upgY8iQdi8AowiT0OXVYs6a3s7fS8ARb4bIfbK5ZUxobz3sreTs+PAcxMmmn+CMbBlnbgPymV8SDigRhUABFxIZMZZ8Z7AM0BmAfTeWHVhoOK32GHHfA/olYyFCa5eMcAAAAASUVORK5CYII="
               width="60"
               height="60"
@@ -143,7 +152,7 @@ const IntegrationAppSelector = (props) => {
         </div>
         {selectedApp.id && (
           <div className={classes["key-action-selector"]}>
-            <div className={classes["action-selector"]}>
+            <div className={`${classes["action-selector"]} relative`}>
               <span>Action</span>
               <Select
                 className="basic-single"
@@ -175,7 +184,7 @@ const IntegrationAppSelector = (props) => {
               />
             </div>
             {app && app.oauth ? (
-              <div className={classes["oauth"]}>
+              <div className={`${classes["oauth"]} mt-2`}>
                 {accountDetails && accountDetails.length > 0 ? (
                   <div>
                     <span>Account</span>
@@ -210,7 +219,7 @@ const IntegrationAppSelector = (props) => {
                   </div>
                 ) : (
                   <button
-                    className={classes["app-selector__oauth"]}
+                    className={`${classes["app-selector__oauth"]} mt-5 mb-1 mx-auto flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white grow-1 border border-solid radius`}
                     onClick={authHandler}
                   >
                     {buttonText}
@@ -218,10 +227,11 @@ const IntegrationAppSelector = (props) => {
                 )}
               </div>
             ) : (
-              <div className={classes["key-selector"]}>
+              <div className={`${classes["key-selector"]} mt-2`}>
                 <span>API Key</span>
-                <div className={classes["key-input"]}>
+                <div className={`${classes["key-input"]} flex justify-between`}>
                   <input
+                    className="block border border-solid bg-navy-100 radius color-navy-700 font-light h-10 px-4 duration-300"
                     placeholder="API Key Here."
                     onChange={(e) => {
                       setButtonText("Authenticate");
@@ -231,7 +241,12 @@ const IntegrationAppSelector = (props) => {
                     }}
                     value={selectedApp.key}
                   />
-                  <button onClick={authHandler}>{buttonText}</button>
+                  <button
+                    className="flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white grow-1 border border-solid radius"
+                    onClick={authHandler}
+                  >
+                    {buttonText}
+                  </button>
                 </div>
               </div>
             )}
@@ -244,11 +259,13 @@ const IntegrationAppSelector = (props) => {
         </div>
       )}
 
-      <div className={classes["pointer"]}>
+      <div className={`${classes["pointer"]} absolute flex top-3`}>
         <div
           className={`${classes["pointer__circle"]} ${
             classes["pointer__circle-source"]
-          } ${props.type === "source" && classes["pointer__circle-active"]}`}
+          } ${
+            props.type === "source" && "bg-navy-700"
+          } w-3 h-3 bg-navy-100 cursor-pointer`}
           onClick={(event) => {
             props.onTypeChange("source");
           }}
@@ -257,8 +274,8 @@ const IntegrationAppSelector = (props) => {
           className={`${classes["pointer__circle"]} ${
             classes["pointer__circle-destination"]
           } ${
-            props.type === "destination" && classes["pointer__circle-active"]
-          }`}
+            props.type === "destination" && "bg-navy-700"
+          } w-3 h-3 bg-navy-100 cursor-pointer`}
           onClick={(event) => {
             props.onTypeChange("destination");
           }}

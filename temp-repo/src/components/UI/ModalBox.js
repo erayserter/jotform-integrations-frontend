@@ -10,11 +10,17 @@ const ModalBox = (props) => {
   useOnClickOutside(ref, () => props.onModalBoxClose(false));
 
   return (
-    <div className={classes["modalbox"]}>
-      <div id="modal-content" className={classes["modal-content"]} ref={ref}>
+    <div
+      className={`${classes["modalbox"]} fixed z-2 left-0 top-0 w-full h-full overflow-auto`}
+    >
+      <div
+        id="modal-content"
+        className={`${classes["modal-content"]} absolute top-1/2 left-1/2 bg-white radius overflow-hidden`}
+        ref={ref}
+      >
         {props.children}
         <button
-          className={classes["closeButton"]}
+          className={`${classes["closeButton"]} absolute right-5 top-5 px-3 pt-3 pb-2 m-0 bg-navy-75 cursor-pointer`}
           onClick={() => props.onModalBoxClose(false)}
         >
           <svg

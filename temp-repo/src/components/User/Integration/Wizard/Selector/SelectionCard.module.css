@@ -1,39 +1,11 @@
-.app-search {
-  padding: 0px 15px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  border: 1px solid #c8ceed;
-  border-radius: 4px;
-}
-
 .app-search input {
-  color: #0a1551;
-  font-size: 1rem;
-  font-weight: 300;
-  height: 40px;
-  padding: 0 16px;
-  width: 100%;
   border: none;
 }
 
-.app-search img {
-  width: 20px;
-}
-
-.app-navigation {
-  margin: 25px 0px;
-}
-
 .app-navigation ul {
-  display: flex;
   gap: 40px 0px;
-  flex-wrap: wrap;
-  align-items: center;
 }
 
 .app-navigation ul li {
   flex-basis: 25%;
-  display: flex;
-  justify-content: center;
 }
