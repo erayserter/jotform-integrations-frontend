@@ -1,17 +1,9 @@
 .container {
   z-index: 9998;
-  font-family: Circular, Circular Std, Circular Std Bold, Work Sans SemiBold,
-    -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial,
-    sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 }
 
 .content-wrapper {
   width: calc(100% - 45px);
-}
-
-.closeButton {
-  border-radius: 50%;
-  border-style: hidden;
 }
 
 .back-button-container__button {

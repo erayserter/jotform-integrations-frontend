@@ -70,119 +70,123 @@ const IntegrationSettings = (props) => {
 
   return (
     <div
-      className={`${classes["settings--container"]} p-5 border border-solid bg-navy-800`}
+      className={`${classes["settings--container"]} md:block flex flex-col justify-between pt-5 px-5 h-full`}
     >
-      <h1 className="pl-14">{appName} Settings</h1>
-      {props.appSettingsInitial[appName][appAction].map((e) => {
-        if (e.type === "Select") {
-          if (
-            props.appOptions[appName][e.selection] == null ||
-            props.appOptions[appName][e.selection].length <= 0
-          )
-            return;
-          console.log(props.appOptions[appName][e.selection]);
-          return (
-            <div
-              className={`${classes["select--container"]} py-5 border border-solid`}
-            >
-              <label className="block mb-2 text-sm font-semibold">
-                {e.label}
-              </label>
-              <Select
-                key={e.selection}
-                isMulti={e.isMulti}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                isClearable={true}
-                isSearchable={true}
-                name="actions"
-                options={props.appOptions[appName][e.selection]}
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-                menuPortalTarget={document.body}
-                menuPlacement="bottom"
-                onChange={(event) => {
-                  if (e.isMulti) {
-                    newValueHandler(
-                      event.map((element) => {
-                        return parseInt(element.value, 10);
-                      }),
-                      e.selection
-                    );
-                  } else newValueHandler(event.value, e.selection);
-                }}
-                value={
-                  inputValues[props.type][e.selection] != null &&
-                  props.appOptions[appName][e.selection].find((element) => {
-                    if (e.isMulti)
-                      return (
-                        inputValues[props.type][e.selection].find(
-                          (dataId) => element.value == dataId
-                        ) != null
+      <h1 className="pl-14 color-navy-700 text-3xl font-semibold pt-1 text-center">
+        {appName} Settings
+      </h1>
+      <div>
+        {props.appSettingsInitial[appName][appAction].map((e) => {
+          if (e.type === "Select") {
+            if (
+              props.appOptions[appName][e.selection] == null ||
+              props.appOptions[appName][e.selection].length <= 0
+            )
+              return;
+            console.log(props.appOptions[appName][e.selection]);
+            return (
+              <div
+                className={`${classes["select--container"]} py-5 border-b border-solid`}
+              >
+                <label className="block mb-2 text-sm font-semibold">
+                  {e.label}
+                </label>
+                <Select
+                  key={e.selection}
+                  isMulti={e.isMulti}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  isClearable={true}
+                  isSearchable={true}
+                  name="actions"
+                  options={props.appOptions[appName][e.selection]}
+                  styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                  menuPortalTarget={document.body}
+                  menuPlacement="bottom"
+                  onChange={(event) => {
+                    if (e.isMulti) {
+                      newValueHandler(
+                        event.map((element) => {
+                          return parseInt(element.value, 10);
+                        }),
+                        e.selection
                       );
-                    return (
-                      element.value === inputValues[props.type][e.selection]
-                    );
-                  })
-                }
+                    } else newValueHandler(event.value, e.selection);
+                  }}
+                  value={
+                    inputValues[props.type][e.selection] != null &&
+                    props.appOptions[appName][e.selection].find((element) => {
+                      if (e.isMulti)
+                        return (
+                          inputValues[props.type][e.selection].find(
+                            (dataId) => element.value == dataId
+                          ) != null
+                        );
+                      return (
+                        element.value === inputValues[props.type][e.selection]
+                      );
+                    })
+                  }
+                />
+              </div>
+            );
+          } else if (e.type === "tagInput") {
+            if (
+              props.appOptions[appName][e.selection] == null ||
+              props.appOptions[appName][e.selection].length <= 0
+            )
+              return;
+            return (
+              <TagInputContainer
+                key={e.selection}
+                label={e.label}
+                onChange={(value) => {
+                  newValueHandler(value, e.selection);
+                }}
+                defaultValue={inputValues[props.type][e.selection]}
+                whitelist={props.appOptions[appName][e.selection]}
               />
-            </div>
-          );
-        } else if (e.type === "tagInput") {
-          if (
-            props.appOptions[appName][e.selection] == null ||
-            props.appOptions[appName][e.selection].length <= 0
-          )
-            return;
-          return (
-            <TagInputContainer
-              key={e.selection}
-              label={e.label}
-              onChange={(value) => {
-                newValueHandler(value, e.selection);
-              }}
-              defaultValue={inputValues[props.type][e.selection]}
-              whitelist={props.appOptions[appName][e.selection]}
-            />
-          );
-        } else if (e.type === "matchFields") {
-          if (
-            props.appOptions[appName][e.selection] == null ||
-            props.appOptions[appName][e.selection].source.length <= 0 ||
-            props.appOptions[appName][e.selection].destination.length <= 0
-          )
-            return;
-          return (
-            <MatchFieldsContainer
-              label={e.label}
-              apps={{ source: source_app, destination: destination_app }}
-              maxLength={4}
-              datas={props.appOptions[appName][e.selection]}
-              default={inputValues[props.type][e.selection]}
-              onChange={(value) => {
-                newValueHandler(value, e.selection);
-              }}
-            />
-          );
-        } else
-          return (
-            <InputContainer
-              key={e.selection}
-              inputLabel={e.label}
-              inputType={e.type}
-              setter={(value) => newValueHandler(value, e.selection)}
-              default={inputValues[props.type][e.selection]}
-            />
-          );
-      })}
-      <button
-        className={`${classes["settings--sendButton"]} flex items-center justify-center mt-6 mx-auto bg-orange-500 color-white border border-solid radius h-10 min-w-28 px-4 text-center text-uppercase duration-300`}
-        onClick={saveHandler}
-      >
-        {props.type === "source" ? "Next" : "Save Settings"}
-      </button>
+            );
+          } else if (e.type === "matchFields") {
+            if (
+              props.appOptions[appName][e.selection] == null ||
+              props.appOptions[appName][e.selection].source.length <= 0 ||
+              props.appOptions[appName][e.selection].destination.length <= 0
+            )
+              return;
+            return (
+              <MatchFieldsContainer
+                label={e.label}
+                apps={{ source: source_app, destination: destination_app }}
+                maxLength={4}
+                datas={props.appOptions[appName][e.selection]}
+                default={inputValues[props.type][e.selection]}
+                onChange={(value) => {
+                  newValueHandler(value, e.selection);
+                }}
+              />
+            );
+          } else
+            return (
+              <InputContainer
+                key={e.selection}
+                inputLabel={e.label}
+                inputType={e.type}
+                setter={(value) => newValueHandler(value, e.selection)}
+                default={inputValues[props.type][e.selection]}
+              />
+            );
+        })}
+        <button
+          className={`${classes["settings--sendButton"]} flex items-center justify-center mt-6 mb-5 mx-auto bg-orange-500 color-white border border-solid radius h-10 min-w-28 px-4 text-center text-uppercase duration-300`}
+          onClick={saveHandler}
+        >
+          {props.type === "source" ? "Next" : "Save Settings"}
+        </button>
+      </div>
       {props.type !== "source" && (
         <button
-          className={`${classes["prevButton"]} cursor-pointer absolute left-5 top-5 pt-3 pb-2 px-3`}
+          className={`${classes["prevButton"]} cursor-pointer absolute radius-full left-4 top-4 md:top-5 md:left-5 p-3 bg-navy-75`}
           onClick={() => props.onPreviousModal("source")}
         >
           <img

@@ -15,10 +15,10 @@ const IntegrationContent = (props) => {
 
   return (
     <div
-      className={`${classes["container"]} flex flex-col items-center bg-white fixed top-0 right-0 left-0 bottom-0 min-h-auto overflow-auto color-navy-700 md:min-h-sm md:relative`}
+      className={`${classes["container"]} flex flex-col items-center bg-white fixed font-circular top-0 right-0 left-0 bottom-0 min-h-auto color-navy-700 md:min-h-sm md:relative`}
     >
       <div
-        className={`${classes["content-wrapper"]} flex flex-col my-0 mx-auto grow-1`}
+        className={`${classes["content-wrapper"]} flex flex-col my-0 mx-auto overflow-x-hidden overflow-y-auto`}
       >
         {currentContent === "choice" && (
           <IntegrationHeader onSelect={setCurrentContent} />
@@ -36,15 +36,17 @@ const IntegrationContent = (props) => {
             oldContent={props.oldContent}
           />
         )}
-        {currentContent === "template" && (
+      </div>
+      {currentContent === "template" && (
+        <div className="h-full w-full mt-16">
           <Templates
             apps={props.apps}
             onTemplateSelect={props.onTemplateSelect}
           />
-        )}
-      </div>
+        </div>
+      )}
       <button
-        className={`${classes["closeButton"]} absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75`}
+        className={`${classes["closeButton"]} absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
         onClick={props.onClose}
       >
         <svg
@@ -62,7 +64,7 @@ const IntegrationContent = (props) => {
       </button>
       {!props.isUpdate && !props.isTemplate && currentContent !== "choice" && (
         <div
-          className={`${classes["back-button-container"]} absolute top-4 left-4 md:top-5 md:left-5`}
+          className={`${classes["back-button-container"]} absolute top-5 left-4 md:left-5`}
           onClick={(event) => {
             setCurrentContent("choice");
           }}

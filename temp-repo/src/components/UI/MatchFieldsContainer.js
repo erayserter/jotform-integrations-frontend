@@ -79,7 +79,7 @@ const MatchFieldsContainer = (props) => {
   });
 
   return (
-    <div className={classes["match-fields"]}>
+    <div className={`${classes["match-fields"]} py-5 border-b border-solid`}>
       <div className={classes["match-fields__title"]}>
         <label>{props.label}</label>
       </div>

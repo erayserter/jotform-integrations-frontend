@@ -4,9 +4,14 @@ import classes from "./InputContainer.module.css";
 
 const InputContainer = (props) => {
   return (
-    <div className={classes["input--container"]}>
-      <label>{props.inputLabel}</label>
+    <div
+      className={`${classes["input--container"]} border-b border-solid py-5`}
+    >
+      <label className="block mb-2 text-sm font-semibold">
+        {props.inputLabel}
+      </label>
       <input
+        className="radius h-10 border border-solid block border-navy-100 w-full px-3 mt-2 relative bg-white z-2 duration-300 font-circular focus:border-blue-300"
         type={props.inputType}
         required
         value={props.default || ""}

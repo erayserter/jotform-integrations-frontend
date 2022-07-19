@@ -1,38 +1,6 @@
 .input--container {
-  padding: 1.25rem 0;
-  border-bottom: 1px solid #ebedf2;
+  border-bottom-color: #ebedf2;
 }
 .input--container label {
-  margin: 0px 0px 10px;
-  display: block;
   color: #596066;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 0;
-}
-
-.input--container input {
-  border-radius: 4px;
-  height: 40px;
-  font-size: 16px;
-  border: solid 1px #c8ceed;
-  display: block;
-  width: 100%;
-  padding: 0 12px;
-  margin: 10px 0px;
-  position: relative;
-  background-color: #fff;
-  z-index: 2;
-  font-family: Circular, -apple-system, blinkmacsystemfont, "Segoe UI", roboto,
-    oxygen-sans, ubuntu, cantarell, "Helvetica Neue", sans-serif;
-  transition: all 0.2s;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-.input--container input:focus {
-  outline: 0;
-  border-color: #6a9cff;
-  box-shadow: 0 0 0 2px rgba(106, 156, 255, 0.58);
 }

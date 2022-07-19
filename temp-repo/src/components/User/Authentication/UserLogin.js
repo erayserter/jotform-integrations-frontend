@@ -44,9 +44,13 @@ const UserLogin = (props) => {
   return (
     <div className={classes["container"]}>
       <Navbar />
-      <div className={classes["userLogin--container"]}>
+      <div
+        className={`${classes["userLogin--container"]} flex justify-center max-w-3/4 h-full m-auto`}
+      >
         <div className={classes["userLogin--wrapper"]}>
-          <h1 className={classes["userLogin--header"]}>Welcome Back!</h1>
+          <h1 className={`${classes["userLogin--header"]} my-12`}>
+            Welcome Back!
+          </h1>
           <form>
             <InputContainer
               inputLabel="Username"

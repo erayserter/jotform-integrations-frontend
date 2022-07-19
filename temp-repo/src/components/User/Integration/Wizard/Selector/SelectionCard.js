@@ -12,7 +12,7 @@ const SelectionCard = (props) => {
 
   const fullContent = props.apps.map((e) => {
     return (
-      <li key={e.id}>
+      <li key={e.id} className="basis-1/3">
         <IntegrationApp
           className="flex justify-center"
           onAppSelect={appSelectHandler}
@@ -28,7 +28,7 @@ const SelectionCard = (props) => {
     .filter((e) => e.name.includes(searchedWord))
     .map((e) => {
       return (
-        <li key={e.id}>
+        <li key={e.id} className="basis-1/3">
           <IntegrationApp
             className="flex justify-center"
             onAppSelect={appSelectHandler}
@@ -41,9 +41,11 @@ const SelectionCard = (props) => {
     });
 
   return (
-    <>
+    <div
+      className={`${classes["container"]} flex md:block flex-col grow-1 md:h-auto justify-end`}
+    >
       <div
-        className={`${classes["app-search"]} flex items-center justify-start border border-solid radius border-navy-100 py-0 px-4`}
+        className={`${classes["app-search"]} flex items-center justify-start border border-solid radius border-navy-100 py-0 px-4 order-last`}
       >
         <img
           className="w-5"
@@ -51,7 +53,7 @@ const SelectionCard = (props) => {
           alt=""
         />
         <input
-          className="bg-navy-700 font-light h-10 px-4 w-full"
+          className="font-light h-10 px-4 w-full"
           onChange={(e) => {
             setSearchedWord(e.target.value);
           }}
@@ -63,7 +65,7 @@ const SelectionCard = (props) => {
           {searchedWord === "" ? fullContent : filteredContent}
         </ul>
       </div>
-    </>
+    </div>
   );
 };
 
