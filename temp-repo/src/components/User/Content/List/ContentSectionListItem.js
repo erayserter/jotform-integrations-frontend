@@ -56,13 +56,19 @@ const ContentSectionListItem = (props) => {
               props.onSelect(props.webhook["webhook_id"]);
             }}
           ></input>
-          <label
-            className={`${
-              props.selectedWebhooks.includes(props.webhook["webhook_id"])
-                ? classes["checked-label"]
-                : null
-            } relative mr-6 h-6 `}
-          ></label>
+          <label className={`relative mr-6 h-6 `}>
+            <div
+              className={`${
+                classes["check-icon-background"]
+              } absolute w-4 h-4 radius top-1 left-0 duration-300 ease-in-out border-2 border solid ${
+                props.selectedWebhooks.includes(props.webhook["webhook_id"]) &&
+                classes["checked-label"]
+              }`}
+            />
+            <div
+              className={`${classes["check-icon"]} absolute opacity-100 duration-300 ease-in-out z-2 border-solid`}
+            ></div>
+          </label>
         </div>
         <div
           className={`${classes["content--list-item-sections"]} ${
@@ -76,7 +82,7 @@ const ContentSectionListItem = (props) => {
           <div
             className={`${classes["content--list-item-favorite-icon"]} ${
               isFavorite && classes["favorite-isActive"]
-            } color-navy-100 inline-block duration-300`}
+            } color-navy-100 inline-block duration-300 z-9`}
             onClick={favoriteHandler}
           >
             <svg
@@ -201,6 +207,9 @@ const ContentSectionListItem = (props) => {
               isLoading && classes["loading"]
             } cursor-pointer items-center inline-flex h-full justify-center px-5 bg-transparent text-sm font-medium relative pointer-events-auto opacity-100 min-w-25 z-1`}
           >
+            <div
+              className={`${classes["button-background"]} absolute opacity-0 duration-300 ease-in-out`}
+            />
             Edit Integration
           </button>
         )}
@@ -214,6 +223,9 @@ const ContentSectionListItem = (props) => {
                 props.onStatusChangeWebhook("purge", props.webhook.webhook_id);
               }}
             >
+              <div
+                className={`${classes["button-background"]} absolute opacity-0 duration-300 ease-in-out`}
+              />
               Purge
             </button>
             <button
@@ -222,6 +234,9 @@ const ContentSectionListItem = (props) => {
                 props.onStatusChangeWebhook("enable", props.webhook.webhook_id);
               }}
             >
+              <div
+                className={`${classes["button-background"]} absolute opacity-0 duration-300 ease-in-out`}
+              />
               Restore
             </button>
           </div>

@@ -12,10 +12,11 @@ const Navbar = (props) => {
 
   return (
     <header
-      className={
-        "navbar min-h-18 flex items-center z-8 shrink-1 justify-between bg-navy-700 color-white w-full max-w-100vw mx-auto" +
-        (isExpanded ? " isExpanded" : "")
-      }
+      className={`navbar min-h-18 flex items-center z-8 shrink-1 justify-between color-white w-full max-w-100vw mx-auto ${
+        isExpanded
+          ? "isExpanded flex-wrap h-100vh absolute bg-white"
+          : "bg-navy-700"
+      }`}
     >
       <div
         className={
@@ -23,14 +24,14 @@ const Navbar = (props) => {
         }
       >
         <Link
-          className="logo flex h-full max-h-14 p-0 w-auto overflow-hidden"
+          className="logo block my-5 mr-3 ml-5 w-7 h-7 xs:m-0 xs:w-40 max-h-14 md:flex xs:h-full p-0 overflow-hidden"
           to="/"
         >
           <svg
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 367 66"
-            class="max-w-full w-full"
+            class="xs:max-w-full xs:w-full w-40"
           >
             <path
               fill-rule="evenodd"
@@ -62,9 +63,9 @@ const Navbar = (props) => {
           </svg>
         </Link>
       </div>
-      <div className="menu-mobile hidden justify-center items-center ml-3 flex-nowrap">
+      <div className="menu-mobile flex md:hidden justify-center items-center ml-3 flex-nowrap">
         <button
-          className="mobile__hamburger mr-0 cursor-pointer relative bg-transparent"
+          className={`mobile__hamburger mr-0 h-16 w-12 cursor-pointer relative bg-transparent`}
           onClick={expandMenuHandler}
         >
           <label
@@ -73,36 +74,66 @@ const Navbar = (props) => {
               (isExpanded ? " active" : "")
             }
           >
-            <div class="bar-wrapper">
-              <div class="bar top-bar"></div>
-              <div class="bar middle-bar"></div>
-              <div class="bar bottom-bar"></div>
+            <div className="bar-wrapper absolute h-full w-full left-0 top-0">
+              <div className="bar top-bar absolute h-full w-full left-0 top-0"></div>
+              <div className="bar middle-bar absolute h-full w-full left-0 top-0"></div>
+              <div className="bar bottom-bar absolute h-full w-full left-0 top-0"></div>
             </div>
           </label>
         </button>
       </div>
-      <div className="menu flex color-white mx-2 my-0 w-full justify-end">
-        <ul className="flex items-center justify-end flex-nowrap m-0">
-          <li className="cursor-pointer">
+      <div
+        className={`menu md:flex color-white mx-2 my-0 w-full ${
+          isExpanded
+            ? "justify-start flex flex-col overflow-x-hidden overflow-y-auto pb-6"
+            : "justify-end hidden"
+        }`}
+      >
+        <ul
+          className={`flex items-center justify-end ${
+            isExpanded
+              ? "relative overflow-x-hidden overflow-y-auto flex-wrap shrink-0"
+              : "flex-nowrap"
+          }`}
+        >
+          <li
+            className={`cursor-pointer w-full relative ${
+              isExpanded ? "border-t border-solid" : ""
+            }`}
+          >
             <Link
               to="/"
-              className="inline-block relative px-4 whitespace-nowrap font-normal line-height-70"
+              className={`inline-block relative px-4 whitespace-nowrap ${
+                isExpanded ? "w-full font-normal line-height-6xl" : ""
+              }`}
             >
               All Integrations
             </Link>
           </li>
-          <li className="cursor-pointer">
+          <li
+            className={`cursor-pointer w-full relative ${
+              isExpanded ? "border-t border-solid" : ""
+            }`}
+          >
             <Link
               to="/"
-              className="inline-block relative px-4 whitespace-nowrap font-normal line-height-70"
+              className={`inline-block relative px-4 whitespace-nowrap ${
+                isExpanded ? "w-full font-normal line-height-6xl" : ""
+              }`}
             >
               Login
             </Link>
           </li>
-          <li className="cursor-pointer">
+          <li
+            className={`cursor-pointer w-full relative ${
+              isExpanded ? "border-t border-solid" : ""
+            }`}
+          >
             <Link
               to="/"
-              className="inline-block relative px-4 whitespace-nowrap font-normal line-height-70"
+              className={`inline-block relative px-4 whitespace-nowrap ${
+                isExpanded ? "w-full font-normal line-height-6xl" : ""
+              }`}
             >
               Logout
             </Link>
@@ -113,7 +144,7 @@ const Navbar = (props) => {
             <li className="menu-list-item cursor-pointer p-3 relative w-18 h-18">
               <Link
                 to="/"
-                className="menu-list-item__link radius-full border-2 border-solid border-black border-opacity-30 w-12 h-12 cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal"
+                className={`menu-list-item__link radius-full border-2 border-solid border-black border-opacity-30 w-12 h-12 cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal`}
                 style={{
                   backgroundImage: `url("https://lh3.googleusercontent.com/a/AATXAJw7-enkIx0trd2ZVHHpIU_2BzI70ZqeA5gqR_QU=s96-c")`,
                 }}

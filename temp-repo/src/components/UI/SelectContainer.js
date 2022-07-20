@@ -21,7 +21,7 @@ const SelectContainer = (props) => {
                 return { value: e, label: e };
               })
         }
-        // styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+        styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
         menuPortalTarget={document.body}
         menuPlacement="bottom"
         onChange={(e) => {

@@ -2,244 +2,30 @@
   border-bottom-color: #ebedf2;
 }
 
-.match-fields::before {
-  width: calc(100% + 90px) !important;
-  content: " ";
-  display: table;
-}
-
-.match-fields::after {
-  content: " ";
-  display: table;
-  clear: both;
-}
-
 .match-fields__title {
   color: #596066;
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 10px;
-  padding: 0;
-}
-
-.match-fields__container {
-  float: left;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
-
-.match-fields__container::after {
-  content: " ";
-  display: table;
-  clear: both;
-}
-
-.match-fields__fields::before {
-  content: " ";
-  display: table;
-}
-
-.match-fields__fields::after {
-  content: " ";
-  display: table;
-  clear: both;
 }
 
 .fields__title {
-  align-items: center;
   color: #979698;
-  display: inline-block;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
   letter-spacing: -0.330593px;
-  line-height: 15px;
-  margin: 6px 0 !important;
-  vertical-align: middle;
   width: 48%;
 }
 
-.fields__title--right {
-  float: right;
-}
-
-.fields__title img {
-  height: 15px;
-  margin-right: 5px;
-  max-height: 15px;
-  vertical-align: middle;
-  max-width: 100%;
-}
-
-.fields__text {
-  display: inline-block;
-  font-size: 12px;
-  vertical-align: middle;
-}
-
-.match-fields__mapping {
-  margin-bottom: 10px;
-  position: relative;
-}
-
-.match-fields__mapping::before {
-  background: #fff;
-  border-top: 1px solid #d8dae9;
-  content: " ";
-  left: 0;
-  position: absolute;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
+.mapping-connection-line {
+  border-top-color: #d8dae9;
   transform: translateY(-50%);
-  width: 100%;
-  display: table;
-}
-
-.match-fields__mapping::after {
-  content: " ";
-  display: table;
-  clear: both;
 }
 
 .mapping__leftside {
-  display: inline-block;
   width: 48%;
 }
 
 .mapping__rightside {
-  float: right;
   width: 48%;
-}
-
-.mapping__dropdown {
-  position: relative;
-}
-
-.dropdown__wrapper {
-  position: relative;
-}
-
-.dropdown__button {
-  background-color: #fff;
-  border: 1px solid #d8dae9;
-  border-radius: 4px;
-  color: #5d5d61;
-  cursor: pointer;
-  font-size: 14px;
-  min-height: 38px;
-  opacity: 1;
-  overflow: hidden;
-  padding: 6px 28px 6px 15px;
-  position: relative;
-  text-align: left;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: 100%;
-  outline: 0;
-}
-
-.dropdown__button::after {
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg width='12' height='8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.397 6.948 11.1.804A.5.5 0 0 0 10.7 0H1.3a.5.5 0 0 0-.4.804l4.702 6.144a.5.5 0 0 0 .794 0z' fill='%23d8dae9' fill-rule='evenodd'/%3E%3C/svg%3E");
-  background-position: 50%;
-  background-repeat: no-repeat;
-  content: "";
-  height: 100%;
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 40px;
-  z-index: 1;
-}
-
-.dropdown__button.disabled {
-  cursor: not-allowed;
-}
-
-.dropdown__text {
-  padding-right: 10px;
-  display: inline-block;
-  overflow: hidden;
-  position: relative;
-  text-overflow: ellipsis;
-  vertical-align: middle;
-}
-
-.dropdown__text.placeholder {
-  opacity: 0.5;
-}
-
-.dropdown__text.required::after {
-  color: #ff2727;
-  content: " *";
-  position: absolute;
-  right: 1px;
-}
-
-.dropdown__popper {
-  width: 100%;
-  z-index: 2;
-}
-
-.dropdown__popper input {
-  border: 1px solid #d8dae9;
-  border-top: 0 solid #d8dae9;
-  color: #23283a;
-  font-size: 14px;
-  padding: 9px 15px;
-  width: 100%;
-  outline: 0;
-  margin: 0;
-  text-align: left;
-  appearance: auto;
-}
-
-.dropdown__popper ul {
-  background-color: #fff;
-  border: 1px solid #d8dae9;
-  border-radius: 0 0 4px 4px;
-  border-top: 0 solid #d8dae9;
-  margin: 0;
-  max-height: 23vh;
-  overflow: auto;
-  padding: 0;
-  list-style: none;
-}
-
-.dropdown__popper ul li {
-  background-color: #fff;
-  border-width: 0;
-  color: #5a6065;
-  cursor: pointer;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  letter-spacing: -0.2px;
-  line-height: 17px;
-  margin: 0;
-  padding: 13px 15px;
-  list-style: none;
-  position: relative;
-  transition: 0.3s;
-  width: 100%;
 }
 
 .match-fields__add-mapping button {
   background-color: #4573e3;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 12px;
-  height: 30px;
-  outline: none;
-  padding: 4px 16px;
-  text-align: center;
   width: 48%;
-}
-
-.match-fields__add-mapping button.disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
 }

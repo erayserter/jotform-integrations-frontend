@@ -30,7 +30,7 @@ const TagInputContainer = (props) => {
   const openRef = useRef();
 
   useOnClickOutside(openRef, () => {
-    // setIsToggled(false);
+    setIsToggled(false);
   });
 
   let str = "";

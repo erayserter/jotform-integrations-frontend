@@ -427,6 +427,7 @@ const AppContainer = (props) => {
 
   const integrationSaveHandler = async (data, isUpdate) => {
     const res = await postWebhookRequest(data);
+
     setWebhooks((prev) => {
       if (isUpdate)
         return prev.map((webhook) => {

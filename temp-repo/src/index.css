@@ -6,21 +6,10 @@ html {
   min-height: 100vh;
 }
 
-.logo {
-  width: 167px;
-  max-height: 55px;
-}
-
 .menu-list-item__link {
   line-height: 70px;
   background-clip: content-box;
   background-position: 50% 50%;
-}
-
-.mobile__hamburger {
-  height: 70px;
-  width: 48px;
-  border: none;
 }
 
 .mobile__hamburger label {
@@ -34,14 +23,6 @@ html {
   pointer-events: none;
 }
 
-.mobile__hamburger label .bar-wrapper,
-.mobile__hamburger label .bar {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  left: 0;
-  top: 0;
-}
 .mobile__hamburger label .bar:before,
 .mobile__hamburger label .bar:after {
   content: "";
@@ -124,37 +105,11 @@ html {
 }
 
 .navbar.isExpanded {
-  width: 100%;
-  flex-wrap: wrap;
   align-content: flex-start;
-  height: 100vh;
-  position: absolute;
-  background-color: #ffffff;
-}
-
-.navbar.isExpanded .menu {
-  display: -webkit-flex;
-  display: flex;
-  -webkit-justify-content: flex-start;
-  justify-content: flex-start;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  padding-bottom: 25px;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-.navbar.isExpanded .menu > ul {
-  position: relative;
-  overflow-y: auto;
-  overflow-x: hidden;
-  margin-bottom: 84px;
 }
 
 .navbar.isExpanded .menu > ul li {
-  width: 100%;
-  position: relative;
-  border-top: 1px solid #f7f7f9;
+  border-top-color: #f7f7f9;
 }
 
 .navbar.isExpanded .menu > ul li:last-of-type {
@@ -162,12 +117,7 @@ html {
 }
 
 .navbar.isExpanded .menu > ul li a {
-  width: 100%;
-  font-weight: 500;
-  font-size: 16px;
   color: #0c164e;
-  text-transform: none;
-  line-height: 48px;
 }
 
 .navbar.isExpanded .jl-text {
@@ -188,69 +138,4 @@ html {
 
 .navbar.isExpanded .jl-pen-middle {
   fill: #ff6100;
-}
-
-.navbar.isExpanded .mobile__hamburger {
-  top: 0;
-}
-@media screen and (max-width: 480px) {
-  .logo {
-    width: 30px;
-    height: 30px;
-    margin: 20px 12px 20px 20px;
-    display: block;
-  }
-
-  .logo::before {
-    content: "";
-    display: block;
-    width: 70px;
-    height: 70px;
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
-
-  .logo svg {
-    max-width: inherit;
-    width: 162px;
-  }
-
-  .menu-mobile {
-    display: flex;
-  }
-
-  .menu {
-    display: none;
-  }
-
-  .navbar.isExpanded .menu > ul {
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-flex: none !important;
-    flex: none !important;
-    margin: 0;
-  }
-}
-
-@media screen and (min-width: 481px) and (max-width: 768px) {
-  .logo {
-    display: block;
-  }
-
-  .menu-mobile {
-    display: flex;
-  }
-
-  .menu {
-    display: none;
-  }
-
-  .navbar.isExpanded .menu > ul {
-    -webkit-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -webkit-flex: none !important;
-    flex: none !important;
-    margin: 0;
-  }
 }

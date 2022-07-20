@@ -6,7 +6,6 @@ import IntegrationAppCard from "./IntegrationAppCard";
 import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
-import InlineEdit from "../../../UI/InlineEdit";
 import IntegrationTitle from "../Header/IntegrationTitle";
 
 const IntegrationWizard = (props) => {

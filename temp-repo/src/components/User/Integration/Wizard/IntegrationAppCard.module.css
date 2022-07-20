@@ -77,11 +77,11 @@
   transform: translateY(-15px);
 }
 
-.card.invalidApp {
+.card-wrapper.invalidApp {
   border: 2px solid red;
 }
 
-.card.invalidApp:hover {
+.card-wrapper.invalidApp:hover {
   border: 2px solid red;
 }
 

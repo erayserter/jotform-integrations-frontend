@@ -80,33 +80,59 @@ const MatchFieldsContainer = (props) => {
 
   return (
     <div className={`${classes["match-fields"]} py-5 border-b border-solid`}>
-      <div className={classes["match-fields__title"]}>
+      <div className={`${classes["match-fields__title"]} mb-2`}>
         <label>{props.label}</label>
       </div>
-      <div className={classes["match-fields__container"]}>
-        <div className={classes["match-fields__fields"]}>
-          <div className={classes["fields__title"]}>
-            <img src={props.apps.destination.img} />
-            <div className={classes["fields__text"]}>
-              <span>{props.apps.destination.name}</span>
+      <div className={`${classes["match-fields__container"]} w-full`}>
+        <div className={`${classes["match-fields__fields"]} mb-2 text-sm`}>
+          <div
+            className={`${classes["fields__title"]} items-center inline-block mt-1 text-xs line-height-xs align-middle font-normal`}
+          >
+            <div className="title-container flex">
+              <img
+                src={props.apps.destination.img}
+                height="15px"
+                className="mr-1 max-h-4 max-w-full align-middle"
+              />
+              <div
+                className={`${classes["fields__text"]} inline-block align-middle text-xs`}
+              >
+                <span>{props.apps.destination.name}</span>
+              </div>
             </div>
           </div>
           <div
-            className={`${classes["fields__title"]} ${classes["fields__title--right"]}`}
+            className={`${classes["fields__title"]} ${classes["fields__title--right"]} float-right items-center inline-block mt-1 text-xs line-height-xs align-middle font-normal`}
           >
-            <img src={props.apps.source.img} />
-            <div className={classes["fields__text"]}>
-              <span>{props.apps.source.name}</span>
+            <div className="title-container flex">
+              <img
+                src={props.apps.source.img}
+                height="15px"
+                className="mr-1 max-h-4 max-w-full align-middle"
+              />
+              <div
+                className={`${classes["fields__text"]} inline-block align-middle text-xs`}
+              >
+                <span>{props.apps.source.name}</span>
+              </div>
             </div>
           </div>
           {mappingChoices.map((choice, index) => {
             return (
-              <div className={classes["match-fields__mapping"]} key={index}>
-                <div className={classes["mapping__leftside"]}>
-                  <div className={classes["mapping__dropdown"]}>
-                    <div className={classes["dropdown__wrapper"]}>
+              <div
+                className={`${classes["match-fields__mapping"]} relative mb-2`}
+                key={index}
+              >
+                <div
+                  className={`${classes["mapping-connection-line"]} bg-white border-t border-solid left-0 w-full absolute top-1/2`}
+                >
+                  {" "}
+                </div>
+                <div className={`${classes["mapping__leftside"]} inline-block`}>
+                  <div className={`${classes["mapping__dropdown"]} relative`}>
+                    <div className={`${classes["dropdown__wrapper"]} relative`}>
                       <Select
-                        className="basic-multi-select"
+                        className={`basic-multi-select`}
                         classNamePrefix="select"
                         isSearchable={true}
                         name="actions"
@@ -133,11 +159,11 @@ const MatchFieldsContainer = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className={classes["mapping__rightside"]}>
-                  <div className={classes["mapping__dropdown"]}>
-                    <div className={classes["dropdown__wrapper"]}>
+                <div className={`${classes["mapping__rightside"]} float-right`}>
+                  <div className={`${classes["mapping__dropdown"]} relative`}>
+                    <div className={`${classes["dropdown__wrapper"]} relative`}>
                       <Select
-                        className="basic-multi-select"
+                        className={`basic-multi-select`}
                         classNamePrefix="select"
                         placeholder="Please select..."
                         isSearchable={true}
@@ -183,8 +209,8 @@ const MatchFieldsContainer = (props) => {
                     !element.destination.label || !element.source.label
                 ) ||
                   mappingChoices.length >= props.maxLength) &&
-                classes["disabled"]
-              }`}
+                "cursor-not-allowed opacity-50"
+              } radius cursor-pointer color-white inline-block text-xs h-7 py-1 px-4 text-center`}
               onClick={(event) => {
                 if (
                   !mappingChoices.find(

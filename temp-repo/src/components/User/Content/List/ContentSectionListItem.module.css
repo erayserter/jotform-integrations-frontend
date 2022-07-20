@@ -4,6 +4,11 @@
   }
 }
 
+.check-icon-background {
+  border-color: rgb(200, 206, 237);
+  background-color: rgb(255, 255, 255);
+}
+/* 
 .content--list-item-checkbox input + label::before {
   content: "";
   position: absolute;
@@ -16,9 +21,21 @@
   top: 0px;
   left: 0px;
   transition: all 0.3s ease 0s;
+} */
+
+.check-icon {
+  border-style: solid;
+  border-color: rgb(255, 255, 255);
+  border-image: initial;
+  border-width: 0px 2px 2px 0px;
+  transform: rotate(45deg);
+  width: 5px;
+  height: 10px;
+  left: 6px;
+  top: 5.8px;
 }
 
-.content--list-item-checkbox input + label::after {
+/* .content--list-item-checkbox input + label::after {
   content: "";
   display: block;
   width: 5px;
@@ -34,12 +51,17 @@
   opacity: 1;
   transition: all 0.3s ease 0s;
   z-index: 2;
-}
+} */
 
-.content--list-item-checkbox .checked-label::before {
+.checked-label {
   background-color: rgb(0, 153, 255);
   border-color: rgb(0, 153, 255);
 }
+
+/* .content--list-item-checkbox .checked-label::before {
+  background-color: rgb(0, 153, 255);
+  border-color: rgb(0, 153, 255);
+} */
 
 @media screen and (max-width: 768px) {
   .content--list-item-favorite-icon-wrapper {
@@ -95,16 +117,22 @@
 }
 
 .content--list-item-actions button {
-  border: none;
-  text-decoration: none;
+  /* border: none; */
+  /* text-decoration: none; */
   color: rgb(10, 21, 81);
 }
 
-.content--list-item-actions button:hover::before {
+.content--list-item-actions button:hover .button-background {
   opacity: 1;
 }
 
-.content--list-item-actions button::before {
+.button-background {
+  background-color: rgb(200, 206, 237);
+  z-index: -1;
+  inset: 0px;
+}
+
+/* .content--list-item-actions button::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -112,8 +140,8 @@
   inset: 0px;
   opacity: 0;
   transition: all 0.3s ease 0s;
-}
+} */
 
-.content--list-item-actions button.loading::before {
+.content--list-item-actions button.loading .button-background {
   opacity: 1;
 }

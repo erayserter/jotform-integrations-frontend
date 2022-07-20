@@ -15,12 +15,12 @@ const IntegrationAppCard = (props) => {
       onClick={clickHandler}
     >
       <div
-        className={`${classes["card"]} ${
-          props.isUpdate && !props.isValid && classes["invalidApp"]
-        } flex items-center justify-center radius-md relative duration-300 md:min-w-0`}
+        className={`${classes["card"]} flex items-center justify-center radius-md relative duration-300 md:min-w-0`}
       >
         <div
-          className={`${classes["card-wrapper"]} radius border-0 flex items-center justify-center absolute top-0 left-0 bottom-0 right-0 h-full border-solid border-transparent bg-navy-100 w-full duration-300`}
+          className={`${classes["card-wrapper"]} ${
+            props.isUpdate && !props.isValid && classes["invalidApp"]
+          } radius border-0 flex items-center justify-center absolute top-0 left-0 bottom-0 right-0 h-full border-solid border-transparent bg-navy-100 w-full duration-300`}
         >
           {props.datas && props.datas.id ? (
             <img
