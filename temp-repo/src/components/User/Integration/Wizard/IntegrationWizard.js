@@ -241,7 +241,7 @@ const IntegrationWizard = (props) => {
             type="source"
           />
           <div
-            className={`${classes["switch-icon"]} flex justify-center items-center mt-6 md:mt-0 w-10 h-10 md:h-auto cursor-pointer`}
+            className={`${classes["switch-icon"]} flex justify-center items-center mt-6 md:mt-0 w-10 h-10 md:mb-16 md:h-auto cursor-pointer`}
             onClick={switchHandler}
           >
             <img
@@ -263,7 +263,7 @@ const IntegrationWizard = (props) => {
         </div>
         {props.isUpdate && !apiStatusValid && (
           <span
-            className={`${classes["wizard--invalid-auth"]} block color-red-500 text-center w-full font-bold mx-auto mt-5 mb-0 py-1 px-6`}
+            className={`${classes["wizard--invalid-auth"]} block color-red-500 text-lg text-center w-full font-bold mx-auto mt-5 mb-0 py-1 px-6`}
           >
             Authentication is required!
           </span>

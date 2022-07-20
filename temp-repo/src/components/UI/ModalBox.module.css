@@ -2,14 +2,9 @@
   background-color: rgba(37, 45, 91, 0.7);
 }
 
-.modal-content {
-  max-width: 700px;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  width: calc(100vw - 30px);
-}
-
-.closeButton {
-  border-radius: 50%;
-  border-style: hidden;
+@media screen and (min-width: 769px) {
+  .modal-content {
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  }
 }

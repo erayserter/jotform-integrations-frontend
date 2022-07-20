@@ -21,7 +21,3 @@
 .settingsButton:hover {
   background-color: #68a206;
 }
-
-.wizard--invalid-auth {
-  font-size: 1.15rem;
-}

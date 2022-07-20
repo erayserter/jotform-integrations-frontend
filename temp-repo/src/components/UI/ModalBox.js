@@ -15,12 +15,12 @@ const ModalBox = (props) => {
     >
       <div
         id="modal-content"
-        className={`${classes["modal-content"]} absolute top-1/2 left-1/2 bg-white radius overflow-hidden`}
+        className={`${classes["modal-content"]} flex flex-col grow-1 absolute top-0 left-0 w-full h-full md:max-w-md md:h-auto md:top-1/2 md:left-1/2 bg-white radius overflow-auto`}
         ref={ref}
       >
         {props.children}
         <button
-          className={`${classes["closeButton"]} absolute right-5 top-5 px-3 pt-3 pb-2 m-0 bg-navy-75 cursor-pointer`}
+          className={`${classes["closeButton"]} absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
           onClick={() => props.onModalBoxClose(false)}
         >
           <svg

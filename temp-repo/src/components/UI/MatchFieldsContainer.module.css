@@ -1,6 +1,5 @@
 .match-fields {
-  padding: 1.25rem 0;
-  border-bottom: 1px solid #ebedf2;
+  border-bottom-color: #ebedf2;
 }
 
 .match-fields::before {

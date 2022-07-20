@@ -1,9 +1,16 @@
 .app-layout-header h1 {
+  font-size: calc(16.57143px + 1.07143vw);
+  margin-top: calc(6.5vh - 24px);
   line-height: 1.15;
 }
 
-.app-layout-body {
-  gap: 20px;
+@media screen and (min-width: 769px) {
+  .app-layout-header h1 {
+    margin-top: 0px;
+    text-align: left;
+    position: relative;
+    font-size: 28px;
+  }
 }
 
 .app-selector {
@@ -12,18 +19,6 @@
 
 .app-selector * {
   box-sizing: content-box;
-}
-
-.key-action-selector {
-  flex-basis: 85%;
-}
-
-.key-input {
-  gap: 10px;
-}
-
-.key-input input {
-  flex-basis: 60%;
 }
 
 .app-selector__container button {
@@ -41,9 +36,4 @@
 
 .pointer {
   left: calc(50% - 18px);
-  gap: 12px;
-}
-
-.pointer__circle {
-  border-radius: 50%;
 }

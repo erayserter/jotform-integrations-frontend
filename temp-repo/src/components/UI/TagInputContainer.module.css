@@ -1,97 +1,33 @@
 .tag-input {
-  position: relative;
-  padding: 1.25rem 0;
-  border-bottom: 1px solid #ebedf2;
+  border-bottom-color: #ebedf2;
 }
 
 .tag-input__title {
   color: #596066;
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 10px;
-  padding: 0;
 }
 
 .input__form-fields button {
-  cursor: pointer;
-  right: 0;
-  transition: 0.3s;
-  align-items: center;
   background: none;
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath fill='none' stroke='%235E74E6' stroke-linecap='round' stroke-width='2' d='m1.866 1 4.115 4L9.88 1'/%3E%3C/svg%3E");
   background-position: calc(100% - 0.5em);
   background-repeat: no-repeat;
   background-size: 9px;
   border: none;
-  border-radius: 4px;
   color: #5e74e6;
-  display: flex;
-  line-height: 1;
-  outline: none;
-  padding: 0.5em 21px 0.5em 0.5em;
-  position: absolute;
-  top: 1em;
 }
 
 .form-fields__icon {
-  align-items: center;
   background-color: #5e74e6;
-  border-radius: 16px;
-  color: #fff;
-  display: flex;
-  height: 16px;
-  justify-content: center;
-  margin-right: 4px;
-  width: 16px;
-}
-
-.form-fields__icon svg {
-  height: 10px;
-  width: 10px;
 }
 
 .form-fields__popper {
-  background-color: #fff;
-  border-radius: 4px;
-  box-shadow: 0 2px 7px 0 rgba(0, 0, 0, 0.5);
-  min-width: 288px;
-  z-index: 10;
+  z-index: 9999;
 }
 
 .popper__wrapper {
-  max-height: 240px;
-  overflow-x: hidden;
-  overflow-y: auto;
   color: #23283a;
-  font-size: 14px;
-  line-height: 1.618em;
-}
-
-.popper__list {
-  padding: 0 12px;
-  max-width: 325px;
-  width: 100%;
-}
-
-.popper__list ul {
-  list-style: none;
-  margin: 12px 0;
-  padding: 0;
-  transition: none;
-}
-
-.popper__list li {
-  border-radius: 4px;
-  display: flex;
-  max-width: 288px;
-  place-items: center;
-  transition: 0.3s;
-  width: 100%;
-  padding: 7px;
-  line-height: 1.618em;
 }
 
 .popper__list li:hover {
-  cursor: pointer;
   background-color: #f6f6f6;
 }

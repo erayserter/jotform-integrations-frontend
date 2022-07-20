@@ -8,12 +8,15 @@ const IntegrationApp = (props) => {
   };
 
   return (
-    <div className={classes["app-container"]}>
+    <div
+      className={`${classes["app-container"]} flex flex-col items-center overflow-hidden`}
+    >
       <img
-        className={classes["app-image"]}
+        className={`${classes["app-image"]} block cursor-pointer`}
         onClick={clickHandler}
         alt=""
         src={props.img}
+        width="50px"
       />
       <span>{props.name}</span>
     </div>

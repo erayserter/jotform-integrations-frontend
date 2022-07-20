@@ -1,3 +1,18 @@
+.settings--container h1 {
+  font-size: calc(16.57143px + 1.07143vw);
+  margin-top: calc(6.5vh - 24px);
+  line-height: 1.15;
+}
+
+@media screen and (min-width: 769px) {
+  .select--container h1 {
+    margin-top: 0px;
+    position: relative;
+    font-size: 28px;
+    text-align: left;
+  }
+}
+
 .settings--container .settings--sendButton {
   border-color: #b8b9c9;
 }
@@ -12,16 +27,4 @@
 
 .select--container label {
   color: #596066;
-}
-
-.prevButton {
-  cursor: pointer;
-  position: absolute;
-  left: 20px;
-  top: 20px;
-  padding: 12px 12px 9px;
-  margin: 0px;
-  border-radius: 50%;
-  border-style: hidden;
-  background-color: #e3e5f5;
 }
