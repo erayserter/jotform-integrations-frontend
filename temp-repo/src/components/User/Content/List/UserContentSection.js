@@ -4,8 +4,11 @@ import classes from "./UserContentSection.module.css";
 
 import ContentSectionListItem from "./ContentSectionListItem";
 
+import { useSelector } from "react-redux";
+
 const UserContentSection = (props) => {
-  const askedContent = props.webhooks.filter((m) => {
+  const webhooks = useSelector((state) => state.webhooks.webhooks);
+  const askedContent = webhooks.filter((m) => {
     if (m.status !== "PURGED") {
       if (props.content.header === "Integrations")
         return m.status === "ENABLED" || m.status === "DISABLED";

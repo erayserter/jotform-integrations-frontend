@@ -7,7 +7,7 @@ import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
 async function loginUser(credentials) {
-  return fetch("https://me-serter.jotform.dev/intern-api/login", {
+  return fetch("https://b-ersoz.jotform.dev/intern-api/login", {
     mode: "no-cors",
     method: "POST",
     headers: {

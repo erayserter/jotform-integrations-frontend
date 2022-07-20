@@ -6,13 +6,12 @@ import SelectionCard from "./SelectionCard";
 
 async function getAllUserData(appName) {
   return fetch(
-    "https://me-serter.jotform.dev/intern-api/getAllUserData?app_name=" +
-      appName
+    "https://b-ersoz.jotform.dev/intern-api/getAllUserData?app_name=" + appName
   ).then((res) => res.json());
 }
 
 async function validateApiKey(credentials) {
-  return fetch("https://me-serter.jotform.dev/intern-api/validateApiKey", {
+  return fetch("https://b-ersoz.jotform.dev/intern-api/validateApiKey", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -58,9 +57,9 @@ const IntegrationAppSelector = (props) => {
     const app = props.apps.find((e) => e.id === selectedApp.id);
     if (app.oauth) {
       setButtonText("...");
-      window.open("https://me-serter.jotform.dev/intern-api/clickUp");
+      window.open("https://b-ersoz.jotform.dev/intern-api/clickUp");
       window.addEventListener("message", (event) => {
-        if (event.origin === "https://me-serter.jotform.dev") {
+        if (event.origin === "https://b-ersoz.jotform.dev") {
           const data = JSON.parse(event.data);
           if (
             data.responseCode === 200 &&

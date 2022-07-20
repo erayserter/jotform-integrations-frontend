@@ -5,7 +5,7 @@ import AppContainer from "./components/AppContainer";
 import UserLogin from "./components/User/Authentication/UserLogin";
 
 async function alreadyLoggedIn() {
-  return fetch("https://me-serter.jotform.dev/intern-api/isLoggedIn").then(
+  return fetch("https://b-ersoz.jotform.dev/intern-api/isLoggedIn").then(
     (res) => res.json()
   );
 }
