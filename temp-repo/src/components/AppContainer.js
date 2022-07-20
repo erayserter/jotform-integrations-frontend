@@ -5,6 +5,9 @@ import Navbar from "./Navbar/Navbar";
 import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
+import { setWebhooks } from "../store/webhooks";
+import { useDispatch, useSelector } from "react-redux";
+
 const APPS = [
   {
     id: 1,
@@ -242,13 +245,13 @@ const appSettingsInitial = {
 };
 
 const getWebhookRequest = async () => {
-  return fetch("https://me-serter.jotform.dev/intern-api/getAllWebhooks").then(
+  return fetch("https://b-ersoz.jotform.dev/intern-api/getAllWebhooks").then(
     (res) => res.json()
   );
 };
 
 const postWebhookRequest = async (credentials) => {
-  return await fetch("https://me-serter.jotform.dev/intern-api/webhook", {
+  return await fetch("https://b-ersoz.jotform.dev/intern-api/webhook", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -258,7 +261,7 @@ const postWebhookRequest = async (credentials) => {
 };
 
 async function validateApiKey(credentials) {
-  return fetch("https://me-serter.jotform.dev/intern-api/validateApiKey", {
+  return fetch("https://b-ersoz.jotform.dev/intern-api/validateApiKey", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -269,13 +272,13 @@ async function validateApiKey(credentials) {
 
 async function getAllUserData(appName) {
   return fetch(
-    "https://me-serter.jotform.dev/intern-api/getAllUserData?app_name=" +
-      appName
+    "https://b-ersoz.jotform.dev/intern-api/getAllUserData?app_name=" + appName
   ).then((res) => res.json());
 }
 
 const AppContainer = (props) => {
-  const [webhooks, setWebhooks] = useState([]);
+  const dispatch = useDispatch();
+  const webhooks = useSelector((state) => state.webhooks.webhooks);
   const [selectedWebhooks, setSelectedWebhooks] = useState([]);
 
   const [isIntegrationContent, setIsIntegrationContent] = useState(false);
@@ -302,7 +305,7 @@ const AppContainer = (props) => {
   const getWebhooks = async () => {
     const res = await getWebhookRequest();
     if (res.responseCode === 200) {
-      setWebhooks(res.content);
+      dispatch(setWebhooks({ webhooks: res.content }));
     }
   };
 
@@ -312,34 +315,34 @@ const AppContainer = (props) => {
       action: status.toLowerCase(),
     };
     await postWebhookRequest(credentials);
-
-    setWebhooks((prev) =>
-      prev.map((e) => {
-        if (
-          (changedWebhookID && e.webhook_id === changedWebhookID) ||
-          (!changedWebhookID && selectedWebhooks.includes(e.webhook_id))
-        )
-          return { ...e, status: (status + "d").toUpperCase() };
-        return e;
-      })
-    );
+    const newWebhooks = webhooks.map((webhook) => {
+      if (
+        (changedWebhookID && webhook.webhook_id === changedWebhookID) ||
+        (!changedWebhookID && selectedWebhooks.includes(webhook.webhook_id))
+      )
+        return { ...webhook, status: (status + "d").toUpperCase() };
+      return webhook;
+    });
+    dispatch(setWebhooks({ webhooks: newWebhooks }));
     if (!changedWebhookID) setSelectedWebhooks([]);
   };
 
-  const favoriteWebhookHandler = async (webhook, bool) => {
+  const favoriteWebhookHandler = async (webhook_id, bool) => {
     const credentials = {
-      webhook_id: webhook,
+      webhook_id: webhook_id,
       is_favorite: bool,
       action: "favorite",
     };
     await postWebhookRequest(credentials);
-    setWebhooks((prev) =>
-      prev.map((e) => {
-        if (e.webhook_id === webhook)
-          return { ...e, is_favorite: bool.toString() };
-        return e;
-      })
-    );
+
+    const newWebhooks = webhooks.map((webhook) => {
+      if (webhook.webhook_id === webhook_id) {
+        return { ...webhook, is_favorite: bool.toString() };
+      }
+      return webhook;
+    });
+
+    dispatch(setWebhooks({ webhooks: newWebhooks }));
   };
 
   const selectWebhookHandler = (webhookID) => {
@@ -427,9 +430,8 @@ const AppContainer = (props) => {
 
   const integrationSaveHandler = async (data, isUpdate) => {
     const res = await postWebhookRequest(data);
-    setWebhooks((prev) => {
-      if (isUpdate)
-        return prev.map((webhook) => {
+    const newWebhooks = isUpdate
+      ? webhooks.map((webhook) => {
           if (webhook.webhook_id === res.content.webhookId)
             return {
               ...webhook,
@@ -437,20 +439,19 @@ const AppContainer = (props) => {
               value: { source: data.source, destination: data.destination },
             };
           return webhook;
-        });
+        })
+      : [
+          ...webhooks,
+          {
+            webhook_id: res.content.webhookId,
+            webhook_name: data.webhook_name,
+            value: { source: data.source, destination: data.destination },
+            status: "ENABLED",
+            is_favorite: "0",
+          },
+        ];
 
-      return [
-        ...prev,
-        {
-          webhook_id: res.content.webhookId,
-          webhook_name: data.webhook_name,
-          value: { source: data.source, destination: data.destination },
-          status: "ENABLED",
-          is_favorite: "0",
-        },
-      ];
-    });
-
+    dispatch(setWebhooks({ webhooks: newWebhooks }));
     closeHandler();
   };
 
@@ -525,7 +526,6 @@ const AppContainer = (props) => {
           onTemplateSelect={templateSelectHandler}
           onNewIntegration={setIsIntegrationContent}
           onIntegrationUpdate={integrationUpdateHandler}
-          webhooks={webhooks}
           selectedWebhooks={selectedWebhooks}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}

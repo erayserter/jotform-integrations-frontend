@@ -10,6 +10,8 @@ import UserContentSection from "./List/UserContentSection";
 import Templates from "./List/Templates/Templates";
 import { useRef } from "react";
 
+import { useSelector } from "react-redux";
+
 const LIST_ITEMS = [
   { header: "Integrations", value: "Integrations" },
   { header: "Templates", value: "Templates" },
@@ -33,6 +35,7 @@ const FIRST_ITEM = 0;
 const UserContent = (props) => {
   const [sectionContent, setSectionContent] = useState(LIST_ITEMS[FIRST_ITEM]);
   const [searchedWord, setSearchedWord] = useState("");
+  const webhooks = useSelector((state) => state.webhooks.webhooks);
 
   const [isSidebarMenuOpen, setIsSidebarMenuOpen] = useState(false);
   const [isSortingPopperOpen, setIsSortingPopperOpen] = useState(false);
@@ -63,7 +66,7 @@ const UserContent = (props) => {
   };
 
   const hasEnabled =
-    props.webhooks.filter((e) => {
+    webhooks.filter((e) => {
       return (
         props.selectedWebhooks.includes(e.webhook_id) &&
         e.status.toLowerCase() === "enabled"
@@ -71,7 +74,7 @@ const UserContent = (props) => {
     }).length !== 0;
 
   const hasDisabled =
-    props.webhooks.filter((e) => {
+    webhooks.filter((e) => {
       return (
         props.selectedWebhooks.includes(e.webhook_id) &&
         e.status.toLowerCase() === "disabled"
@@ -315,7 +318,6 @@ const UserContent = (props) => {
           <UserContentSection
             apps={props.apps}
             onIntegrationUpdate={props.onIntegrationUpdate}
-            webhooks={props.webhooks}
             selectedWebhooks={props.selectedWebhooks}
             content={sectionContent}
             searchedWord={searchedWord}

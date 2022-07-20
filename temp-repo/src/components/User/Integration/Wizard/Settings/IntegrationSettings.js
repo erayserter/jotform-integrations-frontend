@@ -80,7 +80,7 @@ const IntegrationSettings = (props) => {
             props.appOptions[appName][e.selection].length <= 0
           )
             return;
-          console.log(props.appOptions[appName][e.selection]);
+
           return (
             <div
               className={`${classes["select--container"]} py-5 border border-solid`}
