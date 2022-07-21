@@ -6,6 +6,7 @@ export const uiSlice = createSlice({
     currentContent: "choice",
     isIntegrationContent: false,
     isUpdate: false,
+    isTemplate: false,
   },
   reducers: {
     setCurrentContent(state, { payload }) {
@@ -17,10 +18,17 @@ export const uiSlice = createSlice({
     setIsUpdate(state, { payload }) {
       state.isUpdate = payload.isUpdate;
     },
+    setIsTemplate(state, { payload }) {
+      state.isTemplate = payload.isTemplate;
+    },
   },
 });
 
-export const { setCurrentContent, setIsIntegrationContent, setIsUpdate } =
-  uiSlice.actions;
+export const {
+  setCurrentContent,
+  setIsIntegrationContent,
+  setIsUpdate,
+  setIsTemplate,
+} = uiSlice.actions;
 
 export default uiSlice.reducer;

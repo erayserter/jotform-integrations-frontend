@@ -13,11 +13,12 @@ const IntegrationContent = (props) => {
   const dispatch = useDispatch();
   const currentContent = useSelector((state) => state.ui.currentContent);
   const isUpdate = useSelector((state) => state.ui.isUpdate);
+  const isTemplate = useSelector((state) => state.ui.isTemplate);
 
   useEffect(() => {
-    if (isUpdate || props.isTemplate)
+    if (isUpdate || isTemplate)
       dispatch(setCurrentContent({ currentContent: "wizard" }));
-  }, [isUpdate, props.isTemplate]);
+  }, [isUpdate, isTemplate]);
 
   return (
     <div
@@ -35,7 +36,6 @@ const IntegrationContent = (props) => {
             onOptionChange={props.onOptionChange}
             onIntegrationSave={props.onIntegrationSave}
             apiStatus={props.apiStatus}
-            isTemplate={props.isTemplate}
             oldContent={props.oldContent}
           />
         )}
@@ -65,7 +65,7 @@ const IntegrationContent = (props) => {
           ></path>
         </svg>
       </button>
-      {!isUpdate && !props.isTemplate && currentContent !== "choice" && (
+      {!isUpdate && !isTemplate && currentContent !== "choice" && (
         <div
           className={`${classes["back-button-container"]} absolute top-5 left-4 md:left-5`}
           onClick={(event) => {

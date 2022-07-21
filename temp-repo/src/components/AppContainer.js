@@ -6,7 +6,11 @@ import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
 import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
-import { setIsIntegrationContent, setIsUpdate } from "../store/ui";
+import {
+  setIsIntegrationContent,
+  setIsUpdate,
+  setIsTemplate,
+} from "../store/ui";
 import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config";
@@ -303,7 +307,6 @@ const AppContainer = (props) => {
   const isIntegrationContent = useSelector(
     (state) => state.ui.isIntegrationContent
   );
-  const [isTemplate, setIsTemplate] = useState(false); // ui
   const [oldContent, setOldContent] = useState({}); //webhooks
   const [apiStatus, setApiStatus] = useState({
     source: false,
@@ -454,7 +457,7 @@ const AppContainer = (props) => {
   const closeHandler = () => {
     dispatch(setIsIntegrationContent({ isIntegrationContent: false }));
     dispatch(setIsUpdate({ isUpdate: false }));
-    setIsTemplate(false);
+    dispatch(setIsTemplate({ isTemplate: false }));
     setOldContent({});
   };
 
@@ -486,7 +489,7 @@ const AppContainer = (props) => {
   };
 
   const templateSelectHandler = (permutation) => {
-    setIsTemplate(true);
+    dispatch(setIsTemplate({ isTemplate: true }));
 
     const sourceSettings = {};
     for (const field in appSettingsInitial[permutation.source.name][
@@ -544,7 +547,6 @@ const AppContainer = (props) => {
           onOptionChange={optionChangeHandler}
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
-          isTemplate={isTemplate}
           onTemplateSelect={templateSelectHandler}
           oldContent={oldContent}
           apiStatus={apiStatus}

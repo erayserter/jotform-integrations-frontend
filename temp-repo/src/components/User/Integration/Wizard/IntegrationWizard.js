@@ -11,6 +11,7 @@ import IntegrationTitle from "../Header/IntegrationTitle";
 import { useSelector } from "react-redux";
 
 const IntegrationWizard = (props) => {
+  const isTemplate = useSelector((state) => state.ui.isTemplate);
   const isUpdate = useSelector((state) => state.ui.isUpdate);
   const [webhookName, setWebhookName] = useState("Integration");
 
@@ -96,7 +97,7 @@ const IntegrationWizard = (props) => {
             ? props.oldContent.app_datas.destination
             : {},
         });
-      } else if (props.isTemplate) {
+      } else if (isTemplate) {
         setSelectedDatas({
           source: {
             id: source_app.id,
@@ -118,7 +119,7 @@ const IntegrationWizard = (props) => {
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [isUpdate, props.isTemplate]);
+  }, [isUpdate, isTemplate]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
