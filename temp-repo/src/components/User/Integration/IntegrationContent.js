@@ -36,7 +36,6 @@ const IntegrationContent = (props) => {
             onOptionChange={props.onOptionChange}
             onIntegrationSave={props.onIntegrationSave}
             apiStatus={props.apiStatus}
-            oldContent={props.oldContent}
           />
         )}
       </div>

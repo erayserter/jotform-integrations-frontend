@@ -5,7 +5,11 @@ import Navbar from "./Navbar/Navbar";
 import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
-import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
+import {
+  setWebhooks,
+  setSelectedWebhooks,
+  setOldContent,
+} from "../store/webhooks";
 import {
   setIsIntegrationContent,
   setIsUpdate,
@@ -307,7 +311,6 @@ const AppContainer = (props) => {
   const isIntegrationContent = useSelector(
     (state) => state.ui.isIntegrationContent
   );
-  const [oldContent, setOldContent] = useState({}); //webhooks
   const [apiStatus, setApiStatus] = useState({
     source: false,
     destination: false,
@@ -435,16 +438,17 @@ const AppContainer = (props) => {
         info.destination.res.content.responseCode === 200;
       info.destination.content = info.destination.res.content.content;
     }
-
-    setOldContent((prev) => {
-      return {
-        ...webhook,
-        app_datas: {
-          source: info.source.content,
-          destination: info.destination.content,
+    dispatch(
+      setOldContent({
+        oldContent: {
+          ...webhook,
+          app_datas: {
+            source: info.source.content,
+            destination: info.destination.content,
+          },
         },
-      };
-    });
+      })
+    );
 
     setApiStatus({
       source: info.source.status,
@@ -458,7 +462,7 @@ const AppContainer = (props) => {
     dispatch(setIsIntegrationContent({ isIntegrationContent: false }));
     dispatch(setIsUpdate({ isUpdate: false }));
     dispatch(setIsTemplate({ isTemplate: false }));
-    setOldContent({});
+    dispatch(setOldContent({ oldContent: {} }));
   };
 
   const integrationSaveHandler = async (data, isUpdate) => {
@@ -505,21 +509,24 @@ const AppContainer = (props) => {
       if (field.templateDefault)
         destinationSettings[field.selection] = field.templateDefault;
     }
-
-    setOldContent({
-      value: {
-        source: {
-          app_name: permutation.source.name,
-          app_action: permutation.source.trigger,
-          settings: sourceSettings,
+    dispatch(
+      setOldContent({
+        oldContent: {
+          value: {
+            source: {
+              app_name: permutation.source.name,
+              app_action: permutation.source.trigger,
+              settings: sourceSettings,
+            },
+            destination: {
+              app_name: permutation.destination.name,
+              app_action: permutation.destination.action,
+              settings: destinationSettings,
+            },
+          },
         },
-        destination: {
-          app_name: permutation.destination.name,
-          app_action: permutation.destination.action,
-          settings: destinationSettings,
-        },
-      },
-    });
+      })
+    );
     dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };
 
@@ -548,7 +555,6 @@ const AppContainer = (props) => {
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
           onTemplateSelect={templateSelectHandler}
-          oldContent={oldContent}
           apiStatus={apiStatus}
         />
       ) : (
