@@ -8,7 +8,10 @@ import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
 import IntegrationTitle from "../Header/IntegrationTitle";
 
+import { useSelector } from "react-redux";
+
 const IntegrationWizard = (props) => {
+  const isUpdate = useSelector((state) => state.ui.isUpdate);
   const [webhookName, setWebhookName] = useState("Integration");
 
   const [appType, setAppType] = useState("source");
@@ -49,7 +52,7 @@ const IntegrationWizard = (props) => {
           e.name.toLowerCase() ===
           props.oldContent.value.destination["app_name"].toLowerCase()
       );
-      if (props.isUpdate) {
+      if (isUpdate) {
         const allAuthsValid =
           props.apiStatus.source && props.apiStatus.destination;
 
@@ -115,7 +118,7 @@ const IntegrationWizard = (props) => {
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [props.isUpdate, props.isTemplate]);
+  }, [isUpdate, props.isTemplate]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
@@ -201,14 +204,14 @@ const IntegrationWizard = (props) => {
         webhook_name: webhookName,
       };
 
-      if (props.isUpdate) {
+      if (isUpdate) {
         allData.action = "update";
         allData["webhook_id"] = props.oldContent["webhook_id"];
       } else {
         allData.action = "create";
       }
 
-      props.onIntegrationSave(allData, props.isUpdate);
+      props.onIntegrationSave(allData, isUpdate);
     }
   };
 
@@ -230,7 +233,6 @@ const IntegrationWizard = (props) => {
         >
           <IntegrationAppCard
             isValid={apiStatus.source}
-            isUpdate={props.isUpdate}
             apps={props.apps}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
@@ -250,7 +252,6 @@ const IntegrationWizard = (props) => {
           </div>
           <IntegrationAppCard
             isValid={apiStatus.destination}
-            isUpdate={props.isUpdate}
             apps={props.apps}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
@@ -260,7 +261,7 @@ const IntegrationWizard = (props) => {
             type="destination"
           />
         </div>
-        {props.isUpdate && !apiStatusValid && (
+        {isUpdate && !apiStatusValid && (
           <span
             className={`${classes["wizard--invalid-auth"]} block color-red-500 text-lg text-center w-full font-bold mx-auto mt-5 mb-0 py-1 px-6`}
           >

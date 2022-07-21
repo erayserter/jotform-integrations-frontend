@@ -6,7 +6,7 @@ import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
 import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
-import { setIsIntegrationContent } from "../store/ui";
+import { setIsIntegrationContent, setIsUpdate } from "../store/ui";
 import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config";
@@ -303,7 +303,6 @@ const AppContainer = (props) => {
   const isIntegrationContent = useSelector(
     (state) => state.ui.isIntegrationContent
   );
-  const [isUpdate, setIsUpdate] = useState(false); //ui
   const [isTemplate, setIsTemplate] = useState(false); // ui
   const [oldContent, setOldContent] = useState({}); //webhooks
   const [apiStatus, setApiStatus] = useState({
@@ -448,13 +447,13 @@ const AppContainer = (props) => {
       source: info.source.status,
       destination: info.destination.status,
     });
-    setIsUpdate(true);
+    dispatch(setIsUpdate({ isUpdate: true }));
     dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };
 
   const closeHandler = () => {
     dispatch(setIsIntegrationContent({ isIntegrationContent: false }));
-    setIsUpdate(false);
+    dispatch(setIsUpdate({ isUpdate: false }));
     setIsTemplate(false);
     setOldContent({});
   };
@@ -545,7 +544,6 @@ const AppContainer = (props) => {
           onOptionChange={optionChangeHandler}
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
-          isUpdate={isUpdate}
           isTemplate={isTemplate}
           onTemplateSelect={templateSelectHandler}
           oldContent={oldContent}

@@ -2,7 +2,9 @@ import React from "react";
 
 import classes from "./IntegrationAppCard.module.css";
 
+import { useSelector } from "react-redux";
 const IntegrationAppCard = (props) => {
+  const isUpdate = useSelector((state) => state.ui.isUpdate);
   const clickHandler = (event) => {
     props.onClick(props);
   };
@@ -19,7 +21,7 @@ const IntegrationAppCard = (props) => {
       >
         <div
           className={`${classes["card-wrapper"]} ${
-            props.isUpdate && !props.isValid && classes["invalidApp"]
+            isUpdate && !props.isValid && classes["invalidApp"]
           } radius border-0 flex items-center justify-center absolute top-0 left-0 bottom-0 right-0 h-full border-solid border-transparent bg-navy-100 w-full duration-300`}
         >
           {props.datas && props.datas.id ? (
@@ -56,7 +58,7 @@ const IntegrationAppCard = (props) => {
       </div>
       <div
         className={`${classes["text__container"]} ${
-          props.isUpdate && !props.isValid && classes["invalidApp"]
+          isUpdate && !props.isValid && classes["invalidApp"]
         } w-full`}
       >
         <div
