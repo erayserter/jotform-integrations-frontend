@@ -6,11 +6,17 @@ import IntegrationWizard from "./Wizard/IntegrationWizard";
 import IntegrationHeader from "./Header/IntegrationHeader";
 import Templates from "../Content/List/Templates/Templates";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentContent } from "../../../store/ui";
+
 const IntegrationContent = (props) => {
-  const [currentContent, setCurrentContent] = useState("choice");
+  const dispatch = useDispatch();
+  const currentContent = useSelector((state) => state.ui.currentContent);
+  // const [currentContent, setCurrentContent] = useState("choice");
 
   useEffect(() => {
-    if (props.isUpdate || props.isTemplate) setCurrentContent("wizard");
+    if (props.isUpdate || props.isTemplate)
+      dispatch(setCurrentContent({ currentContent: "wizard" }));
   }, [props.isUpdate, props.isTemplate]);
 
   return (
@@ -66,7 +72,7 @@ const IntegrationContent = (props) => {
         <div
           className={`${classes["back-button-container"]} absolute top-5 left-4 md:left-5`}
           onClick={(event) => {
-            setCurrentContent("choice");
+            dispatch(setCurrentContent({ currentContent: "choice" }));
           }}
         >
           <button
