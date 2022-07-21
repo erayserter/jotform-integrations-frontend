@@ -12,7 +12,6 @@ import { setCurrentContent } from "../../../store/ui";
 const IntegrationContent = (props) => {
   const dispatch = useDispatch();
   const currentContent = useSelector((state) => state.ui.currentContent);
-  // const [currentContent, setCurrentContent] = useState("choice");
 
   useEffect(() => {
     if (props.isUpdate || props.isTemplate)
@@ -26,9 +25,7 @@ const IntegrationContent = (props) => {
       <div
         className={`${classes["content-wrapper"]} flex flex-col my-0 mx-auto overflow-x-hidden overflow-y-auto`}
       >
-        {currentContent === "choice" && (
-          <IntegrationHeader onSelect={setCurrentContent} />
-        )}
+        {currentContent === "choice" && <IntegrationHeader />}
         {currentContent === "wizard" && (
           <IntegrationWizard
             apps={props.apps}

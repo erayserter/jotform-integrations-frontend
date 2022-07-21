@@ -6,6 +6,7 @@ import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
 import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
+import { setIsIntegrationContent } from "../store/ui";
 import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config";
@@ -299,11 +300,12 @@ const AppContainer = (props) => {
   const selectedWebhooks = useSelector(
     (state) => state.webhooks.selectedWebhooks
   );
-
-  const [isIntegrationContent, setIsIntegrationContent] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [isTemplate, setIsTemplate] = useState(false);
-  const [oldContent, setOldContent] = useState({});
+  const isIntegrationContent = useSelector(
+    (state) => state.ui.isIntegrationContent
+  );
+  const [isUpdate, setIsUpdate] = useState(false); //ui
+  const [isTemplate, setIsTemplate] = useState(false); // ui
+  const [oldContent, setOldContent] = useState({}); //webhooks
   const [apiStatus, setApiStatus] = useState({
     source: false,
     destination: false,
@@ -447,11 +449,11 @@ const AppContainer = (props) => {
       destination: info.destination.status,
     });
     setIsUpdate(true);
-    setIsIntegrationContent(true);
+    dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };
 
   const closeHandler = () => {
-    setIsIntegrationContent(false);
+    dispatch(setIsIntegrationContent({ isIntegrationContent: false }));
     setIsUpdate(false);
     setIsTemplate(false);
     setOldContent({});
@@ -516,7 +518,7 @@ const AppContainer = (props) => {
         },
       },
     });
-    setIsIntegrationContent(true);
+    dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };
 
   useEffect(() => {
@@ -553,7 +555,6 @@ const AppContainer = (props) => {
         <UserContent
           apps={APPS}
           onTemplateSelect={templateSelectHandler}
-          onNewIntegration={setIsIntegrationContent}
           onIntegrationUpdate={integrationUpdateHandler}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}

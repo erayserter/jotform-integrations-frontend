@@ -10,7 +10,8 @@ import UserContentSection from "./List/UserContentSection";
 import Templates from "./List/Templates/Templates";
 import { useRef } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsIntegrationContent } from "../../../store/ui";
 
 const LIST_ITEMS = [
   { header: "Integrations", value: "Integrations" },
@@ -33,6 +34,7 @@ const SORT_LIST_ITEMS = [
 const FIRST_ITEM = 0;
 
 const UserContent = (props) => {
+  const dispatch = useDispatch();
   const [sectionContent, setSectionContent] = useState(LIST_ITEMS[FIRST_ITEM]);
   const [searchedWord, setSearchedWord] = useState("");
   const webhooks = useSelector((state) => state.webhooks.webhooks);
@@ -65,7 +67,7 @@ const UserContent = (props) => {
   };
 
   const clickHandler = (event) => {
-    props.onNewIntegration(true);
+    dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };
 
   const hasEnabled =
