@@ -4,20 +4,30 @@ import Select from "react-select";
 import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
 
+import configurations from "../../../../../config";
+
 async function getAllUserData(appName) {
   return fetch(
-    "https://b-ersoz.jotform.dev/intern-api/getAllUserData?app_name=" + appName
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/getAllUserData?app_name=" +
+      appName
   ).then((res) => res.json());
 }
 
 async function validateApiKey(credentials) {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/validateApiKey", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  return fetch(
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/validateApiKey",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }
+  ).then((data) => data.json());
 }
 
 const IntegrationAppSelector = (props) => {
@@ -57,9 +67,16 @@ const IntegrationAppSelector = (props) => {
     const app = props.apps.find((e) => e.id === selectedApp.id);
     if (app.oauth) {
       setButtonText("...");
-      window.open("https://b-ersoz.jotform.dev/intern-api/clickUp");
+      window.open(
+        "https://" +
+          configurations.DEV_RDS_NAME +
+          ".jotform.dev/intern-api/clickUp"
+      );
       window.addEventListener("message", (event) => {
-        if (event.origin === "https://b-ersoz.jotform.dev") {
+        if (
+          event.origin ===
+          "https://" + configurations.DEV_RDS_NAME + ".jotform.dev"
+        ) {
           const data = JSON.parse(event.data);
           if (
             data.responseCode === 200 &&

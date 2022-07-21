@@ -8,6 +8,8 @@ import IntegrationContent from "./User/Integration/IntegrationContent";
 import { setWebhooks } from "../store/webhooks";
 import { useDispatch, useSelector } from "react-redux";
 
+import configurations from "../config";
+
 const APPS = [
   {
     id: 1,
@@ -245,34 +247,49 @@ const appSettingsInitial = {
 };
 
 const getWebhookRequest = async () => {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/getAllWebhooks").then(
-    (res) => res.json()
-  );
+  return fetch(
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/getAllWebhooks"
+  ).then((res) => res.json());
 };
 
 const postWebhookRequest = async (credentials) => {
-  return await fetch("https://b-ersoz.jotform.dev/intern-api/webhook", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  return await fetch(
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/webhook",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }
+  ).then((data) => data.json());
 };
 
 async function validateApiKey(credentials) {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/validateApiKey", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  return fetch(
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/validateApiKey",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }
+  ).then((data) => data.json());
 }
 
 async function getAllUserData(appName) {
   return fetch(
-    "https://b-ersoz.jotform.dev/intern-api/getAllUserData?app_name=" + appName
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/getAllUserData?app_name=" +
+      appName
   ).then((res) => res.json());
 }
 

@@ -6,15 +6,20 @@ import classes from "./UserLogin.module.css";
 import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
+import configurations from "../../../config";
+
 async function loginUser(credentials) {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/login", {
-    mode: "no-cors",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(credentials),
-  }).then((data) => data.json());
+  return fetch(
+    "https://" + configurations.DEV_RDS_NAME + ".jotform.dev/intern-api/login",
+    {
+      mode: "no-cors",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    }
+  ).then((data) => data.json());
 }
 
 const UserLogin = (props) => {

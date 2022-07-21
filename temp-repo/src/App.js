@@ -4,10 +4,14 @@ import { Routes, Route, HashRouter } from "react-router-dom";
 import AppContainer from "./components/AppContainer";
 import UserLogin from "./components/User/Authentication/UserLogin";
 
+import configurations from "./config/index";
+
 async function alreadyLoggedIn() {
-  return fetch("https://b-ersoz.jotform.dev/intern-api/isLoggedIn").then(
-    (res) => res.json()
-  );
+  return fetch(
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/isLoggedIn"
+  ).then((res) => res.json());
 }
 
 function App() {
