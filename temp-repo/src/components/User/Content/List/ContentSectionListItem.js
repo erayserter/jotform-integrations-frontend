@@ -3,7 +3,13 @@ import { useRef } from "react";
 
 import classes from "./ContentSectionListItem.module.css";
 
+import { useSelector } from "react-redux";
+
 const ContentSectionListItem = (props) => {
+  const selectedWebhooks = useSelector(
+    (state) => state.webhooks.selectedWebhooks
+  );
+
   const [isFavorite, setIsFavorite] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +34,7 @@ const ContentSectionListItem = (props) => {
         isLoading ? "bg-navy-25" : ""
       } flex justify-between items-center w-full h-16 radius-md hover:bg-navy-25`}
       style={
-        props.selectedWebhooks.includes(props.webhook["webhook_id"])
+        selectedWebhooks.includes(props.webhook["webhook_id"])
           ? { backgroundColor: "#edf8ff" }
           : {}
       }
@@ -42,7 +48,7 @@ const ContentSectionListItem = (props) => {
       >
         <div
           className={`${classes["content--list-item-sections"]} ${
-            props.selectedWebhooks.includes(props.webhook["webhook_id"])
+            selectedWebhooks.includes(props.webhook["webhook_id"])
               ? "flex"
               : "hidden"
           } relative z-1 md:mr-4 md:flex w-20 md:w-auto ${
@@ -61,7 +67,7 @@ const ContentSectionListItem = (props) => {
               className={`${
                 classes["check-icon-background"]
               } absolute w-4 h-4 radius top-1 left-0 duration-300 ease-in-out border-2 border solid ${
-                props.selectedWebhooks.includes(props.webhook["webhook_id"]) &&
+                selectedWebhooks.includes(props.webhook["webhook_id"]) &&
                 classes["checked-label"]
               }`}
             />
@@ -113,7 +119,7 @@ const ContentSectionListItem = (props) => {
         >
           <div
             className={`${classes["content--list-item-integration-icon"]} ${
-              props.selectedWebhooks.includes(props.webhook["webhook_id"])
+              selectedWebhooks.includes(props.webhook["webhook_id"])
                 ? "hidden"
                 : "flex"
             } md:flex items-center justify-center`}

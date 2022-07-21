@@ -5,7 +5,7 @@ import Navbar from "./Navbar/Navbar";
 import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
-import { setWebhooks } from "../store/webhooks";
+import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
 import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config";
@@ -296,7 +296,9 @@ async function getAllUserData(appName) {
 const AppContainer = (props) => {
   const dispatch = useDispatch();
   const webhooks = useSelector((state) => state.webhooks.webhooks);
-  const [selectedWebhooks, setSelectedWebhooks] = useState([]);
+  const selectedWebhooks = useSelector(
+    (state) => state.webhooks.selectedWebhooks
+  );
 
   const [isIntegrationContent, setIsIntegrationContent] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -341,7 +343,8 @@ const AppContainer = (props) => {
       return webhook;
     });
     dispatch(setWebhooks({ webhooks: newWebhooks }));
-    if (!changedWebhookID) setSelectedWebhooks([]);
+    if (!changedWebhookID)
+      dispatch(setSelectedWebhooks({ selectedWebhooks: [] }));
   };
 
   const favoriteWebhookHandler = async (webhook_id, bool) => {
@@ -364,8 +367,17 @@ const AppContainer = (props) => {
 
   const selectWebhookHandler = (webhookID) => {
     if (selectedWebhooks.includes(webhookID))
-      setSelectedWebhooks((prev) => prev.filter((e) => e !== webhookID));
-    else setSelectedWebhooks((prev) => [...prev, webhookID]);
+      dispatch(
+        setSelectedWebhooks({
+          selectedWebhooks: selectedWebhooks.filter((e) => e !== webhookID),
+        })
+      );
+    else
+      dispatch(
+        setSelectedWebhooks({
+          selectedWebhooks: [...selectedWebhooks, webhookID],
+        })
+      );
   };
 
   const integrationUpdateHandler = async (webhook) => {
@@ -543,7 +555,6 @@ const AppContainer = (props) => {
           onTemplateSelect={templateSelectHandler}
           onNewIntegration={setIsIntegrationContent}
           onIntegrationUpdate={integrationUpdateHandler}
-          selectedWebhooks={selectedWebhooks}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}
           onSelect={selectWebhookHandler}

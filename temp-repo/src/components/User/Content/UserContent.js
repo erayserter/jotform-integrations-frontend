@@ -36,6 +36,9 @@ const UserContent = (props) => {
   const [sectionContent, setSectionContent] = useState(LIST_ITEMS[FIRST_ITEM]);
   const [searchedWord, setSearchedWord] = useState("");
   const webhooks = useSelector((state) => state.webhooks.webhooks);
+  const selectedWebhooks = useSelector(
+    (state) => state.webhooks.selectedWebhooks
+  );
 
   const [isSidebarMenuOpen, setIsSidebarMenuOpen] = useState(false);
   const [isSortingPopperOpen, setIsSortingPopperOpen] = useState(false);
@@ -68,7 +71,7 @@ const UserContent = (props) => {
   const hasEnabled =
     webhooks.filter((e) => {
       return (
-        props.selectedWebhooks.includes(e.webhook_id) &&
+        selectedWebhooks.includes(e.webhook_id) &&
         e.status.toLowerCase() === "enabled"
       );
     }).length !== 0;
@@ -76,7 +79,7 @@ const UserContent = (props) => {
   const hasDisabled =
     webhooks.filter((e) => {
       return (
-        props.selectedWebhooks.includes(e.webhook_id) &&
+        selectedWebhooks.includes(e.webhook_id) &&
         e.status.toLowerCase() === "disabled"
       );
     }).length !== 0;
@@ -172,13 +175,13 @@ const UserContent = (props) => {
           >
             <button
               className={`${classes["user--folder"]} ${
-                props.selectedWebhooks.length > 0 ? "hidden" : "block"
+                selectedWebhooks.length > 0 ? "hidden" : "block"
               } md:hidden bg-white border border-solid radius cursor-pointer shrink-0 h-11 w-11 mr-2 bg-no-repeat bg-center pointer-events-auto hover:bg-navy-25`}
               onClick={(event) => setIsSidebarMenuOpen(true)}
             ></button>
             <div
               className={`${classes["user--selection-menu"]} ${
-                props.selectedWebhooks.length > 0 ? "flex" : "hidden"
+                selectedWebhooks.length > 0 ? "flex" : "hidden"
               } grow-1 shrink-1 mr-2 pointer-events-auto items-start justify-start pl-0 md:pl-4`}
             >
               <button
@@ -238,7 +241,7 @@ const UserContent = (props) => {
             </div>
             <div
               className={`${classes["user--sectionsearch"]} ${
-                props.selectedWebhooks.length > 0 ? "hidden" : "flex"
+                selectedWebhooks.length > 0 ? "hidden" : "flex"
               } md:flex pointer-events-auto ml-auto`}
             >
               <div className={classes["user--sectionsearch-sort"]}>
@@ -318,7 +321,6 @@ const UserContent = (props) => {
           <UserContentSection
             apps={props.apps}
             onIntegrationUpdate={props.onIntegrationUpdate}
-            selectedWebhooks={props.selectedWebhooks}
             content={sectionContent}
             searchedWord={searchedWord}
             onSelect={props.onSelect}

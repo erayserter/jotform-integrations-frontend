@@ -132,16 +132,6 @@
   inset: 0px;
 }
 
-/* .content--list-item-actions button::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  background-color: rgb(200, 206, 237);
-  inset: 0px;
-  opacity: 0;
-  transition: all 0.3s ease 0s;
-} */
-
 .content--list-item-actions button.loading .button-background {
   opacity: 1;
 }
