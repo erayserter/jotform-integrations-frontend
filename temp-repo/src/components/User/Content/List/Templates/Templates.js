@@ -5,12 +5,58 @@ import classes from "./Templates.module.css";
 
 import TemplateItem from "./TemplateItem";
 
+import { useDispatch } from "react-redux";
+import {
+  setIsTemplate,
+  setIsIntegrationContent,
+} from "../../../../../store/ui";
+import { setOldContent } from "../../../../../store/webhooks";
+
 const Templates = (props) => {
+  const dispatch = useDispatch();
   const [allPermutations, setAllPermutations] = useState([]);
   const [searchedApps, setSearchedApps] = useState({
     source: "",
     destination: "",
   });
+
+  const onTemplateSelect = (permutation) => {
+    dispatch(setIsTemplate({ isTemplate: true }));
+
+    const sourceSettings = {};
+    for (const field in props.appSettingsInitial[permutation.source.name][
+      permutation.source.trigger
+    ]) {
+      if (field.templateDefault)
+        sourceSettings[field.selection] = field.templateDefault;
+    }
+    const destinationSettings = {};
+    for (const field of props.appSettingsInitial[permutation.destination.name][
+      permutation.destination.action
+    ]) {
+      if (field.templateDefault)
+        destinationSettings[field.selection] = field.templateDefault;
+    }
+    dispatch(
+      setOldContent({
+        oldContent: {
+          value: {
+            source: {
+              app_name: permutation.source.name,
+              app_action: permutation.source.trigger,
+              settings: sourceSettings,
+            },
+            destination: {
+              app_name: permutation.destination.name,
+              app_action: permutation.destination.action,
+              settings: destinationSettings,
+            },
+          },
+        },
+      })
+    );
+    dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
+  };
 
   useEffect(() => {
     const per = [];
@@ -124,7 +170,7 @@ const Templates = (props) => {
                 className="cursor-pointer transform ease-in-out duration-300"
                 key={permutation.id}
                 onClick={(event) => {
-                  props.onTemplateSelect(permutation);
+                  onTemplateSelect(permutation);
                 }}
               >
                 <TemplateItem datas={permutation} />

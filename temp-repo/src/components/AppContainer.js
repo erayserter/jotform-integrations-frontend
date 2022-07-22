@@ -492,44 +492,6 @@ const AppContainer = (props) => {
     closeHandler();
   };
 
-  const templateSelectHandler = (permutation) => {
-    dispatch(setIsTemplate({ isTemplate: true }));
-
-    const sourceSettings = {};
-    for (const field in appSettingsInitial[permutation.source.name][
-      permutation.source.trigger
-    ]) {
-      if (field.templateDefault)
-        sourceSettings[field.selection] = field.templateDefault;
-    }
-    const destinationSettings = {};
-    for (const field of appSettingsInitial[permutation.destination.name][
-      permutation.destination.action
-    ]) {
-      if (field.templateDefault)
-        destinationSettings[field.selection] = field.templateDefault;
-    }
-    dispatch(
-      setOldContent({
-        oldContent: {
-          value: {
-            source: {
-              app_name: permutation.source.name,
-              app_action: permutation.source.trigger,
-              settings: sourceSettings,
-            },
-            destination: {
-              app_name: permutation.destination.name,
-              app_action: permutation.destination.action,
-              settings: destinationSettings,
-            },
-          },
-        },
-      })
-    );
-    dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
-  };
-
   useEffect(() => {
     getWebhooks();
   }, []);
@@ -554,13 +516,12 @@ const AppContainer = (props) => {
           onOptionChange={optionChangeHandler}
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
-          onTemplateSelect={templateSelectHandler}
           apiStatus={apiStatus}
         />
       ) : (
         <UserContent
           apps={APPS}
-          onTemplateSelect={templateSelectHandler}
+          appSettingsInitial={appSettingsInitial}
           onIntegrationUpdate={integrationUpdateHandler}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}

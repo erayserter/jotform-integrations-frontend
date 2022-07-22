@@ -316,7 +316,7 @@ const UserContent = (props) => {
         </div>
         {sectionContent.header === "Templates" ? (
           <Templates
-            onTemplateSelect={props.onTemplateSelect}
+            appSettingsInitial={props.appSettingsInitial}
             apps={props.apps}
           />
         ) : (

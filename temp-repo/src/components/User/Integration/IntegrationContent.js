@@ -42,8 +42,8 @@ const IntegrationContent = (props) => {
       {currentContent === "template" && (
         <div className="h-full w-full mt-16">
           <Templates
+            appSettingsInitial={props.appSettingsInitial}
             apps={props.apps}
-            onTemplateSelect={props.onTemplateSelect}
           />
         </div>
       )}
