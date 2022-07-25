@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 
 import classes from "./IntegrationAppCard.module.css";
 
-import { useSelector } from "react-redux";
 const IntegrationAppCard = (props) => {
   const apps = useSelector((state) => state.apps.apps);
 

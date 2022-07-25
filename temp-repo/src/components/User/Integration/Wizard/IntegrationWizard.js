@@ -9,8 +9,6 @@ import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
 import IntegrationTitle from "../Header/IntegrationTitle";
 
-import { useSelector } from "react-redux";
-
 const IntegrationWizard = (props) => {
   const apps = useSelector((state) => state.apps.apps);
 
