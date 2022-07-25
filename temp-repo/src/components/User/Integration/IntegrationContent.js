@@ -6,12 +6,19 @@ import IntegrationWizard from "./Wizard/IntegrationWizard";
 import IntegrationHeader from "./Header/IntegrationHeader";
 import Templates from "../Content/List/Templates/Templates";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrentContent } from "../../../store/ui";
+
 const IntegrationContent = (props) => {
-  const [currentContent, setCurrentContent] = useState("choice");
+  const dispatch = useDispatch();
+  const currentContent = useSelector((state) => state.ui.currentContent);
+  const isUpdate = useSelector((state) => state.ui.isUpdate);
+  const isTemplate = useSelector((state) => state.ui.isTemplate);
 
   useEffect(() => {
-    if (props.isUpdate || props.isTemplate) setCurrentContent("wizard");
-  }, [props.isUpdate, props.isTemplate]);
+    if (isUpdate || isTemplate)
+      dispatch(setCurrentContent({ currentContent: "wizard" }));
+  }, [isUpdate, isTemplate]);
 
   return (
     <div
@@ -20,23 +27,21 @@ const IntegrationContent = (props) => {
       <div
         className={`${classes["content-wrapper"]} flex flex-col my-0 mx-auto overflow-x-hidden overflow-y-auto`}
       >
-        {currentContent === "choice" && (
-          <IntegrationHeader onSelect={setCurrentContent} />
-        )}
+        {currentContent === "choice" && <IntegrationHeader />}
         {currentContent === "wizard" && (
           <IntegrationWizard
             appSettingsInitial={props.appSettingsInitial}
             onIntegrationSave={props.onIntegrationSave}
             apiStatus={props.apiStatus}
-            isUpdate={props.isUpdate}
-            isTemplate={props.isTemplate}
-            oldContent={props.oldContent}
           />
         )}
       </div>
       {currentContent === "template" && (
         <div className="h-full w-full mt-16">
-          <Templates onTemplateSelect={props.onTemplateSelect} />
+          <Templates
+            onTemplateSelect={props.onTemplateSelect}
+            appSettingsInitial={props.appSettingsInitial}
+          />
         </div>
       )}
       <button
@@ -56,11 +61,11 @@ const IntegrationContent = (props) => {
           ></path>
         </svg>
       </button>
-      {!props.isUpdate && !props.isTemplate && currentContent !== "choice" && (
+      {!isUpdate && !isTemplate && currentContent !== "choice" && (
         <div
           className={`${classes["back-button-container"]} absolute top-5 left-4 md:left-5`}
           onClick={(event) => {
-            setCurrentContent("choice");
+            dispatch(setCurrentContent({ currentContent: "choice" }));
           }}
         >
           <button

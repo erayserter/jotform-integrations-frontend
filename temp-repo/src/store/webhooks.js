@@ -6,17 +6,22 @@ export const webhooksSlice = createSlice({
   initialState: {
     webhooks: [],
     selectedWebhooks: [],
+    oldContent: {},
   },
   reducers: {
     setWebhooks(state, { payload }) {
       state.webhooks = cloneDeep(payload.webhooks);
     },
     setSelectedWebhooks(state, { payload }) {
-      state.selectedWebhooks = [...payload.selectedWebhooks];
+      state.selectedWebhooks = cloneDeep(payload.selectedWebhooks);
+    },
+    setOldContent(state, { payload }) {
+      state.oldContent = cloneDeep(payload.oldContent);
     },
   },
 });
 
-export const { setWebhooks, setSelectedWebhooks } = webhooksSlice.actions;
+export const { setWebhooks, setSelectedWebhooks, setOldContent } =
+  webhooksSlice.actions;
 
 export default webhooksSlice.reducer;

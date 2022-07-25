@@ -1,5 +1,5 @@
 const configurations = {
-  DEV_RDS_NAME: "me-serter",
+  DEV_RDS_NAME: "b-ersoz",
 };
 
 export default configurations;

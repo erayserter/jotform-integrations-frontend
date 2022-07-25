@@ -5,7 +5,16 @@ import Navbar from "./Navbar/Navbar";
 import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
-import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
+import {
+  setWebhooks,
+  setSelectedWebhooks,
+  setOldContent,
+} from "../store/webhooks";
+import {
+  setIsIntegrationContent,
+  setIsUpdate,
+  setIsTemplate,
+} from "../store/ui";
 import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config";
@@ -301,10 +310,9 @@ const AppContainer = (props) => {
   );
   const apps = useSelector((state) => state.apps.apps);
 
-  const [isIntegrationContent, setIsIntegrationContent] = useState(false);
-  const [isUpdate, setIsUpdate] = useState(false);
-  const [isTemplate, setIsTemplate] = useState(false);
-  const [oldContent, setOldContent] = useState({});
+  const isIntegrationContent = useSelector(
+    (state) => state.ui.isIntegrationContent
+  );
   const [apiStatus, setApiStatus] = useState({
     source: false,
     destination: false,
@@ -413,31 +421,32 @@ const AppContainer = (props) => {
         info.destination.res.content.responseCode === 200;
       info.destination.content = info.destination.res.content.content;
     }
-
-    setOldContent((prev) => {
-      return {
-        ...webhook,
-        app_datas: {
-          source: info.source.content,
-          destination: info.destination.content,
+    dispatch(
+      setOldContent({
+        oldContent: {
+          ...webhook,
+          app_datas: {
+            source: info.source.content,
+            destination: info.destination.content,
+          },
         },
-      };
-    });
+      })
+    );
 
     console.log(apiStatus);
     setApiStatus({
       source: info.source.status,
       destination: info.destination.status,
     });
-    setIsUpdate(true);
-    setIsIntegrationContent(true);
+    dispatch(setIsUpdate({ isUpdate: true }));
+    dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };
 
   const closeHandler = () => {
-    setIsIntegrationContent(false);
-    setIsUpdate(false);
-    setIsTemplate(false);
-    setOldContent({});
+    dispatch(setIsIntegrationContent({ isIntegrationContent: false }));
+    dispatch(setIsUpdate({ isUpdate: false }));
+    dispatch(setIsTemplate({ isTemplate: false }));
+    dispatch(setOldContent({ oldContent: {} }));
   };
 
   const integrationSaveHandler = async (data, isUpdate) => {
@@ -467,37 +476,6 @@ const AppContainer = (props) => {
     closeHandler();
   };
 
-  const templateSelectHandler = (permutation) => {
-    setIsTemplate(true);
-
-    const sourceSettings = {};
-    for (const field of permutation.trigger.fields) {
-      if (field.templateDefault)
-        sourceSettings[field.selection] = field.templateDefault;
-    }
-    const destinationSettings = {};
-    for (const field of permutation.action.fields) {
-      if (field.templateDefault)
-        destinationSettings[field.selection] = field.templateDefault;
-    }
-
-    setOldContent({
-      value: {
-        source: {
-          app_name: permutation.source_item.name,
-          app_action: permutation.trigger.name,
-          settings: sourceSettings,
-        },
-        destination: {
-          app_name: permutation.destination_item.name,
-          app_action: permutation.action.name,
-          settings: destinationSettings,
-        },
-      },
-    });
-    setIsIntegrationContent(true);
-  };
-
   useEffect(() => {
     getWebhooks();
   }, []);
@@ -519,16 +497,11 @@ const AppContainer = (props) => {
           appSettingsInitial={appSettingsInitial}
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
-          isUpdate={isUpdate}
-          isTemplate={isTemplate}
-          onTemplateSelect={templateSelectHandler}
-          oldContent={oldContent}
           apiStatus={apiStatus}
         />
       ) : (
         <UserContent
-          onTemplateSelect={templateSelectHandler}
-          onNewIntegration={setIsIntegrationContent}
+          appSettingsInitial={appSettingsInitial}
           onIntegrationUpdate={integrationUpdateHandler}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}

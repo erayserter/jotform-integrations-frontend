@@ -9,9 +9,14 @@ import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
 import IntegrationTitle from "../Header/IntegrationTitle";
 
+import { useSelector } from "react-redux";
+
 const IntegrationWizard = (props) => {
   const apps = useSelector((state) => state.apps.apps);
 
+  const isTemplate = useSelector((state) => state.ui.isTemplate);
+  const isUpdate = useSelector((state) => state.ui.isUpdate);
+  const oldContent = useSelector((state) => state.webhooks.oldContent);
   const [webhookName, setWebhookName] = useState("Integration");
 
   const [appType, setAppType] = useState("source");
@@ -41,12 +46,11 @@ const IntegrationWizard = (props) => {
   const apiStatusValid = apiStatus.source && apiStatus.destination;
 
   useEffect(() => {
-    if (Object.keys(props.oldContent).length > 0) {
-      const source_app = apps[props.oldContent.value.source["app_name"]];
-      const destination_app =
-        apps[props.oldContent.value.destination["app_name"]];
+    if (Object.keys(oldContent).length > 0) {
+      const source_app = apps[oldContent.value.source["app_name"]];
+      const destination_app = apps[oldContent.value.destination["app_name"]];
 
-      if (props.isUpdate) {
+      if (isUpdate) {
         const allAuthsValid =
           props.apiStatus.source && props.apiStatus.destination;
 
@@ -57,62 +61,60 @@ const IntegrationWizard = (props) => {
           setIsSettingsChoice(true);
         }
 
-        setWebhookName(props.oldContent.webhook_name);
+        setWebhookName(oldContent.webhook_name);
 
         setSelectedDatas({
           source: {
             id: source_app.id,
-            action: props.oldContent.value.source["app_action"],
-            key: props.oldContent.value.source["api_key"],
-            auth_id: props.oldContent.value.source.auth_user_id,
+            action: oldContent.value.source["app_action"],
+            key: oldContent.value.source["api_key"],
+            auth_id: oldContent.value.source.auth_user_id,
           },
           destination: {
             id: destination_app.id,
-            action: props.oldContent.value.destination["app_action"],
-            key: props.oldContent.value.destination["api_key"],
-            auth_id: props.oldContent.value.destination.auth_user_id,
+            action: oldContent.value.destination["app_action"],
+            key: oldContent.value.destination["api_key"],
+            auth_id: oldContent.value.destination.auth_user_id,
           },
         });
         setSelectedSettings({
           source: props.apiStatus.source
-            ? props.oldContent.value.source.settings
+            ? oldContent.value.source.settings
             : {},
           destination: props.apiStatus.destination
-            ? props.oldContent.value.destination.settings
+            ? oldContent.value.destination.settings
             : {},
         });
 
         setAppDatas({
-          source: props.apiStatus.source
-            ? props.oldContent.app_datas.source
-            : {},
+          source: props.apiStatus.source ? oldContent.app_datas.source : {},
           destination: props.apiStatus.destination
-            ? props.oldContent.app_datas.destination
+            ? oldContent.app_datas.destination
             : {},
         });
-      } else if (props.isTemplate) {
+      } else if (isTemplate) {
         setSelectedDatas({
           source: {
             id: source_app.id,
-            action: props.oldContent.value.source["app_action"],
+            action: oldContent.value.source["app_action"],
             key: null,
             auth_id: null,
           },
           destination: {
             id: destination_app.id,
-            action: props.oldContent.value.destination["app_action"],
+            action: oldContent.value.destination["app_action"],
             key: null,
             auth_id: null,
           },
         });
         setSelectedSettings({
-          source: props.oldContent.value.source.settings,
-          destination: props.oldContent.value.destination.settings,
+          source: oldContent.value.source.settings,
+          destination: oldContent.value.destination.settings,
         });
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [props.isUpdate, props.isTemplate]);
+  }, [isUpdate, isTemplate]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
@@ -203,14 +205,14 @@ const IntegrationWizard = (props) => {
         webhook_name: webhookName,
       };
 
-      if (props.isUpdate) {
+      if (isUpdate) {
         allData.action = "update";
-        allData["webhook_id"] = props.oldContent["webhook_id"];
+        allData["webhook_id"] = oldContent["webhook_id"];
       } else {
         allData.action = "create";
       }
 
-      props.onIntegrationSave(allData, props.isUpdate);
+      props.onIntegrationSave(allData, isUpdate);
     }
   };
 
@@ -232,7 +234,6 @@ const IntegrationWizard = (props) => {
         >
           <IntegrationAppCard
             isValid={apiStatus.source}
-            isUpdate={props.isUpdate}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
             }}
@@ -251,7 +252,6 @@ const IntegrationWizard = (props) => {
           </div>
           <IntegrationAppCard
             isValid={apiStatus.destination}
-            isUpdate={props.isUpdate}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
             }}
@@ -260,7 +260,7 @@ const IntegrationWizard = (props) => {
             type="destination"
           />
         </div>
-        {props.isUpdate && !apiStatusValid && (
+        {isUpdate && !apiStatusValid && (
           <span
             className={`${classes["wizard--invalid-auth"]} block color-red-500 text-lg text-center w-full font-bold mx-auto mt-5 mb-0 py-1 px-6`}
           >

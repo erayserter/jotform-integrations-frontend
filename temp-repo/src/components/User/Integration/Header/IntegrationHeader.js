@@ -4,6 +4,8 @@ import classes from "./IntegrationHeader.module.css";
 
 import IntegrationTitle from "./IntegrationTitle";
 import IntegrationAppCard from "../Wizard/IntegrationAppCard";
+import { useDispatch } from "react-redux";
+import { setCurrentContent } from "../../../../store/ui";
 
 const TEMPLATE_IMG = (
   <svg
@@ -33,6 +35,7 @@ const TEMPLATE_IMG = (
 );
 
 const IntegrationHeader = (props) => {
+  const dispatch = useDispatch();
   return (
     <>
       <IntegrationTitle
@@ -49,14 +52,14 @@ const IntegrationHeader = (props) => {
             first={true}
             text="Create with Wizard"
             onClick={() => {
-              props.onSelect("wizard");
+              dispatch(setCurrentContent({ currentContent: "wizard" }));
             }}
           />
           <IntegrationAppCard
             text="Use Template"
             img={TEMPLATE_IMG}
             onClick={() => {
-              props.onSelect("template");
+              dispatch(setCurrentContent({ currentContent: "template" }));
             }}
           />
         </div>
