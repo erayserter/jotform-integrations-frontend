@@ -1,8 +1,15 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 import classes from "./IntegrationAppCard.module.css";
 
 const IntegrationAppCard = (props) => {
+  const apps = useSelector((state) => state.apps.apps);
+
+  let app;
+  if (props.datas && props.datas.id)
+    app = Object.values(apps).find((app) => app.id === props.datas.id);
+
   const clickHandler = (event) => {
     props.onClick(props);
   };
@@ -22,10 +29,10 @@ const IntegrationAppCard = (props) => {
             props.isUpdate && !props.isValid && classes["invalidApp"]
           } radius border-0 flex items-center justify-center absolute top-0 left-0 bottom-0 right-0 h-full border-solid border-transparent bg-navy-100 w-full duration-300`}
         >
-          {props.datas && props.datas.id ? (
+          {app ? (
             <img
               className="h-2/3 w-2/3 max-h-full max-w-full md:w-auto md:h-auto"
-              src={props.apps[props.datas.id - 1].img}
+              src={app.url}
               width="53"
               height="51"
             />

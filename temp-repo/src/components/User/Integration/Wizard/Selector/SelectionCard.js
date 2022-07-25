@@ -1,40 +1,44 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import IntegrationApp from "./Apps/IntegrationApp";
 
 import classes from "./SelectionCard.module.css";
 
 const SelectionCard = (props) => {
+  const apps = useSelector((state) => state.apps.apps);
+
   const [searchedWord, setSearchedWord] = useState("");
 
   const appSelectHandler = (id) => {
     props.onAppSelect(id);
   };
 
-  const fullContent = props.apps.map((e) => {
+  const fullContent = Object.values(apps).map((app) => {
     return (
-      <li key={e.id} className="basis-1/3">
+      <li key={app.id} className="basis-1/3">
         <IntegrationApp
           className="flex justify-center"
           onAppSelect={appSelectHandler}
-          id={e.id}
-          img={e.img}
-          name={e.name}
+          id={app.id}
+          img={app.url}
+          name={app.name}
         />
       </li>
     );
   });
 
-  const filteredContent = props.apps
+  const filteredContent = Object.values(apps)
     .filter((e) => e.name.includes(searchedWord))
-    .map((e) => {
+    .map((app) => {
       return (
-        <li key={e.id} className="basis-1/3">
+        <li key={app.id} className="basis-1/3">
           <IntegrationApp
             className="flex justify-center"
             onAppSelect={appSelectHandler}
-            id={e.id}
-            img={e.img}
-            name={e.name}
+            id={app.id}
+            img={app.url}
+            name={app.name}
           />
         </li>
       );

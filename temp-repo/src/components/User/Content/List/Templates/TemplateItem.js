@@ -3,8 +3,10 @@ import React from "react";
 import classes from "./TemplateItem.module.css";
 
 const TemplateItem = (props) => {
-  const source_app = props.datas.source;
-  const destination_app = props.datas.destination;
+  const source_app = props.datas.source_item;
+  const destination_app = props.datas.destination_item;
+  const trigger = props.datas.trigger;
+  const action = props.datas.action;
 
   return (
     <div
@@ -18,14 +20,14 @@ const TemplateItem = (props) => {
             className={classes["image-containter__source"]}
             width="60"
             height="60"
-            src={source_app.img}
+            src={source_app.url}
             alt={source_app.name}
           />
           <img
             className={classes["image-container__destination"]}
             width="60"
             height="60"
-            src={destination_app.img}
+            src={destination_app.url}
             alt={destination_app.name}
           />
         </div>
@@ -44,7 +46,7 @@ const TemplateItem = (props) => {
       <p
         className={`${classes["template-item--paragraph"]} inline-block mt-1 px-4 overflow-hidden text-xs line-height-sm`}
       >
-        When {source_app.trigger}, {destination_app.action}
+        When {trigger.name}, {action.name}
       </p>
     </div>
   );

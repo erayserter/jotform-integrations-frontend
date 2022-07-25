@@ -25,10 +25,7 @@ const IntegrationContent = (props) => {
         )}
         {currentContent === "wizard" && (
           <IntegrationWizard
-            apps={props.apps}
             appSettingsInitial={props.appSettingsInitial}
-            appOptions={props.appOptions}
-            onOptionChange={props.onOptionChange}
             onIntegrationSave={props.onIntegrationSave}
             apiStatus={props.apiStatus}
             isUpdate={props.isUpdate}
@@ -39,10 +36,7 @@ const IntegrationContent = (props) => {
       </div>
       {currentContent === "template" && (
         <div className="h-full w-full mt-16">
-          <Templates
-            apps={props.apps}
-            onTemplateSelect={props.onTemplateSelect}
-          />
+          <Templates onTemplateSelect={props.onTemplateSelect} />
         </div>
       )}
       <button

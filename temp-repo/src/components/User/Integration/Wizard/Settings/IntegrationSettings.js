@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import Select from "react-select";
+import { useDispatch, useSelector } from "react-redux";
 
 import InputContainer from "../../../../UI/InputContainer";
 import TagInputContainer from "../../../../UI/TagInputContainer";
@@ -10,37 +11,31 @@ import classes from "./IntegrationSettings.module.css";
 import Jotform from "../../../../../data/apps/Jotform";
 import ClickUp from "../../../../../data/apps/ClickUp";
 import Telegram from "../../../../../data/apps/Telegram";
+import { setOptions } from "../../../../../store/apps";
 
 const IntegrationSettings = (props) => {
+  const dispatch = useDispatch();
+  const appOptions = useSelector((state) => state.apps.options);
+  const apps = useSelector((state) => state.apps.apps);
+  const app = Object.values(apps).find(
+    (app) => app.id === props.datas[props.type].id
+  );
   const inputValues = props.settingsData;
 
-  const source_app = props.apps.find((e) => {
-    return e.id === props.datas.source.id;
-  });
-
-  const destination_app = props.apps.find((e) => {
-    return e.id === props.datas.destination.id;
-  });
-
-  const app = props.apps.find((e) => {
-    return e.id === props.datas[props.type].id;
-  });
-
   const appAction = props.datas[props.type].action;
-  const appName = app.name;
 
   useEffect(() => {
     let data = {};
 
-    if (appName === "Jotform") {
+    if (app.name === "Jotform") {
       data = new Jotform().init(props.appDatas, appAction, props.type);
     }
-    if (appName === "Telegram") {
+    if (app.name === "Telegram") {
       data = new Telegram().init(props.appDatas, appAction, props.type, {
         formId: inputValues.source.form_id,
       });
     }
-    if (appName === "ClickUp") {
+    if (app.name === "ClickUp") {
       data = new ClickUp().init(props.appDatas, appAction, props.type, {
         workspace: inputValues[props.type].workspace,
         space: inputValues[props.type].space,
@@ -52,16 +47,11 @@ const IntegrationSettings = (props) => {
       });
     }
 
-    props.onOptionChange(appName, data);
-  }, [props.datas, props.apps, props.appDatas, props.type, props.settingsData]);
+    dispatch(setOptions({ options: { ...appOptions, [app.name]: data } }));
+  }, [props.datas, props.appDatas, props.type, props.settingsData]);
 
   const newValueHandler = (value, labelData, isExternal) => {
-    if (isExternal == null || isExternal === false) {
-      inputValues[props.type][labelData] = value;
-      props.onSettingsChange(inputValues[props.type], props.type);
-    } else {
-      inputValues[props.type] = { ...inputValues[props.type], ...labelData };
-    }
+    props.onSettingsChange(value, props.type, labelData, isExternal);
   };
 
   const saveHandler = (event) => {
@@ -72,17 +62,24 @@ const IntegrationSettings = (props) => {
     <div
       className={`${classes["settings--container"]} md:block flex flex-col justify-between pt-5 px-5 h-full`}
     >
-      <h1 className="pl-14 color-navy-700 text-3xl font-semibold pt-1 text-center">
-        {appName} Settings
+      <h1
+        className={`color-navy-700 text-3xl font-semibold pt-1 text-center ${
+          props.type !== "source" && "pl-14"
+        }`}
+      >
+        {app.name} Settings
       </h1>
       <div>
-        {props.appSettingsInitial[appName][appAction].map((e) => {
+        {props.appSettingsInitial[app.name][appAction].map((e) => {
+          console.log(e);
           if (e.type === "Select") {
             if (
-              props.appOptions[appName][e.selection] == null ||
-              props.appOptions[appName][e.selection].length <= 0
+              appOptions[app.name][e.selection] == null ||
+              appOptions[app.name][e.selection].length <= 0
             )
               return;
+            console.log(appOptions[app.name][e.selection]);
+            console.log(inputValues[props.type][e.selection]);
             return (
               <div
                 className={`${classes["select--container"]} py-5 border-b border-solid`}
@@ -98,7 +95,7 @@ const IntegrationSettings = (props) => {
                   isClearable={true}
                   isSearchable={true}
                   name="actions"
-                  options={props.appOptions[appName][e.selection]}
+                  options={appOptions[app.name][e.selection]}
                   styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                   menuPortalTarget={document.body}
                   menuPlacement="bottom"
@@ -114,27 +111,40 @@ const IntegrationSettings = (props) => {
                   }}
                   value={
                     inputValues[props.type][e.selection] != null &&
-                    props.appOptions[appName][e.selection].find((element) => {
+                    appOptions[app.name][e.selection].filter((element) => {
                       if (e.isMulti)
-                        return (
-                          inputValues[props.type][e.selection].find(
-                            (dataId) => element.value == dataId
-                          ) != null
+                        return inputValues[props.type][e.selection].includes(
+                          parseInt(element.value, 10)
                         );
-                      return (
-                        element.value === inputValues[props.type][e.selection]
-                      );
+                      else
+                        return (
+                          element.value == inputValues[props.type][e.selection]
+                        );
                     })
+                    // inputValues[props.type][e.selection] != null &&
+                    // appOptions[app.name][e.selection].find((element) => {
+                    //   if (e.isMulti)
+                    //     return (
+                    //       inputValues[props.type][e.selection].find(
+                    //         (dataId) => element.value == dataId
+                    //       ) != null
+                    //     );
+                    //   return (
+                    //     element.value === inputValues[props.type][e.selection]
+                    //   );
+                    // })
                   }
                 />
               </div>
             );
           } else if (e.type === "tagInput") {
+            console.log(appOptions);
             if (
-              props.appOptions[appName][e.selection] == null ||
-              props.appOptions[appName][e.selection].length <= 0
+              appOptions[app.name][e.selection] == null ||
+              appOptions[app.name][e.selection].length <= 0
             )
               return;
+            console.log("girdi");
             return (
               <TagInputContainer
                 key={e.selection}
@@ -143,22 +153,23 @@ const IntegrationSettings = (props) => {
                   newValueHandler(value, e.selection);
                 }}
                 defaultValue={inputValues[props.type][e.selection]}
-                whitelist={props.appOptions[appName][e.selection]}
+                whitelist={appOptions[app.name][e.selection]}
               />
             );
           } else if (e.type === "matchFields") {
             if (
-              props.appOptions[appName][e.selection] == null ||
-              props.appOptions[appName][e.selection].source.length <= 0 ||
-              props.appOptions[appName][e.selection].destination.length <= 0
+              appOptions[app.name][e.selection] == null ||
+              appOptions[app.name][e.selection].source.length <= 0 ||
+              appOptions[app.name][e.selection].destination.length <= 0
             )
               return;
             return (
               <MatchFieldsContainer
                 label={e.label}
-                apps={{ source: source_app, destination: destination_app }}
                 maxLength={4}
-                datas={props.appOptions[appName][e.selection]}
+                source={props.datas.source}
+                destination={props.datas.destination}
+                datas={appOptions[app.name][e.selection]}
                 default={inputValues[props.type][e.selection]}
                 onChange={(value) => {
                   newValueHandler(value, e.selection);

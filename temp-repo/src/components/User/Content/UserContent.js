@@ -313,13 +313,9 @@ const UserContent = (props) => {
           </div>
         </div>
         {sectionContent.header === "Templates" ? (
-          <Templates
-            onTemplateSelect={props.onTemplateSelect}
-            apps={props.apps}
-          />
+          <Templates onTemplateSelect={props.onTemplateSelect} />
         ) : (
           <UserContentSection
-            apps={props.apps}
             onIntegrationUpdate={props.onIntegrationUpdate}
             content={sectionContent}
             searchedWord={searchedWord}

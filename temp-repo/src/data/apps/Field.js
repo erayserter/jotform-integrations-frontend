@@ -1,12 +1,12 @@
 export default class Field {
   label;
   selection;
-  defaultValue;
+  templateDefault;
 
-  constructor(label, selection, defaultValue = undefined) {
+  constructor(label, selection, templateDefault = undefined) {
     this.label = label;
     this.selection = selection;
-    this.defaultValue = defaultValue;
+    this.templateDefault = templateDefault;
   }
 
   getSelection() {

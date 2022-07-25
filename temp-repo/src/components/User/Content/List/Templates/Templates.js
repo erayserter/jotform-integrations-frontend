@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 
 import classes from "./Templates.module.css";
 
 import TemplateItem from "./TemplateItem";
 
 const Templates = (props) => {
+  const apps = useSelector((state) => state.apps.apps);
+
   const [allPermutations, setAllPermutations] = useState([]);
   const [searchedApps, setSearchedApps] = useState({
     source: "",
@@ -15,29 +18,27 @@ const Templates = (props) => {
   useEffect(() => {
     const per = [];
 
-    props.apps.forEach((source_item) => {
-      props.apps.forEach((destination_item) => {
-        if (source_item.id !== destination_item.id)
-          source_item.triggers.forEach((source_trigger) => {
-            destination_item.actions.forEach((destination_action) => {
+    for (const source_item in apps) {
+      for (const destination_item in apps) {
+        const source = apps[source_item];
+        const destination = apps[destination_item];
+        if (source.id !== destination.id) {
+          source.triggers.forEach((source_trigger) => {
+            destination.actions.forEach((destination_action) => {
               per.push({
                 id: per.length + 1,
-                source: {
-                  name: source_item.name,
-                  img: source_item.img,
-                  trigger: source_trigger,
-                },
-                destination: {
-                  name: destination_item.name,
-                  img: destination_item.img,
-                  action: destination_action,
-                },
+                source_item: source,
+                trigger: source_trigger,
+                destination_item: destination,
+                action: destination_action,
               });
             });
           });
-      });
-    });
+        }
+      }
+    }
 
+    console.log(per);
     setAllPermutations(per);
   }, []);
 
@@ -53,7 +54,7 @@ const Templates = (props) => {
             isClearable={true}
             isSearchable={true}
             name="actions"
-            options={props.apps
+            options={Object.values(apps)
               .filter((e) => e.triggers.length !== 0)
               .map((e) => {
                 return { label: e.name, value: e.name };
@@ -81,7 +82,7 @@ const Templates = (props) => {
             isClearable={true}
             isSearchable={true}
             name="actions"
-            options={props.apps
+            options={Object.values(apps)
               .filter((e) => e.actions.length !== 0)
               .map((e) => {
                 return { label: e.name, value: e.name };
@@ -111,11 +112,14 @@ const Templates = (props) => {
             let bool = true;
             if (searchedApps.source !== "")
               bool =
-                bool && permutation.source.name.includes(searchedApps.source);
+                bool &&
+                permutation.source_item.name.includes(searchedApps.source);
             if (searchedApps.destination !== "")
               bool =
                 bool &&
-                permutation.destination.name.includes(searchedApps.destination);
+                permutation.destination_item.name.includes(
+                  searchedApps.destination
+                );
             return bool;
           })
           .map((permutation) => {

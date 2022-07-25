@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 import classes from "./IntegrationWizard.module.css";
 
@@ -9,6 +10,8 @@ import IntegrationSettings from "./Settings/IntegrationSettings";
 import IntegrationTitle from "../Header/IntegrationTitle";
 
 const IntegrationWizard = (props) => {
+  const apps = useSelector((state) => state.apps.apps);
+
   const [webhookName, setWebhookName] = useState("Integration");
 
   const [appType, setAppType] = useState("source");
@@ -39,16 +42,10 @@ const IntegrationWizard = (props) => {
 
   useEffect(() => {
     if (Object.keys(props.oldContent).length > 0) {
-      const source_app = props.apps.find(
-        (e) =>
-          e.name.toLowerCase() ===
-          props.oldContent.value.source["app_name"].toLowerCase()
-      );
-      const destination_app = props.apps.find(
-        (e) =>
-          e.name.toLowerCase() ===
-          props.oldContent.value.destination["app_name"].toLowerCase()
-      );
+      const source_app = apps[props.oldContent.value.source["app_name"]];
+      const destination_app =
+        apps[props.oldContent.value.destination["app_name"]];
+
       if (props.isUpdate) {
         const allAuthsValid =
           props.apiStatus.source && props.apiStatus.destination;
@@ -166,22 +163,27 @@ const IntegrationWizard = (props) => {
     setIsModelOpen(true);
   };
 
-  const settingsChangeHandler = (values, type) => {
-    setSelectedSettings((prev) => {
-      return { ...prev, [type]: values };
-    });
+  const settingsChangeHandler = (value, type, label, isExternal) => {
+    if (!isExternal)
+      setSelectedSettings((prev) => {
+        return { ...prev, [type]: { ...prev[type], [label]: value } };
+      });
+    else
+      setSelectedSettings((prev) => {
+        return { ...prev, [label]: value };
+      });
   };
 
   const saveSettingsHandler = (values, type) => {
     if (settingsChoice === "source") {
       setSettingsChoice("destination");
     } else {
-      const source_app = props.apps.find((e) => {
-        return e.id === selectedDatas.source.id;
-      });
-      const destination_app = props.apps.find((e) => {
-        return e.id === selectedDatas.destination.id;
-      });
+      const source_app = Object.values(apps).find(
+        (app) => app.id === selectedDatas.source.id
+      );
+      const destination_app = Object.values(apps).find(
+        (app) => app.id === selectedDatas.destination.id
+      );
 
       const allData = {
         source: {
@@ -231,7 +233,6 @@ const IntegrationWizard = (props) => {
           <IntegrationAppCard
             isValid={apiStatus.source}
             isUpdate={props.isUpdate}
-            apps={props.apps}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
             }}
@@ -251,7 +252,6 @@ const IntegrationWizard = (props) => {
           <IntegrationAppCard
             isValid={apiStatus.destination}
             isUpdate={props.isUpdate}
-            apps={props.apps}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
             }}
@@ -282,7 +282,6 @@ const IntegrationWizard = (props) => {
           <ModalBox onModalBoxClose={modalBoxHandler}>
             {isAppChoice && (
               <IntegrationAppSelector
-                apps={props.apps}
                 onAuthenticate={authHandler}
                 type={appType}
                 onTypeChange={typeChangeHandler}
@@ -292,10 +291,7 @@ const IntegrationWizard = (props) => {
             )}
             {isSettingsChoice && (
               <IntegrationSettings
-                apps={props.apps}
                 appSettingsInitial={props.appSettingsInitial}
-                appOptions={props.appOptions}
-                onOptionChange={props.onOptionChange}
                 onSettingsChange={settingsChangeHandler}
                 onSave={saveSettingsHandler}
                 onPreviousModal={setSettingsChoice}

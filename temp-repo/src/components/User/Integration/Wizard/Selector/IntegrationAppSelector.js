@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 
 import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
@@ -31,6 +32,8 @@ async function validateApiKey(credentials) {
 }
 
 const IntegrationAppSelector = (props) => {
+  const apps = useSelector((state) => state.apps.apps);
+
   const [buttonText, setButtonText] = useState("Authenticate");
 
   const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
@@ -50,8 +53,8 @@ const IntegrationAppSelector = (props) => {
     setIsAppSelectorVisible(false);
     setButtonText("Authenticate");
     setSelectedApp({ id: id, action: "", key: "" });
-    const app = props.apps.find((e) => e.id === id);
-    if (app.oauth) {
+    const app = Object.values(apps).find((app) => app.id === id);
+    if (app.isOauth) {
       setButtonText("...");
       await oauthHandler(app);
     }
@@ -64,8 +67,8 @@ const IntegrationAppSelector = (props) => {
   };
 
   const authHandler = async (event) => {
-    const app = props.apps.find((e) => e.id === selectedApp.id);
-    if (app.oauth) {
+    const app = Object.values(apps).find((app) => app.id === selectedApp.id);
+    if (app.isOauth) {
       setButtonText("...");
       window.open(
         "https://" +
@@ -135,7 +138,7 @@ const IntegrationAppSelector = (props) => {
     }
   }, [props.datas, props.type]);
 
-  const app = props.apps.find((e) => e.id === selectedApp.id);
+  const app = Object.values(apps).find((app) => app.id === selectedApp.id);
 
   return (
     <div
@@ -155,7 +158,7 @@ const IntegrationAppSelector = (props) => {
           {selectedApp.id && (
             <img
               className="cursor-pointer bg-navy-100 p-2 radius"
-              src={app.img}
+              src={app.url}
               width="86.3"
               height="86.3"
               onClick={appSelectorSectionHandler}
@@ -184,10 +187,10 @@ const IntegrationAppSelector = (props) => {
                 options={
                   props.type === "source"
                     ? app.triggers.map((e) => {
-                        return { value: e, label: e };
+                        return { value: e.name, label: e.name };
                       })
                     : app.actions.map((e) => {
-                        return { value: e, label: e };
+                        return { value: e.name, label: e.name };
                       })
                 }
                 styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
@@ -204,7 +207,7 @@ const IntegrationAppSelector = (props) => {
                 }
               />
             </div>
-            {app && app.oauth ? (
+            {app && app.isOauth ? (
               <div className={`${classes["oauth"]} mt-2`}>
                 {accountDetails && accountDetails.length > 0 ? (
                   <div>
@@ -276,9 +279,7 @@ const IntegrationAppSelector = (props) => {
           </div>
         )}
       </div>
-      {isAppSelectorVisible && (
-        <SelectionCard apps={props.apps} onAppSelect={appSelectHandler} />
-      )}
+      {isAppSelectorVisible && <SelectionCard onAppSelect={appSelectHandler} />}
 
       <div className={`${classes["pointer"]} absolute flex top-3 gap-3`}>
         <div

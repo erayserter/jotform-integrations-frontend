@@ -50,7 +50,6 @@ const UserContentSection = (props) => {
               return (
                 <ContentSectionListItem
                   key={e}
-                  apps={props.apps}
                   webhook={e}
                   onIntegrationUpdate={props.onIntegrationUpdate}
                   onSelect={props.onSelect}

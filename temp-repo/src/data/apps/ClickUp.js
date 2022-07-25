@@ -8,7 +8,8 @@ import TagInput from "./fields/TagInput";
 const ID = 3;
 const NAME = "ClickUp";
 const URL =
-  "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg";
+  "https://files.jotform.com/jotformapps/cde74cfb4f0ca88ebc50767e1e211553.png";
+const TRIGGERS = [];
 const ACTIONS = [
   new Action("Create Task", [
     new Select("Choose a Workspace", "workspace", false),
@@ -42,6 +43,7 @@ export default class ClickUp extends App {
       id: ID,
       name: NAME,
       url: URL,
+      triggers: TRIGGERS,
       actions: ACTIONS,
       isOauth: IS_OAUTH,
     });

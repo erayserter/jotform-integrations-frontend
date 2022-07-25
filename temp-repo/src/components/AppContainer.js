@@ -10,32 +10,32 @@ import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config";
 
-const APPS = [
-  {
-    id: 1,
-    name: "Jotform",
-    img: "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg",
-    triggers: ["Get Submission"],
-    actions: [],
-    oauth: false,
-  },
-  {
-    id: 2,
-    name: "Telegram",
-    img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
-    triggers: [],
-    actions: ["Send Message", "Send Attachments"],
-    oauth: false,
-  },
-  {
-    id: 3,
-    name: "ClickUp",
-    img: "https://files.jotform.com/jotformapps/cde74cfb4f0ca88ebc50767e1e211553.png",
-    triggers: [],
-    actions: ["Create Task", "Create Subtask", "Create Comment"],
-    oauth: true,
-  },
-];
+// const APPS = [
+//   {
+//     id: 1,
+//     name: "Jotform",
+//     img: "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg",
+//     triggers: ["Get Submission"],
+//     actions: [],
+//     oauth: false,
+//   },
+//   {
+//     id: 2,
+//     name: "Telegram",
+//     img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
+//     triggers: [],
+//     actions: ["Send Message", "Send Attachments"],
+//     oauth: false,
+//   },
+//   {
+//     id: 3,
+//     name: "ClickUp",
+//     img: "https://files.jotform.com/jotformapps/cde74cfb4f0ca88ebc50767e1e211553.png",
+//     triggers: [],
+//     actions: ["Create Task", "Create Subtask", "Create Comment"],
+//     oauth: true,
+//   },
+// ];
 
 const appSettingsInitial = {
   Jotform: {
@@ -299,6 +299,7 @@ const AppContainer = (props) => {
   const selectedWebhooks = useSelector(
     (state) => state.webhooks.selectedWebhooks
   );
+  const apps = useSelector((state) => state.apps.apps);
 
   const [isIntegrationContent, setIsIntegrationContent] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -308,18 +309,6 @@ const AppContainer = (props) => {
     source: false,
     destination: false,
   });
-
-  const [appOptions, setAppOptions] = useState({
-    Jotform: {},
-    Telegram: {},
-    ClickUp: {},
-  });
-
-  const optionChangeHandler = (appName, options) => {
-    setAppOptions((prev) => {
-      return { ...prev, [appName]: options };
-    });
-  };
 
   const getWebhooks = async () => {
     const res = await getWebhookRequest();
@@ -381,22 +370,15 @@ const AppContainer = (props) => {
   };
 
   const integrationUpdateHandler = async (webhook) => {
-    const source_app = APPS.find(
-      (e) =>
-        e.name.toLowerCase() === webhook.value.source.app_name.toLowerCase()
-    );
-    const destination_app = APPS.find(
-      (e) =>
-        e.name.toLowerCase() ===
-        webhook.value.destination.app_name.toLowerCase()
-    );
+    const source_app = apps[webhook.value.source.app_name];
+    const destination_app = apps[webhook.value.destination.app_name];
 
     const info = {
       source: { res: null, status: false, content: null },
       destination: { res: null, status: false, content: null },
     };
 
-    if (source_app.oauth) {
+    if (source_app.isOauth) {
       info.source.res = await getAllUserData(webhook.value.source.app_name);
       const user = info.source.res.content.find(
         (e) => e.auth_user_id === webhook.value.source.auth_user_id
@@ -412,7 +394,7 @@ const AppContainer = (props) => {
       info.source.status = info.source.res.content.responseCode === 200;
       info.source.content = info.source.res.content.content;
     }
-    if (destination_app.oauth) {
+    if (destination_app.isOauth) {
       info.destination.res = await getAllUserData(
         webhook.value.destination.app_name
       );
@@ -442,6 +424,7 @@ const AppContainer = (props) => {
       };
     });
 
+    console.log(apiStatus);
     setApiStatus({
       source: info.source.status,
       destination: info.destination.status,
@@ -488,16 +471,12 @@ const AppContainer = (props) => {
     setIsTemplate(true);
 
     const sourceSettings = {};
-    for (const field in appSettingsInitial[permutation.source.name][
-      permutation.source.trigger
-    ]) {
+    for (const field of permutation.trigger.fields) {
       if (field.templateDefault)
         sourceSettings[field.selection] = field.templateDefault;
     }
     const destinationSettings = {};
-    for (const field of appSettingsInitial[permutation.destination.name][
-      permutation.destination.action
-    ]) {
+    for (const field of permutation.action.fields) {
       if (field.templateDefault)
         destinationSettings[field.selection] = field.templateDefault;
     }
@@ -505,13 +484,13 @@ const AppContainer = (props) => {
     setOldContent({
       value: {
         source: {
-          app_name: permutation.source.name,
-          app_action: permutation.source.trigger,
+          app_name: permutation.source_item.name,
+          app_action: permutation.trigger.name,
           settings: sourceSettings,
         },
         destination: {
-          app_name: permutation.destination.name,
-          app_action: permutation.destination.action,
+          app_name: permutation.destination_item.name,
+          app_action: permutation.action.name,
           settings: destinationSettings,
         },
       },
@@ -537,10 +516,7 @@ const AppContainer = (props) => {
       <Navbar />
       {isIntegrationContent ? (
         <IntegrationContent
-          apps={APPS}
           appSettingsInitial={appSettingsInitial}
-          appOptions={appOptions}
-          onOptionChange={optionChangeHandler}
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
           isUpdate={isUpdate}
@@ -551,7 +527,6 @@ const AppContainer = (props) => {
         />
       ) : (
         <UserContent
-          apps={APPS}
           onTemplateSelect={templateSelectHandler}
           onNewIntegration={setIsIntegrationContent}
           onIntegrationUpdate={integrationUpdateHandler}

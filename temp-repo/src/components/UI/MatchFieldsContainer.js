@@ -1,7 +1,8 @@
-import { isEmpty } from "lodash";
 import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
-
+import { useSelector } from "react-redux";
 import Select from "react-select";
+
+import { isEmpty } from "lodash";
 
 import classes from "./MatchFieldsContainer.module.css";
 
@@ -60,6 +61,15 @@ const MatchFieldsContainer = (props) => {
     { destination: { value: "name", label: "Name" }, source: {} },
   ]);
 
+  const apps = useSelector((state) => state.apps.apps);
+
+  const source_app = Object.values(apps).find(
+    (app) => app.id === props.source.id
+  );
+  const destination_app = Object.values(apps).find(
+    (app) => app.id === props.destination.id
+  );
+
   useEffect(() => {
     if (props.default && !isEmpty(props.default))
       setMappingChoices(convertInput(props.default, props.datas));
@@ -90,14 +100,14 @@ const MatchFieldsContainer = (props) => {
           >
             <div className="title-container flex">
               <img
-                src={props.apps.destination.img}
+                src={destination_app.url}
                 height="15px"
                 className="mr-1 max-h-4 max-w-full align-middle"
               />
               <div
                 className={`${classes["fields__text"]} inline-block align-middle text-xs`}
               >
-                <span>{props.apps.destination.name}</span>
+                <span>{destination_app.name}</span>
               </div>
             </div>
           </div>
@@ -106,14 +116,14 @@ const MatchFieldsContainer = (props) => {
           >
             <div className="title-container flex">
               <img
-                src={props.apps.source.img}
+                src={source_app.url}
                 height="15px"
                 className="mr-1 max-h-4 max-w-full align-middle"
               />
               <div
                 className={`${classes["fields__text"]} inline-block align-middle text-xs`}
               >
-                <span>{props.apps.source.name}</span>
+                <span>{source_app.name}</span>
               </div>
             </div>
           </div>

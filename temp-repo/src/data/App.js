@@ -1,14 +1,16 @@
 export default class App {
   id;
   name;
-  img;
+  url;
   actions;
+  triggers;
   isOauth;
 
   constructor(appObject) {
     this.id = appObject.id;
     this.name = appObject.name;
-    this.img = appObject.img;
+    this.url = appObject.url;
+    this.triggers = appObject.triggers;
     this.actions = appObject.actions;
     this.isOauth = appObject.isOauth;
   }
@@ -20,9 +22,13 @@ export default class App {
   }
 
   addAllOptions(options, datas, actionName, type, requiredInfo) {
-    const action = this.actions.find(
-      (action) => action.getName() === actionName
-    );
+    let action = this.actions.find((action) => action.getName() === actionName);
+
+    if (!action)
+      action = this.triggers.find(
+        (trigger) => trigger.getName() === actionName
+      );
+
     for (const field of action.getAllFields()) {
       const selection = field.getSelection();
       const fieldOption = this.getOptionFromSelection(

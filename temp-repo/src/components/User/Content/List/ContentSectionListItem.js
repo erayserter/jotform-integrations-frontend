@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
+import { useSelector } from "react-redux";
 
 import classes from "./ContentSectionListItem.module.css";
 
-import { useSelector } from "react-redux";
-
 const ContentSectionListItem = (props) => {
+  const apps = useSelector((state) => state.apps.apps);
   const selectedWebhooks = useSelector(
     (state) => state.webhooks.selectedWebhooks
   );
@@ -127,24 +127,12 @@ const ContentSectionListItem = (props) => {
             <img
               width="40"
               height="40"
-              src={
-                props.apps.find(
-                  (app) =>
-                    app.name.toLowerCase() ===
-                    props.webhook.value.source.app_name.toLowerCase()
-                ).img
-              }
+              src={apps[props.webhook.value.source.app_name].url}
             />
             <img
               width="40"
               height="40"
-              src={
-                props.apps.find(
-                  (app) =>
-                    app.name.toLowerCase() ===
-                    props.webhook.value.destination.app_name.toLowerCase()
-                ).img
-              }
+              src={apps[props.webhook.value.destination.app_name].url}
             />
           </div>
         </div>

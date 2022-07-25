@@ -8,6 +8,7 @@ import Field from "./Field";
 const ID = 2;
 const NAME = "Telegram";
 const URL = "https://img.icons8.com/color/480/000000/telegram-app--v1.png";
+const TRIGGERS = [];
 const ACTIONS = [
   new Action("Send Message", [
     new Field("Chat ID", "chat_id", "8576375"),
@@ -18,7 +19,7 @@ const ACTIONS = [
     new Select("File Upload Field", "upload_fields", true),
   ]),
 ];
-const IS_OAUTH = true;
+const IS_OAUTH = false;
 
 export default class Telegram extends App {
   constructor() {
@@ -26,6 +27,7 @@ export default class Telegram extends App {
       id: ID,
       name: NAME,
       url: URL,
+      triggers: TRIGGERS,
       actions: ACTIONS,
       isOauth: IS_OAUTH,
     });

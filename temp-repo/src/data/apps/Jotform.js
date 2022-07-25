@@ -4,10 +4,12 @@ import Select from "./fields/Select";
 
 const ID = 1;
 const NAME = "Jotform";
-const URL = "https://img.icons8.com/color/480/000000/telegram-app--v1.png";
-const ACTIONS = [
+const URL =
+  "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg";
+const TRIGGERS = [
   new Action("Get Submission", [new Select("Choose Form", "form_id", false)]),
 ];
+const ACTIONS = [];
 const IS_OAUTH = false;
 
 export default class Jotform extends App {
@@ -16,6 +18,7 @@ export default class Jotform extends App {
       id: ID,
       name: NAME,
       url: URL,
+      triggers: TRIGGERS,
       actions: ACTIONS,
       isOauth: IS_OAUTH,
     });
