@@ -17,216 +17,7 @@ import {
 } from "../store/ui";
 import { useDispatch, useSelector } from "react-redux";
 
-import configurations from "../config";
-
-const appSettingsInitial = {
-  Jotform: {
-    "Get Submission": [
-      {
-        label: "Choose Form",
-        type: "Select",
-        isMulti: false,
-        selection: "form_id",
-        data: [],
-      },
-    ],
-  },
-  Telegram: {
-    "Send Message": [
-      {
-        label: "Chat ID",
-        type: "text",
-        selection: "chat_id",
-        templateDefault: "8576375",
-      },
-      {
-        label: "Text",
-        selection: "text",
-        type: "tagInput",
-        whitelist: [],
-      },
-    ],
-    "Send Attachments": [
-      {
-        label: "Chat ID",
-        type: "text",
-        selection: "chat_id",
-        templateDefault: "8576375",
-      },
-      {
-        label: "File Upload Field",
-        type: "Select",
-        isMulti: true,
-        selection: "upload_fields",
-        data: [],
-      },
-    ],
-  },
-  ClickUp: {
-    "Create Task": [
-      {
-        label: "Choose a Workspace",
-        type: "Select",
-        isMulti: false,
-        selection: "workspace",
-        data: [],
-      },
-      {
-        label: "Choose a Space",
-        type: "Select",
-        isMulti: false,
-        selection: "space",
-        data: [],
-      },
-      {
-        label: "Choose a Folder",
-        type: "Select",
-        isMulti: false,
-        selection: "folder",
-        data: [],
-      },
-      {
-        label: "Choose a List",
-        type: "Select",
-        isMulti: false,
-        selection: "list_id",
-        data: [],
-      },
-      {
-        label: "Match Your Fields",
-        type: "matchFields",
-        selection: "match_fields",
-        data: {
-          source: [],
-          destination: [
-            { value: "name", label: "Name" },
-            { value: "description", label: "Description" },
-            { value: "priority", label: "Priority" },
-            { value: "status", label: "Status" },
-          ],
-          predefined: {
-            priority: [
-              { value: "urgent", label: "Urgent" },
-              { value: "high", label: "High" },
-              { value: "normal", label: "Normal" },
-              { value: "low", label: "Low" },
-            ],
-            status: [
-              { value: "todo", label: "TO DO" },
-              { value: "complete", label: "COMPLETE" },
-            ],
-          },
-        },
-      },
-    ],
-    "Create Subtask": [
-      {
-        label: "Choose a Workspace",
-        type: "Select",
-        isMulti: false,
-        selection: "workspace",
-        data: [],
-      },
-      {
-        label: "Choose a Space",
-        type: "Select",
-        isMulti: false,
-        selection: "space",
-        data: [],
-      },
-      {
-        label: "Choose a Folder",
-        type: "Select",
-        isMulti: false,
-        selection: "folder",
-        data: [],
-      },
-      {
-        label: "Choose a List",
-        type: "Select",
-        isMulti: false,
-        selection: "list_id",
-        data: [],
-      },
-      {
-        label: "Choose a Task",
-        type: "Select",
-        isMulti: false,
-        selection: "task",
-        data: [],
-      },
-      {
-        label: "Match Your Fields",
-        type: "matchFields",
-        selection: "match_fields",
-        data: {
-          source: [],
-          destination: [
-            { value: "name", label: "Name" },
-            { value: "description", label: "Description" },
-            { value: "priority", label: "Priority" },
-            { value: "status", label: "Status" },
-          ],
-          predefined: {
-            priority: [
-              { value: "urgent", label: "Urgent" },
-              { value: "high", label: "High" },
-              { value: "normal", label: "Normal" },
-              { value: "low", label: "Low" },
-            ],
-            status: [
-              { value: "todo", label: "TO DO" },
-              { value: "complete", label: "COMPLETE" },
-            ],
-          },
-        },
-      },
-    ],
-    "Create Comment": [
-      {
-        label: "Choose a Workspace",
-        type: "Select",
-        isMulti: false,
-        selection: "workspace",
-        data: [],
-      },
-      {
-        label: "Choose a Space",
-        type: "Select",
-        isMulti: false,
-        selection: "space",
-        data: [],
-      },
-      {
-        label: "Choose a Folder",
-        type: "Select",
-        isMulti: false,
-        selection: "folder",
-        data: [],
-      },
-      {
-        label: "Choose a List",
-        type: "Select",
-        isMulti: false,
-        selection: "list_id",
-        data: [],
-      },
-      {
-        label: "Choose a Task",
-        type: "Select",
-        isMulti: false,
-        selection: "task",
-        data: [],
-      },
-      {
-        label: "Enter a Comment",
-        type: "tagInput",
-        selection: "comment",
-        whitelist: [],
-      },
-    ],
-  },
-};
+import configurations from "../config/index";
 
 const getWebhookRequest = async () => {
   return fetch(
@@ -449,10 +240,6 @@ const AppContainer = (props) => {
     closeHandler();
   };
 
-  useEffect(() => {
-    getWebhooks();
-  }, []);
-
   if (!props.isLoggedIn)
     return (
       <Navigate
@@ -462,19 +249,21 @@ const AppContainer = (props) => {
       />
     );
 
+  useEffect(() => {
+    getWebhooks();
+  }, []);
+
   return (
     <div className="min-h-100vh flex flex-col bg-white relative items-stretch color-black font-circular overflow-x-hidden">
       <Navbar />
       {isIntegrationContent ? (
         <IntegrationContent
-          appSettingsInitial={appSettingsInitial}
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
           apiStatus={apiStatus}
         />
       ) : (
         <UserContent
-          appSettingsInitial={appSettingsInitial}
           onIntegrationUpdate={integrationUpdateHandler}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
 
-import configurations from "../../../../../config";
+import configurations from "../../../../../config/index";
 
 async function getAllUserData(appName) {
   return fetch(

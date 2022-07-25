@@ -6,7 +6,7 @@ import classes from "./UserLogin.module.css";
 import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
-import configurations from "../../../config";
+import configurations from "../../../config/index";
 
 async function loginUser(credentials) {
   return fetch(

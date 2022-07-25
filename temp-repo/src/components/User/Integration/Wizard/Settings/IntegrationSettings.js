@@ -8,9 +8,6 @@ import MatchFieldsContainer from "../../../../UI/MatchFieldsContainer";
 
 import classes from "./IntegrationSettings.module.css";
 
-import Jotform from "../../../../../data/apps/Jotform";
-import ClickUp from "../../../../../data/apps/ClickUp";
-import Telegram from "../../../../../data/apps/Telegram";
 import { setOptions } from "../../../../../store/apps";
 
 const IntegrationSettings = (props) => {
@@ -30,15 +27,15 @@ const IntegrationSettings = (props) => {
     let data = {};
 
     if (app.name === "Jotform") {
-      data = new Jotform().init(props.appDatas, appAction, props.type);
+      data = app.init(props.appDatas, appAction, props.type);
     }
     if (app.name === "Telegram") {
-      data = new Telegram().init(props.appDatas, appAction, props.type, {
+      data = app.init(props.appDatas, appAction, props.type, {
         formId: inputValues.source.form_id,
       });
     }
     if (app.name === "ClickUp") {
-      data = new ClickUp().init(props.appDatas, appAction, props.type, {
+      data = app.init(props.appDatas, appAction, props.type, {
         workspace: inputValues[props.type].workspace,
         space: inputValues[props.type].space,
         folder: inputValues[props.type].folder,
