@@ -112,7 +112,7 @@ const IntegrationWizard = (props) => {
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [isUpdate, isTemplate]);
+  }, [props.apiStatus, isUpdate, isTemplate]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);

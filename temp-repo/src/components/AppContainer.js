@@ -19,33 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config";
 
-// const APPS = [
-//   {
-//     id: 1,
-//     name: "Jotform",
-//     img: "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg",
-//     triggers: ["Get Submission"],
-//     actions: [],
-//     oauth: false,
-//   },
-//   {
-//     id: 2,
-//     name: "Telegram",
-//     img: "https://img.icons8.com/color/480/000000/telegram-app--v1.png",
-//     triggers: [],
-//     actions: ["Send Message", "Send Attachments"],
-//     oauth: false,
-//   },
-//   {
-//     id: 3,
-//     name: "ClickUp",
-//     img: "https://files.jotform.com/jotformapps/cde74cfb4f0ca88ebc50767e1e211553.png",
-//     triggers: [],
-//     actions: ["Create Task", "Create Subtask", "Create Comment"],
-//     oauth: true,
-//   },
-// ];
-
 const appSettingsInitial = {
   Jotform: {
     "Get Submission": [
@@ -433,11 +406,11 @@ const AppContainer = (props) => {
       })
     );
 
-    console.log(apiStatus);
     setApiStatus({
       source: info.source.status,
       destination: info.destination.status,
     });
+
     dispatch(setIsUpdate({ isUpdate: true }));
     dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };

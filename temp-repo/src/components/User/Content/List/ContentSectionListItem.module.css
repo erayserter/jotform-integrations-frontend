@@ -8,20 +8,6 @@
   border-color: rgb(200, 206, 237);
   background-color: rgb(255, 255, 255);
 }
-/* 
-.content--list-item-checkbox input + label::before {
-  content: "";
-  position: absolute;
-  box-sizing: border-box;
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgb(200, 206, 237);
-  background-color: rgb(255, 255, 255);
-  border-radius: 4px;
-  top: 0px;
-  left: 0px;
-  transition: all 0.3s ease 0s;
-} */
 
 .check-icon {
   border-style: solid;
@@ -35,33 +21,10 @@
   top: 5.8px;
 }
 
-/* .content--list-item-checkbox input + label::after {
-  content: "";
-  display: block;
-  width: 5px;
-  height: 10px;
-  border-style: solid;
-  border-color: rgb(255, 255, 255);
-  border-image: initial;
-  border-width: 0px 2px 2px 0px;
-  transform: rotate(45deg);
-  position: absolute;
-  top: 3px;
-  left: 7px;
-  opacity: 1;
-  transition: all 0.3s ease 0s;
-  z-index: 2;
-} */
-
 .checked-label {
   background-color: rgb(0, 153, 255);
   border-color: rgb(0, 153, 255);
 }
-
-/* .content--list-item-checkbox .checked-label::before {
-  background-color: rgb(0, 153, 255);
-  border-color: rgb(0, 153, 255);
-} */
 
 @media screen and (max-width: 768px) {
   .content--list-item-favorite-icon-wrapper {
@@ -117,8 +80,6 @@
 }
 
 .content--list-item-actions button {
-  /* border: none; */
-  /* text-decoration: none; */
   color: rgb(10, 21, 81);
 }
 

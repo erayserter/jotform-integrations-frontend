@@ -20,6 +20,11 @@ const IntegrationContent = (props) => {
       dispatch(setCurrentContent({ currentContent: "wizard" }));
   }, [isUpdate, isTemplate]);
 
+  const closeButtonHandler = (event) => {
+    dispatch(setCurrentContent({ currentContent: "choice" }));
+    props.onClose(event);
+  };
+
   return (
     <div
       className={`${classes["container"]} flex flex-col items-center bg-white fixed font-circular top-0 right-0 left-0 bottom-0 min-h-auto color-navy-700 md:min-h-sm md:relative`}
@@ -46,7 +51,7 @@ const IntegrationContent = (props) => {
       )}
       <button
         className={`${classes["closeButton"]} absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
-        onClick={props.onClose}
+        onClick={closeButtonHandler}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

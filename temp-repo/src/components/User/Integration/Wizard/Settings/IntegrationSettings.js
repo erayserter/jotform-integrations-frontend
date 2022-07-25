@@ -71,15 +71,12 @@ const IntegrationSettings = (props) => {
       </h1>
       <div>
         {props.appSettingsInitial[app.name][appAction].map((e) => {
-          console.log(e);
           if (e.type === "Select") {
             if (
               appOptions[app.name][e.selection] == null ||
               appOptions[app.name][e.selection].length <= 0
             )
               return;
-            console.log(appOptions[app.name][e.selection]);
-            console.log(inputValues[props.type][e.selection]);
             return (
               <div
                 className={`${classes["select--container"]} py-5 border-b border-solid`}
@@ -121,30 +118,16 @@ const IntegrationSettings = (props) => {
                           element.value == inputValues[props.type][e.selection]
                         );
                     })
-                    // inputValues[props.type][e.selection] != null &&
-                    // appOptions[app.name][e.selection].find((element) => {
-                    //   if (e.isMulti)
-                    //     return (
-                    //       inputValues[props.type][e.selection].find(
-                    //         (dataId) => element.value == dataId
-                    //       ) != null
-                    //     );
-                    //   return (
-                    //     element.value === inputValues[props.type][e.selection]
-                    //   );
-                    // })
                   }
                 />
               </div>
             );
           } else if (e.type === "tagInput") {
-            console.log(appOptions);
             if (
               appOptions[app.name][e.selection] == null ||
               appOptions[app.name][e.selection].length <= 0
             )
               return;
-            console.log("girdi");
             return (
               <TagInputContainer
                 key={e.selection}
