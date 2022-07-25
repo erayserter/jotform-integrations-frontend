@@ -24,6 +24,8 @@ const IntegrationSettings = (props) => {
 
   const appAction = props.datas[props.type].action;
 
+  const appFields = app.getFields(props.type, appAction);
+
   useEffect(() => {
     let data = {};
 
@@ -70,8 +72,8 @@ const IntegrationSettings = (props) => {
         {app.name} Settings
       </h1>
       <div>
-        {props.appSettingsInitial[app.name][appAction].map((e) => {
-          if (e.type === "Select") {
+        {appFields.map((e) => {
+          if (e.type === "select") {
             if (
               appOptions[app.name][e.selection] == null ||
               appOptions[app.name][e.selection].length <= 0

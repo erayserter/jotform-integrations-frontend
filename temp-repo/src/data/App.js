@@ -44,4 +44,12 @@ export default class App {
   addOption(options, selection, optionData) {
     options[selection] = optionData;
   }
+
+  getFields(type, actName) {
+    const selectedAct = (a) => a.name === actName;
+    const actArray = (actType) =>
+      type === "source" ? this.triggers : this.actions;
+
+    return actArray(type).find(selectedAct).getAllFields();
+  }
 }

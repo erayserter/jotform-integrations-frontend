@@ -199,12 +199,7 @@ const IntegrationAppSelector = (props) => {
                 onChange={(e) => {
                   if (e) actionSelectHandler(e.value);
                 }}
-                defaultValue={
-                  selectedApp.action !== "" && {
-                    value: selectedApp.action,
-                    label: selectedApp.action,
-                  }
-                }
+                value={{ label: selectedApp.action, value: selectedApp.action }}
               />
             </div>
             {app && app.isOauth ? (

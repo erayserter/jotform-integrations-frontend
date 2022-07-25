@@ -35,7 +35,6 @@ const IntegrationContent = (props) => {
         {currentContent === "choice" && <IntegrationHeader />}
         {currentContent === "wizard" && (
           <IntegrationWizard
-            appSettingsInitial={props.appSettingsInitial}
             onIntegrationSave={props.onIntegrationSave}
             apiStatus={props.apiStatus}
           />

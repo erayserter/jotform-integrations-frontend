@@ -289,7 +289,6 @@ const IntegrationWizard = (props) => {
             )}
             {isSettingsChoice && (
               <IntegrationSettings
-                appSettingsInitial={props.appSettingsInitial}
                 onSettingsChange={settingsChangeHandler}
                 onSave={saveSettingsHandler}
                 onPreviousModal={setSettingsChoice}

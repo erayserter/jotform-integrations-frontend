@@ -27,19 +27,16 @@ const Templates = (props) => {
     dispatch(setIsTemplate({ isTemplate: true }));
 
     const sourceSettings = {};
-    for (const field in props.appSettingsInitial[permutation.source_item.name][
-      permutation.trigger.name
-    ]) {
+    for (const field of permutation.trigger.getAllFields()) {
       if (field.templateDefault)
         sourceSettings[field.selection] = field.templateDefault;
     }
     const destinationSettings = {};
-    for (const field of props.appSettingsInitial[
-      permutation.destination_item.name
-    ][permutation.action.name]) {
+    for (const field of permutation.action.getAllFields()) {
       if (field.templateDefault)
         destinationSettings[field.selection] = field.templateDefault;
     }
+
     dispatch(
       setOldContent({
         oldContent: {
@@ -51,13 +48,14 @@ const Templates = (props) => {
             },
             destination: {
               app_name: permutation.destination_item.name,
-              app_action: permutation.action,
+              app_action: permutation.action.name,
               settings: destinationSettings,
             },
           },
         },
       })
     );
+
     dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
   };
 
