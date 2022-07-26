@@ -240,6 +240,10 @@ const AppContainer = (props) => {
     closeHandler();
   };
 
+  useEffect(() => {
+    if (props.isLoggedIn) getWebhooks();
+  }, []);
+
   if (!props.isLoggedIn)
     return (
       <Navigate
@@ -248,10 +252,6 @@ const AppContainer = (props) => {
         }}
       />
     );
-
-  useEffect(() => {
-    getWebhooks();
-  }, []);
 
   return (
     <div className="min-h-100vh flex flex-col bg-white relative items-stretch color-black font-circular overflow-x-hidden">

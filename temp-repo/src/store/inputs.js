@@ -9,9 +9,18 @@ export const inputsSlice = createSlice({
   name: "inputs",
   initialState: {
     appSelections: {
-      app: null,
-      key: null,
-      auth_id: null,
+      source: {
+        name: "Integration",
+        app: null,
+        key: null,
+        auth_id: null,
+      },
+      destination: {
+        name: "Integration",
+        app: null,
+        key: null,
+        auth_id: null,
+      },
     },
     settingsSelections: {},
   },
