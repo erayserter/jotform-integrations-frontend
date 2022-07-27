@@ -13,41 +13,42 @@ import { setOptions } from "../../../../../store/apps";
 const IntegrationSettings = (props) => {
   const dispatch = useDispatch();
   const appOptions = useSelector((state) => state.apps.options);
-  const apps = useSelector((state) => state.apps.apps);
-  const app = Object.values(apps).find(
-    (app) => app.id === props.datas[props.type].id
-  );
-  const inputValues = props.settingsData;
 
-  const appAction = props.datas[props.type].action;
+  const appSelections = useSelector((state) => state.inputs.appSelections);
+  const app = appSelections[props.type].app;
 
-  const appFields = app.getFields(props.type, appAction);
+  const appInfo = useSelector((state) => state.infos.appInfo);
+  const inputValues = useSelector((state) => state.inputs.settingsSelections);
+
+  const appAction = appSelections[props.type].action;
+
+  const appFields = app.getFields(props.type, appAction.name);
 
   useEffect(() => {
     let data = {};
 
     if (app.name === "Jotform") {
-      data = app.init(props.appDatas, appAction, props.type);
+      data = app.init(appInfo, appAction.name, props.type);
     }
     if (app.name === "Telegram") {
-      data = app.init(props.appDatas, appAction, props.type, {
+      data = app.init(appInfo, appAction.name, props.type, {
         formId: inputValues.source.form_id,
       });
     }
     if (app.name === "ClickUp") {
-      data = app.init(props.appDatas, appAction, props.type, {
+      data = app.init(appInfo, appAction.name, props.type, {
         workspace: inputValues[props.type].workspace,
         space: inputValues[props.type].space,
         folder: inputValues[props.type].folder,
         list: inputValues[props.type].list_id,
         task: inputValues[props.type].task,
         formId: inputValues.source.form_id,
-        subtask: appAction === "Create Subtask",
+        subtask: appAction.name === "Create Subtask",
       });
     }
 
     dispatch(setOptions({ options: { ...appOptions, [app.name]: data } }));
-  }, [props.datas, props.appDatas, props.type, props.settingsData]);
+  }, [app, appInfo, props.type, inputValues]);
 
   const newValueHandler = (value, labelData, isExternal) => {
     props.onSettingsChange(value, props.type, labelData, isExternal);
@@ -149,8 +150,6 @@ const IntegrationSettings = (props) => {
               <MatchFieldsContainer
                 label={e.label}
                 maxLength={4}
-                source={props.datas.source}
-                destination={props.datas.destination}
                 datas={appOptions[app.name][e.selection]}
                 default={inputValues[props.type][e.selection]}
                 onChange={(value) => {

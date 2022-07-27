@@ -8,15 +8,25 @@ import ClickUp from "../data/apps/ClickUp";
 export const infosSlice = createSlice({
   name: "infos",
   initialState: {
-    appInfos: {
+    appInfo: {
       source: {},
       destination: {},
     },
-    apiInfo,
+    apiInfo: {
+      source: false,
+      destination: false,
+    },
   },
-  reducers: {},
+  reducers: {
+    setAppInfo(state, { payload }) {
+      state.appInfo = cloneDeep(payload.appInfo);
+    },
+    setApiInfo(state, { payload }) {
+      state.apiInfo = { ...payload.apiInfo };
+    },
+  },
 });
 
-export const {} = infosSlice.actions;
+export const { setAppInfo, setApiInfo } = infosSlice.actions;
 
 export default infosSlice.reducer;

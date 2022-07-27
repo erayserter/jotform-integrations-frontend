@@ -1,28 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { cloneDeep } from "lodash";
-
-import Jotform from "../data/apps/Jotform";
-import Telegram from "../data/apps/Telegram";
-import ClickUp from "../data/apps/ClickUp";
 
 export const inputsSlice = createSlice({
   name: "inputs",
   initialState: {
     appSelections: {
+      webhookId: null,
+      name: "Integration",
       source: {
-        name: "Integration",
         app: null,
+        action: null,
         key: null,
         auth_id: null,
       },
       destination: {
-        name: "Integration",
         app: null,
+        action: null,
         key: null,
         auth_id: null,
       },
     },
-    settingsSelections: {},
+    settingsSelections: { source: {}, destination: {} },
   },
   reducers: {
     setAppSelections(state, { payload }) {

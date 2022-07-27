@@ -52,4 +52,8 @@ export default class App {
 
     return actArray(type).find(selectedAct).getAllFields();
   }
+
+  isSameApp(app) {
+    return app.id === this.id;
+  }
 }

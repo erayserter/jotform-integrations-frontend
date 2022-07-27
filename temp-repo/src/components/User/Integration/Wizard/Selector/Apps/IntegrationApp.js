@@ -4,7 +4,7 @@ import classes from "./IntegrationApp.module.css";
 
 const IntegrationApp = (props) => {
   const clickHandler = (event) => {
-    props.onAppSelect(props.id);
+    props.onAppSelect(props.app);
   };
 
   return (
@@ -15,10 +15,10 @@ const IntegrationApp = (props) => {
         className={`${classes["app-image"]} block cursor-pointer`}
         onClick={clickHandler}
         alt=""
-        src={props.img}
+        src={props.app.url}
         width="50px"
       />
-      <span>{props.name}</span>
+      <span>{props.app.name}</span>
     </div>
   );
 };

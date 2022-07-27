@@ -10,8 +10,8 @@ const SelectionCard = (props) => {
 
   const [searchedWord, setSearchedWord] = useState("");
 
-  const appSelectHandler = (id) => {
-    props.onAppSelect(id);
+  const appSelectHandler = (app) => {
+    props.onAppSelect(app);
   };
 
   const fullContent = Object.values(apps).map((app) => {
@@ -20,9 +20,7 @@ const SelectionCard = (props) => {
         <IntegrationApp
           className="flex justify-center"
           onAppSelect={appSelectHandler}
-          id={app.id}
-          img={app.url}
-          name={app.name}
+          app={app}
         />
       </li>
     );
@@ -36,9 +34,7 @@ const SelectionCard = (props) => {
           <IntegrationApp
             className="flex justify-center"
             onAppSelect={appSelectHandler}
-            id={app.id}
-            img={app.url}
-            name={app.name}
+            app={app}
           />
         </li>
       );

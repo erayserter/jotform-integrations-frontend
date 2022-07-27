@@ -34,10 +34,7 @@ const IntegrationContent = (props) => {
       >
         {currentContent === "choice" && <IntegrationHeader />}
         {currentContent === "wizard" && (
-          <IntegrationWizard
-            onIntegrationSave={props.onIntegrationSave}
-            apiStatus={props.apiStatus}
-          />
+          <IntegrationWizard onIntegrationSave={props.onIntegrationSave} />
         )}
       </div>
       {currentContent === "template" && (
