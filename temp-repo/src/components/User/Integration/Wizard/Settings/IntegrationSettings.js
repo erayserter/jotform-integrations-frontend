@@ -12,6 +12,7 @@ import Jotform from "../../../../../data/apps/Jotform";
 import ClickUp from "../../../../../data/apps/ClickUp";
 import Telegram from "../../../../../data/apps/Telegram";
 import { setOptions } from "../../../../../store/apps";
+import GoogleContacts from "../../../../../data/apps/GoogleContacts";
 
 const IntegrationSettings = (props) => {
   const dispatch = useDispatch();
@@ -46,6 +47,11 @@ const IntegrationSettings = (props) => {
         task: inputValues[props.type].task,
         formId: inputValues.source.form_id,
         subtask: appAction === "Create Subtask",
+      });
+    }
+    if (app.name === "GoogleContacts") {
+      data = app.init(props.appDatas, appAction, props.type, {
+        formId: inputValues.source.form_id,
       });
     }
 

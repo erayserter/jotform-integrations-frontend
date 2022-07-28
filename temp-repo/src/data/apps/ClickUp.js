@@ -178,7 +178,7 @@ export default class ClickUp extends App {
 
   getFieldOptions(datas, options) {
     const fieldOptions = [];
-    const fields = this.getFields(datas.destination, options);
+    const fields = this.getAccountFields(datas.destination, options);
 
     for (const field of fields)
       fieldOptions.push({
@@ -213,7 +213,7 @@ export default class ClickUp extends App {
     return folder.lists;
   }
 
-  getFields(datas, options) {
+  getAccountFields(datas, options) {
     const lists = this.getLists(datas, options);
     const list = lists.find((list) => list.id === options.list);
     return list.fields;
@@ -223,5 +223,9 @@ export default class ClickUp extends App {
     const lists = this.getLists(datas, options);
     const list = lists.find((list) => list.id === options.list);
     return list.tasks;
+  }
+
+  prepareData(data) {
+    return data;
   }
 }

@@ -105,4 +105,8 @@ export default class Jotform extends App {
   static getUploadFields(datas, formId) {
     return datas[formId].file_upload_fields;
   }
+
+  prepareData(data) {
+    return data;
+  }
 }

@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import classes from "./IntegrationAppSelector.module.css";
 import SelectionCard from "./SelectionCard";
 
-import configurations from "../../../../../config";
+import configurations from "../../../../../config/index";
 
 async function getAllUserData(appName) {
   return fetch(
@@ -73,7 +73,9 @@ const IntegrationAppSelector = (props) => {
       window.open(
         "https://" +
           configurations.DEV_RDS_NAME +
-          ".jotform.dev/intern-api/clickUp"
+          ".jotform.dev/intern-api/" +
+          app.name.charAt(0).toLowerCase() +
+          app.name.slice(1)
       );
       window.addEventListener("message", (event) => {
         if (

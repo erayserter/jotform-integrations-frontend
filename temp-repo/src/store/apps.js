@@ -4,6 +4,7 @@ import { cloneDeep } from "lodash";
 import Jotform from "../data/apps/Jotform";
 import Telegram from "../data/apps/Telegram";
 import ClickUp from "../data/apps/ClickUp";
+import GoogleContacts from "../data/apps/GoogleContacts";
 
 export const appsSlice = createSlice({
   name: "apps",
@@ -12,8 +13,9 @@ export const appsSlice = createSlice({
       Jotform: new Jotform(),
       Telegram: new Telegram(),
       ClickUp: new ClickUp(),
+      GoogleContacts: new GoogleContacts(),
     },
-    options: { Jotform: {}, Telegram: {}, ClickUp: {} },
+    options: { Jotform: {}, Telegram: {}, ClickUp: {}, GoogleContacts: {} },
   },
   reducers: {
     setOptions(state, { payload }) {
