@@ -38,7 +38,7 @@ const IntegrationAppSelector = (props) => {
 
   const apps = useSelector((state) => state.apps.apps);
 
-  const [buttonText, setButtonText] = useState("Authenticate");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
   const [accountDetails, setAccountDetails] = useState(null);
@@ -53,8 +53,7 @@ const IntegrationAppSelector = (props) => {
     setIsAppSelectorVisible((prev) => !prev);
   };
 
-  const appSelectHandler = async (selectedApp) => {
-    console.log({ selectedApp, app });
+  const appSelectHandler = (selectedApp) => {
     if (!isNil(app) && selectedApp.isSameApp(app)) return;
 
     setIsAppSelectorVisible(false);
@@ -72,11 +71,6 @@ const IntegrationAppSelector = (props) => {
         },
       })
     );
-
-    if (selectedApp.isOauth) {
-      setButtonText("...");
-      await oauthHandler(selectedApp);
-    } else setButtonText("Authenticate");
   };
 
   const actionSelectHandler = (value) => {
@@ -97,8 +91,6 @@ const IntegrationAppSelector = (props) => {
   };
 
   const keySelectHandler = (event) => {
-    setButtonText("Authenticate");
-
     dispatch(
       setAppSelections({
         appSelections: {
@@ -113,8 +105,8 @@ const IntegrationAppSelector = (props) => {
   };
 
   const authHandler = async (event) => {
+    setIsLoading(true);
     if (app.isOauth) {
-      setButtonText("...");
       window.open(
         "https://" +
           configurations.DEV_RDS_NAME +
@@ -135,14 +127,12 @@ const IntegrationAppSelector = (props) => {
         }
       });
     } else {
-      setButtonText("...");
       const res = await validateApiKey({
         app_name: app.name.toLowerCase(),
         action: appSelections[props.type].action.name,
         api_key: appSelections[props.type].key,
       });
       if (res.content.responseCode === 200) {
-        setButtonText("Authenticated");
         props.onAuthenticate(
           {
             app: app,
@@ -155,22 +145,28 @@ const IntegrationAppSelector = (props) => {
         );
       }
     }
+    setIsLoading(false);
   };
 
   const oauthHandler = async (app, data) => {
     const res = await getAllUserData(app.name);
     setAccountDetails(res.content);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    setIsAppSelectorVisible(true);
-    setButtonText("Authenticate");
-    if (appSelections[props.type].app !== null) {
+    if (app !== null) {
       if (apiInfo[props.type]) {
-        setButtonText("Authenticated");
-      } else setIsAppSelectorVisible(false);
+        setIsAppSelectorVisible(true);
+      } else {
+        if (app.isOauth && !accountDetails) {
+          setIsLoading(true);
+          oauthHandler(app);
+        }
+        setIsAppSelectorVisible(false);
+      }
     }
-  }, [appSelections, apiInfo, props.type]);
+  }, [app, apiInfo, props.type]);
 
   return (
     <div
@@ -278,7 +274,7 @@ const IntegrationAppSelector = (props) => {
                     className={`${classes["app-selector__oauth"]} mt-5 mb-1 mx-auto flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white grow-1 border border-solid radius`}
                     onClick={authHandler}
                   >
-                    {buttonText}
+                    {isLoading ? "..." : "Authenticate"}
                   </button>
                 )}
               </div>
@@ -298,7 +294,7 @@ const IntegrationAppSelector = (props) => {
                     className="flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white border border-solid radius"
                     onClick={authHandler}
                   >
-                    {buttonText}
+                    {isLoading ? "..." : "Authenticate"}
                   </button>
                 </div>
               </div>

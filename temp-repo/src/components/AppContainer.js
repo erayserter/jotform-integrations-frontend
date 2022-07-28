@@ -268,6 +268,11 @@ const AppContainer = (props) => {
       })
     );
     dispatch(
+      setSettingsSelections({
+        settingsSelections: { source: {}, destination: {} },
+      })
+    );
+    dispatch(
       setApiInfo({
         apiInfo: {
           source: false,
