@@ -39,7 +39,7 @@ const IntegrationContent = (props) => {
       </div>
       {currentContent === "template" && (
         <div className="h-full w-full mt-16">
-          <Templates onTemplateSelect={props.onTemplateSelect} />
+          <Templates />
         </div>
       )}
       <button

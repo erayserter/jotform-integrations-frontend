@@ -36,17 +36,14 @@ async function validateApiKey(credentials) {
 const IntegrationAppSelector = (props) => {
   const dispatch = useDispatch();
 
-  const apps = useSelector((state) => state.apps.apps);
-
   const [isLoading, setIsLoading] = useState(false);
 
   const [isAppSelectorVisible, setIsAppSelectorVisible] = useState(true);
-  const [accountDetails, setAccountDetails] = useState(null);
+  const [accountDetails, setAccountDetails] = useState([]);
 
   const apiInfo = useSelector((state) => state.infos.apiInfo);
 
   const appSelections = useSelector((state) => state.inputs.appSelections);
-
   const app = appSelections[props.type].app;
 
   const appSelectorSectionHandler = (event) => {
@@ -156,13 +153,13 @@ const IntegrationAppSelector = (props) => {
 
   useEffect(() => {
     if (app !== null) {
+      if (app.isOauth && accountDetails.length <= 0) {
+        setIsLoading(true);
+        oauthHandler(app);
+      }
       if (apiInfo[props.type]) {
         setIsAppSelectorVisible(true);
       } else {
-        if (app.isOauth && !accountDetails) {
-          setIsLoading(true);
-          oauthHandler(app);
-        }
         setIsAppSelectorVisible(false);
       }
     }
@@ -267,6 +264,14 @@ const IntegrationAppSelector = (props) => {
                           selectedAccount
                         );
                       }}
+                      value={{
+                        value: appSelections.auth_id,
+                        label: accountDetails.find(
+                          (account) =>
+                            account.auth_user_id ===
+                            appSelections[props.type].auth_id
+                        )?.user_name,
+                      }}
                     />
                   </div>
                 ) : (
@@ -274,7 +279,11 @@ const IntegrationAppSelector = (props) => {
                     className={`${classes["app-selector__oauth"]} mt-5 mb-1 mx-auto flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white grow-1 border border-solid radius`}
                     onClick={authHandler}
                   >
-                    {isLoading ? "..." : "Authenticate"}
+                    {isLoading
+                      ? "..."
+                      : apiInfo[props.type]
+                      ? "Authenticated"
+                      : "Authenticate"}
                   </button>
                 )}
               </div>
@@ -294,7 +303,11 @@ const IntegrationAppSelector = (props) => {
                     className="flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white border border-solid radius"
                     onClick={authHandler}
                   >
-                    {isLoading ? "..." : "Authenticate"}
+                    {isLoading
+                      ? "..."
+                      : apiInfo[props.type]
+                      ? "Authenticated"
+                      : "Authenticate"}
                   </button>
                 </div>
               </div>
