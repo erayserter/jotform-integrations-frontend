@@ -315,7 +315,7 @@ const UserContent = (props) => {
           </div>
         </div>
         {sectionContent.header === "Templates" ? (
-          <Templates onTemplateSelect={props.onTemplateSelect} />
+          <Templates />
         ) : (
           <UserContentSection
             onIntegrationUpdate={props.onIntegrationUpdate}

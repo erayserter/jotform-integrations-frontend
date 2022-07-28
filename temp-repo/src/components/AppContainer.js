@@ -5,16 +5,15 @@ import Navbar from "./Navbar/Navbar";
 import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
-import {
-  setWebhooks,
-  setSelectedWebhooks,
-  setOldContent,
-} from "../store/webhooks";
+import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
 import {
   setIsIntegrationContent,
   setIsUpdate,
   setIsTemplate,
 } from "../store/ui";
+import { setApiInfo, setAppInfo } from "../store/infos";
+import { setAppSelections, setSettingsSelections } from "../store/inputs";
+
 import { useDispatch, useSelector } from "react-redux";
 
 import configurations from "../config/index";
@@ -74,13 +73,14 @@ const AppContainer = (props) => {
   );
   const apps = useSelector((state) => state.apps.apps);
 
+  const appSelections = useSelector((state) => state.inputs.appSelections);
+  const settingsSelections = useSelector(
+    (state) => state.inputs.settingsSelections
+  );
+
   const isIntegrationContent = useSelector(
     (state) => state.ui.isIntegrationContent
   );
-  const [apiStatus, setApiStatus] = useState({
-    source: false,
-    destination: false,
-  });
 
   const getWebhooks = async () => {
     const res = await getWebhookRequest();
@@ -185,22 +185,59 @@ const AppContainer = (props) => {
         info.destination.res.content.responseCode === 200;
       info.destination.content = info.destination.res.content.content;
     }
+
     dispatch(
-      setOldContent({
-        oldContent: {
-          ...webhook,
-          app_datas: {
-            source: info.source.content,
-            destination: info.destination.content,
+      setAppSelections({
+        appSelections: {
+          ...appSelections,
+          webhookId: webhook.webhook_id,
+          name: webhook.webhook_name,
+          source: {
+            app: source_app,
+            action: source_app.triggers.find(
+              (e) => e.name === webhook.value.source.app_action
+            ),
+            key: webhook.value.source.api_key,
+            auth_id: webhook.value.source.auth_user_id,
+          },
+          destination: {
+            app: destination_app,
+            action: destination_app.actions.find(
+              (e) => e.name === webhook.value.destination.app_action
+            ),
+            key: webhook.value.destination.api_key,
+            auth_id: webhook.value.destination.auth_user_id,
           },
         },
       })
     );
 
-    setApiStatus({
-      source: info.source.status,
-      destination: info.destination.status,
-    });
+    dispatch(
+      setSettingsSelections({
+        settingsSelections: {
+          source: webhook.value.source.settings,
+          destination: webhook.value.destination.settings,
+        },
+      })
+    );
+
+    dispatch(
+      setAppInfo({
+        appInfo: {
+          source: info.source.content,
+          destination: info.destination.content,
+        },
+      })
+    );
+
+    dispatch(
+      setApiInfo({
+        apiInfo: {
+          source: info.source.status,
+          destination: info.destination.status,
+        },
+      })
+    );
 
     dispatch(setIsUpdate({ isUpdate: true }));
     dispatch(setIsIntegrationContent({ isIntegrationContent: true }));
@@ -210,7 +247,39 @@ const AppContainer = (props) => {
     dispatch(setIsIntegrationContent({ isIntegrationContent: false }));
     dispatch(setIsUpdate({ isUpdate: false }));
     dispatch(setIsTemplate({ isTemplate: false }));
-    dispatch(setOldContent({ oldContent: {} }));
+    dispatch(
+      setAppSelections({
+        appSelections: {
+          ...appSelections,
+          name: "Integration",
+          source: {
+            app: null,
+            action: null,
+            key: null,
+            auth_id: null,
+          },
+          destination: {
+            app: null,
+            action: null,
+            key: null,
+            auth_id: null,
+          },
+        },
+      })
+    );
+    dispatch(
+      setSettingsSelections({
+        settingsSelections: { source: {}, destination: {} },
+      })
+    );
+    dispatch(
+      setApiInfo({
+        apiInfo: {
+          source: false,
+          destination: false,
+        },
+      })
+    );
   };
 
   const integrationSaveHandler = async (data, isUpdate) => {
@@ -242,7 +311,7 @@ const AppContainer = (props) => {
   };
 
   useEffect(() => {
-    getWebhooks();
+    if (props.isLoggedIn) getWebhooks();
   }, []);
 
   if (!props.isLoggedIn)
@@ -261,7 +330,6 @@ const AppContainer = (props) => {
         <IntegrationContent
           onClose={closeHandler}
           onIntegrationSave={integrationSaveHandler}
-          apiStatus={apiStatus}
         />
       ) : (
         <UserContent

@@ -5,12 +5,15 @@ import classes from "./IntegrationAppCard.module.css";
 
 const IntegrationAppCard = (props) => {
   const apps = useSelector((state) => state.apps.apps);
+  const appSelections = useSelector((state) => state.inputs.appSelections);
 
   let app;
-  if (props.datas && props.datas.id)
-    app = Object.values(apps).find((app) => app.id === props.datas.id);
+  if (props.type) app = appSelections[props.type].app;
+
+  const apiInfo = useSelector((state) => state.infos.apiInfo);
 
   const isUpdate = useSelector((state) => state.ui.isUpdate);
+
   const clickHandler = (event) => {
     props.onClick(props);
   };
@@ -27,7 +30,7 @@ const IntegrationAppCard = (props) => {
       >
         <div
           className={`${classes["card-wrapper"]} ${
-            isUpdate && !props.isValid && classes["invalidApp"]
+            isUpdate && !apiInfo[props.type] && classes["invalidApp"]
           } radius border-0 flex items-center justify-center absolute top-0 left-0 bottom-0 right-0 h-full border-solid border-transparent bg-navy-100 w-full duration-300`}
         >
           {app ? (
@@ -64,7 +67,7 @@ const IntegrationAppCard = (props) => {
       </div>
       <div
         className={`${classes["text__container"]} ${
-          isUpdate && !props.isValid && classes["invalidApp"]
+          isUpdate && !apiInfo[props.type] && classes["invalidApp"]
         } w-full`}
       >
         <div

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import classes from "./IntegrationWizard.module.css";
 
@@ -8,14 +8,20 @@ import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
 import IntegrationTitle from "../Header/IntegrationTitle";
+import { setApiInfo, setAppInfo } from "../../../../store/infos";
+import {
+  setAppSelections,
+  setSettingsSelections,
+} from "../../../../store/inputs";
+import ClickUp from "../../../../data/apps/ClickUp";
 
 const IntegrationWizard = (props) => {
+  const dispatch = useDispatch();
+
   const apps = useSelector((state) => state.apps.apps);
 
   const isTemplate = useSelector((state) => state.ui.isTemplate);
   const isUpdate = useSelector((state) => state.ui.isUpdate);
-  const oldContent = useSelector((state) => state.webhooks.oldContent);
-  const [webhookName, setWebhookName] = useState("Integration");
 
   const [appType, setAppType] = useState("source");
   const [settingsChoice, setSettingsChoice] = useState("source");
@@ -24,95 +30,28 @@ const IntegrationWizard = (props) => {
   const [isAppChoice, setIsAppChoice] = useState(false);
   const [isSettingsChoice, setIsSettingsChoice] = useState(false);
 
-  const [apiStatus, setApiStatus] = useState({
-    source: false,
-    destination: false,
-  });
-  const [appDatas, setAppDatas] = useState({
-    source: {},
-    destination: {},
-  });
-  const [selectedDatas, setSelectedDatas] = useState({
-    source: { id: null, action: null, key: null, auth_id: null },
-    destination: { id: null, action: null, key: null, auth_id: null },
-  });
-  const [selectedSettings, setSelectedSettings] = useState({
-    source: {},
-    destination: {},
-  });
+  const apiInfo = useSelector((state) => state.infos.apiInfo);
+  const appInfo = useSelector((state) => state.infos.appInfo);
 
-  const apiStatusValid = apiStatus.source && apiStatus.destination;
+  const appSelections = useSelector((state) => state.inputs.appSelections);
+  const selectedSettings = useSelector(
+    (state) => state.inputs.settingsSelections
+  );
+
+  const apiStatusValid = apiInfo.source && apiInfo.destination;
 
   useEffect(() => {
-    if (Object.keys(oldContent).length > 0) {
-      const source_app = apps[oldContent.value.source["app_name"]];
-      const destination_app = apps[oldContent.value.destination["app_name"]];
-
+    if (appSelections.source.app) {
       if (isUpdate) {
-        const allAuthsValid =
-          props.apiStatus.source && props.apiStatus.destination;
-
-        setApiStatus(props.apiStatus);
-
-        if (allAuthsValid) {
+        if (apiStatusValid) {
           setIsModelOpen(true);
           setIsSettingsChoice(true);
         }
-
-        setWebhookName(oldContent.webhook_name);
-
-        setSelectedDatas({
-          source: {
-            id: source_app.id,
-            action: oldContent.value.source["app_action"],
-            key: oldContent.value.source["api_key"],
-            auth_id: oldContent.value.source.auth_user_id,
-          },
-          destination: {
-            id: destination_app.id,
-            action: oldContent.value.destination["app_action"],
-            key: oldContent.value.destination["api_key"],
-            auth_id: oldContent.value.destination.auth_user_id,
-          },
-        });
-        setSelectedSettings({
-          source: props.apiStatus.source
-            ? oldContent.value.source.settings
-            : {},
-          destination: props.apiStatus.destination
-            ? oldContent.value.destination.settings
-            : {},
-        });
-
-        setAppDatas({
-          source: props.apiStatus.source ? oldContent.app_datas.source : {},
-          destination: props.apiStatus.destination
-            ? oldContent.app_datas.destination
-            : {},
-        });
       } else if (isTemplate) {
-        setSelectedDatas({
-          source: {
-            id: source_app.id,
-            action: oldContent.value.source["app_action"],
-            key: null,
-            auth_id: null,
-          },
-          destination: {
-            id: destination_app.id,
-            action: oldContent.value.destination["app_action"],
-            key: null,
-            auth_id: null,
-          },
-        });
-        setSelectedSettings({
-          source: oldContent.value.source.settings,
-          destination: oldContent.value.destination.settings,
-        });
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [props.apiStatus, isUpdate, isTemplate]);
+  }, [isUpdate, isTemplate]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
@@ -129,30 +68,38 @@ const IntegrationWizard = (props) => {
   };
 
   const switchHandler = (event) => {
-    setSelectedDatas((prev) => {
-      return {
-        source: {
-          id: prev.destination.id,
-          action: "",
-          key: prev.destination.key,
+    dispatch(
+      setAppSelections({
+        appSelections: {
+          ...appSelections,
+          source: appSelections.destination,
+          destination: appSelections.source,
         },
-        destination: { id: prev.source.id, action: "", key: prev.source.key },
-      };
-    });
-    setSelectedSettings({ source: {}, destination: {} });
+      })
+    );
+    dispatch(
+      setSettingsSelections({
+        settingsSelections: { source: {}, destination: {} },
+      })
+    );
   };
 
   const authHandler = (datas, type, appDatas) => {
-    const valid = { ...apiStatus, [type]: true };
+    const valid = { ...apiInfo, [type]: true };
     setIsModelOpen(false);
     setIsAppChoice(false);
-    setSelectedDatas((prev) => {
-      return { ...prev, [type.toLowerCase()]: datas };
-    });
-    setAppDatas((prev) => {
-      return { ...prev, [type]: appDatas };
-    });
-    setApiStatus(valid);
+    dispatch(
+      setAppSelections({
+        appSelections: {
+          ...appSelections,
+          [type.toLowerCase()]: datas,
+        },
+      })
+    );
+
+    dispatch(setAppInfo({ appInfo: { ...appInfo, [type]: appDatas } }));
+    dispatch(setApiInfo({ apiInfo: valid }));
+
     if (!valid.source) integrationChoiceHandler(true, "source");
     else if (!valid.destination) integrationChoiceHandler(true, "destination");
   };
@@ -165,47 +112,50 @@ const IntegrationWizard = (props) => {
 
   const settingsChangeHandler = (value, type, label, isExternal) => {
     if (!isExternal)
-      setSelectedSettings((prev) => {
-        return { ...prev, [type]: { ...prev[type], [label]: value } };
-      });
+      dispatch(
+        setSettingsSelections({
+          settingsSelections: {
+            ...selectedSettings,
+            [type]: { ...selectedSettings[type], [label]: value },
+          },
+        })
+      );
     else
-      setSelectedSettings((prev) => {
-        return { ...prev, [label]: value };
-      });
+      dispatch(
+        setSettingsSelections({
+          settingsSelections: { ...selectedSettings, [label]: value },
+        })
+      );
   };
 
   const saveSettingsHandler = (values, type) => {
     if (settingsChoice === "source") {
       setSettingsChoice("destination");
     } else {
-      const source_app = Object.values(apps).find(
-        (app) => app.id === selectedDatas.source.id
-      );
-      const destination_app = Object.values(apps).find(
-        (app) => app.id === selectedDatas.destination.id
-      );
+      const source_app = appSelections.source.app;
+      const destination_app = appSelections.destination.app;
 
       const allData = {
         source: {
           app_name: source_app.name,
-          app_action: selectedDatas.source.action,
-          api_key: selectedDatas.source.key,
-          auth_user_id: selectedDatas.source.auth_id,
+          app_action: appSelections.source.action.name,
+          api_key: appSelections.source.key,
+          auth_user_id: appSelections.source.auth_id,
           settings: selectedSettings.source,
         },
         destination: {
           app_name: destination_app.name,
-          app_action: selectedDatas.destination.action,
-          api_key: selectedDatas.destination.key,
-          auth_user_id: selectedDatas.destination.auth_id,
+          app_action: appSelections.destination.action.name,
+          api_key: appSelections.destination.key,
+          auth_user_id: appSelections.destination.auth_id,
           settings: selectedSettings.destination,
         },
-        webhook_name: webhookName,
+        webhook_name: appSelections.name,
       };
 
       if (isUpdate) {
         allData.action = "update";
-        allData["webhook_id"] = oldContent["webhook_id"];
+        allData["webhook_id"] = appSelections.webhookId;
       } else {
         allData.action = "create";
       }
@@ -218,12 +168,23 @@ const IntegrationWizard = (props) => {
     setAppType(type);
   };
 
+  const inlineWebhookNameHandler = (name) => {
+    dispatch(
+      setAppSelections({
+        appSelections: {
+          ...appSelections,
+          name: name,
+        },
+      })
+    );
+  };
+
   return (
     <>
       <IntegrationTitle
         isTitleInlineEdit={true}
-        titleValue={webhookName}
-        titleSetValue={setWebhookName}
+        titleValue={appSelections.name}
+        titleSetValue={inlineWebhookNameHandler}
         subtitle="Select applications to easly create an integration between them."
       />
       <div className={`${classes["body"]} flex flex-col grow-1 min-h-76`}>
@@ -231,12 +192,10 @@ const IntegrationWizard = (props) => {
           className={`${classes["cards"]} flex flex-col m-0 justify-center items-center duration-700 delay-500`}
         >
           <IntegrationAppCard
-            isValid={apiStatus.source}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
             }}
             text="Source"
-            datas={selectedDatas.source}
             type="source"
           />
           <div
@@ -249,12 +208,10 @@ const IntegrationWizard = (props) => {
             />
           </div>
           <IntegrationAppCard
-            isValid={apiStatus.destination}
             onClick={(data) => {
               integrationChoiceHandler(true, data.type);
             }}
             text="Destination"
-            datas={selectedDatas.destination}
             type="destination"
           />
         </div>
@@ -283,8 +240,6 @@ const IntegrationWizard = (props) => {
                 onAuthenticate={authHandler}
                 type={appType}
                 onTypeChange={typeChangeHandler}
-                datas={selectedDatas}
-                isValid={apiStatus[appType]}
               />
             )}
             {isSettingsChoice && (
@@ -292,10 +247,7 @@ const IntegrationWizard = (props) => {
                 onSettingsChange={settingsChangeHandler}
                 onSave={saveSettingsHandler}
                 onPreviousModal={setSettingsChoice}
-                datas={selectedDatas}
                 type={settingsChoice}
-                settingsData={selectedSettings}
-                appDatas={appDatas}
               />
             )}
           </ModalBox>

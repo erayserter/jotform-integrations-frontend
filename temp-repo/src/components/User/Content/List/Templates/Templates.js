@@ -11,12 +11,14 @@ import {
   setIsTemplate,
   setIsIntegrationContent,
 } from "../../../../../store/ui";
-import { setOldContent } from "../../../../../store/webhooks";
+import { setAppSelections } from "../../../../../store/inputs";
 
 const Templates = (props) => {
-  const apps = useSelector((state) => state.apps.apps);
-
   const dispatch = useDispatch();
+
+  const apps = useSelector((state) => state.apps.apps);
+  const appSelections = useSelector((state) => state.inputs.appSelections);
+
   const [allPermutations, setAllPermutations] = useState([]);
   const [searchedApps, setSearchedApps] = useState({
     source: "",
@@ -38,19 +40,21 @@ const Templates = (props) => {
     }
 
     dispatch(
-      setOldContent({
-        oldContent: {
-          value: {
-            source: {
-              app_name: permutation.source_item.name,
-              app_action: permutation.trigger.name,
-              settings: sourceSettings,
-            },
-            destination: {
-              app_name: permutation.destination_item.name,
-              app_action: permutation.action.name,
-              settings: destinationSettings,
-            },
+      setAppSelections({
+        appSelections: {
+          ...appSelections,
+          name: "Template Integration",
+          source: {
+            app: permutation.source_item,
+            action: permutation.trigger,
+            key: null,
+            auth_id: null,
+          },
+          destination: {
+            app: permutation.destination_item,
+            action: permutation.action,
+            key: null,
+            auth_id: null,
           },
         },
       })

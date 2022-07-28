@@ -61,14 +61,10 @@ const MatchFieldsContainer = (props) => {
     { destination: { value: "name", label: "Name" }, source: {} },
   ]);
 
-  const apps = useSelector((state) => state.apps.apps);
+  const appSelections = useSelector((state) => state.inputs.appSelections);
 
-  const source_app = Object.values(apps).find(
-    (app) => app.id === props.source.id
-  );
-  const destination_app = Object.values(apps).find(
-    (app) => app.id === props.destination.id
-  );
+  const source_app = appSelections.source.app;
+  const destination_app = appSelections.destination.app;
 
   useEffect(() => {
     if (props.default && !isEmpty(props.default))
