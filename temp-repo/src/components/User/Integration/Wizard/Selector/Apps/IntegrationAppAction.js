@@ -5,7 +5,7 @@ import classes from "./IntegrationAppAction.module.css";
 const IntegrationAppAction = (props) => {
   return (
     <li
-      className={`${classes["dropdown-item"]} flex items-center justify-start h-10 px-4 border-b border-solid border-navy-100 cursor-pointer`}
+      className={`flex items-center justify-start h-10 px-4 border-b border-solid border-navy-100 cursor-pointer`}
       onClick={(e) => {
         props.onActionSelect(props.id);
       }}

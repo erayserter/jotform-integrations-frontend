@@ -8,11 +8,9 @@ const IntegrationApp = (props) => {
   };
 
   return (
-    <div
-      className={`${classes["app-container"]} flex flex-col items-center overflow-hidden`}
-    >
+    <div className={`flex flex-col items-center overflow-hidden line-clamp-1`}>
       <img
-        className={`${classes["app-image"]} block cursor-pointer`}
+        className={`block cursor-pointer`}
         onClick={clickHandler}
         alt=""
         src={props.app.url}

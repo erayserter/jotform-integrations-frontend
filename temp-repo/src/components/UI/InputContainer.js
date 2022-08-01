@@ -5,6 +5,7 @@ import classes from "./InputContainer.module.css";
 const InputContainer = (props) => {
   return (
     <div
+      key={props.key}
       className={`${classes["input--container"]} border-b border-solid py-5`}
     >
       <label className="block mb-2 text-sm font-semibold">

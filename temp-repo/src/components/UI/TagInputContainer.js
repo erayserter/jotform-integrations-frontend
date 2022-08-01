@@ -85,6 +85,7 @@ const TagInputContainer = (props) => {
 
   return (
     <div
+      key={props.key}
       className={`${classes["tag-input"]} relative py-5 border-b border-solid`}
     >
       <div
@@ -104,7 +105,7 @@ const TagInputContainer = (props) => {
             );
             props.onChange(converted);
           }}
-          value={str}
+          defaultValue={str}
         />
         <div className={classes["input__form-fields"]}>
           <button

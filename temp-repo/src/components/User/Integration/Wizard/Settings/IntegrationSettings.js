@@ -9,7 +9,6 @@ import MatchFieldsContainer from "../../../../UI/MatchFieldsContainer";
 import classes from "./IntegrationSettings.module.css";
 
 import { setOptions } from "../../../../../store/apps";
-import GoogleContacts from "../../../../../data/apps/GoogleContacts";
 
 const IntegrationSettings = (props) => {
   const dispatch = useDispatch();
@@ -48,7 +47,7 @@ const IntegrationSettings = (props) => {
       });
     }
     if (app.name === "GoogleContacts") {
-      data = app.init(props.appDatas, appAction, props.type, {
+      data = app.init(appInfo, appAction.name, props.type, {
         formId: inputValues.source.form_id,
       });
     }
@@ -82,16 +81,16 @@ const IntegrationSettings = (props) => {
               appOptions[app.name][e.selection] == null ||
               appOptions[app.name][e.selection].length <= 0
             )
-              return;
+              return null;
             return (
               <div
+                key={e.selection}
                 className={`${classes["select--container"]} py-5 border-b border-solid`}
               >
                 <label className="block mb-2 text-sm font-semibold">
                   {e.label}
                 </label>
                 <Select
-                  key={e.selection}
                   isMulti={e.isMulti}
                   className="basic-multi-select"
                   classNamePrefix="select"
@@ -114,16 +113,17 @@ const IntegrationSettings = (props) => {
                   }}
                   value={
                     inputValues[props.type][e.selection] != null &&
-                    appOptions[app.name][e.selection].filter((element) => {
-                      if (e.isMulti)
-                        return inputValues[props.type][e.selection].includes(
-                          parseInt(element.value, 10)
-                        );
-                      else
-                        return (
-                          element.value == inputValues[props.type][e.selection]
-                        );
-                    })
+                    (e.isMulti
+                      ? inputValues[props.type][e.selection].map((input) =>
+                          appOptions[app.name][e.selection].find(
+                            (option) => option.value === input
+                          )
+                        )
+                      : appOptions[app.name][e.selection].find(
+                          (option) =>
+                            option.value ===
+                            inputValues[props.type][e.selection]
+                        ))
                   }
                 />
               </div>
@@ -133,7 +133,7 @@ const IntegrationSettings = (props) => {
               appOptions[app.name][e.selection] == null ||
               appOptions[app.name][e.selection].length <= 0
             )
-              return;
+              return null;
             return (
               <TagInputContainer
                 key={e.selection}
@@ -151,9 +151,10 @@ const IntegrationSettings = (props) => {
               appOptions[app.name][e.selection].source.length <= 0 ||
               appOptions[app.name][e.selection].destination.length <= 0
             )
-              return;
+              return null;
             return (
               <MatchFieldsContainer
+                key={e.selection}
                 label={e.label}
                 maxLength={4}
                 datas={appOptions[app.name][e.selection]}
@@ -189,6 +190,7 @@ const IntegrationSettings = (props) => {
           <img
             width="16"
             height="16"
+            alt="previous button"
             src="https://img.icons8.com/external-dreamstale-lineal-dreamstale/32/undefined/external-left-arrow-arrows-dreamstale-lineal-dreamstale.png"
           />
         </button>

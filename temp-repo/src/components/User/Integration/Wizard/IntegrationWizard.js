@@ -12,13 +12,13 @@ import { setApiInfo, setAppInfo } from "../../../../store/infos";
 import {
   setAppSelections,
   setSettingsSelections,
+  newSettingsHandler,
 } from "../../../../store/inputs";
-import ClickUp from "../../../../data/apps/ClickUp";
+
+import { cloneDeep } from "lodash";
 
 const IntegrationWizard = (props) => {
   const dispatch = useDispatch();
-
-  const apps = useSelector((state) => state.apps.apps);
 
   const isTemplate = useSelector((state) => state.ui.isTemplate);
   const isUpdate = useSelector((state) => state.ui.isUpdate);
@@ -34,7 +34,7 @@ const IntegrationWizard = (props) => {
   const appInfo = useSelector((state) => state.infos.appInfo);
 
   const appSelections = useSelector((state) => state.inputs.appSelections);
-  const selectedSettings = useSelector(
+  const settingsSelections = useSelector(
     (state) => state.inputs.settingsSelections
   );
 
@@ -111,19 +111,11 @@ const IntegrationWizard = (props) => {
   };
 
   const settingsChangeHandler = (value, type, label, isExternal) => {
-    if (!isExternal)
-      dispatch(
-        setSettingsSelections({
-          settingsSelections: {
-            ...selectedSettings,
-            [type]: { ...selectedSettings[type], [label]: value },
-          },
-        })
-      );
+    if (!isExternal) dispatch(newSettingsHandler({ type, value, label }));
     else
       dispatch(
         setSettingsSelections({
-          settingsSelections: { ...selectedSettings, [label]: value },
+          settingsSelections: { ...settingsSelections, [label]: value },
         })
       );
   };
@@ -141,14 +133,14 @@ const IntegrationWizard = (props) => {
           app_action: appSelections.source.action.name,
           api_key: appSelections.source.key,
           auth_user_id: appSelections.source.auth_id,
-          settings: selectedSettings.source,
+          settings: settingsSelections.source,
         },
         destination: {
           app_name: destination_app.name,
           app_action: appSelections.destination.action.name,
           api_key: appSelections.destination.key,
           auth_user_id: appSelections.destination.auth_id,
-          settings: selectedSettings.destination,
+          settings: settingsSelections.destination,
         },
         webhook_name: appSelections.name,
       };

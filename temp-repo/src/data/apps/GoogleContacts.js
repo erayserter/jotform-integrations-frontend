@@ -1,10 +1,7 @@
 import App from "../App";
 import Action from "./Action";
 import Jotform from "./Jotform";
-import Select from "./fields/Select";
-import MatchFields from "./fields/MatchFields";
 import TagInput from "./fields/TagInput";
-import Field from "./Field";
 import { cloneDeep } from "lodash";
 
 const ID = 4;
@@ -35,17 +32,15 @@ export default class GoogleContacts extends App {
   }
 
   getOptionFromSelection(datas, selection, type, requiredInfo = {}) {
-    const selectedTypeData = datas[type];
     const allTypeData = datas;
     switch (selection) {
       case "givenName":
-        return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
       case "familyName":
-        return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
       case "emailAddress":
-        return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
       case "phoneNumber":
         return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
+      default:
+        return;
     }
   }
 

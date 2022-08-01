@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { cloneDeep } from "lodash";
 
 export const inputsSlice = createSlice({
   name: "inputs",
@@ -26,11 +27,23 @@ export const inputsSlice = createSlice({
       state.appSelections = { ...payload.appSelections };
     },
     setSettingsSelections(state, { payload }) {
-      state.settingsSelections = { ...payload.settingsSelections };
+      state.settingsSelections = Object.assign({}, payload.settingsSelections);
+    },
+    newSettingsHandler(state, { payload }) {
+      console.log({ payload: payload, settings: state.settingsSelections });
+
+      state.settingsSelections = {
+        ...state.settingsSelections,
+        [payload.type]: {
+          ...state.settingsSelections[payload.type],
+          [payload.label]: payload.value,
+        },
+      };
     },
   },
 });
 
-export const { setAppSelections, setSettingsSelections } = inputsSlice.actions;
+export const { setAppSelections, setSettingsSelections, newSettingsHandler } =
+  inputsSlice.actions;
 
 export default inputsSlice.reducer;
