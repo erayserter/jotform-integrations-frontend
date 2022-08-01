@@ -179,7 +179,9 @@ const IntegrationWizard = (props) => {
         titleSetValue={inlineWebhookNameHandler}
         subtitle="Select applications to easly create an integration between them."
       />
-      <div className={`${classes["body"]} flex flex-col grow-1 min-h-76`}>
+      <div
+        className={`${classes["integration-body"]} flex flex-col grow-1 min-h-76`}
+      >
         <div
           className={`${classes["cards"]} flex flex-col m-0 justify-center items-center duration-700 delay-500`}
         >
