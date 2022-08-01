@@ -14,53 +14,63 @@ const IntegrationSettings = (props) => {
   const dispatch = useDispatch();
   const appOptions = useSelector((state) => state.apps.options);
 
-  const appSelections = useSelector((state) => state.inputs.appSelections);
+  const userInputs = useSelector((state) => state.inputs);
+
+  const appSelections = userInputs.appSelections;
+  const settingsSelections = userInputs.settingsSelections;
+
   const app = appSelections[props.type].app;
+  const appAction = appSelections[props.type].action;
 
   const appInfo = useSelector((state) => state.infos.appInfo);
-  const inputValues = useSelector((state) => state.inputs.settingsSelections);
-
-  const appAction = appSelections[props.type].action;
 
   const appFields = app.getFields(props.type, appAction.name);
 
   useEffect(() => {
     let data = {};
 
-    if (app.name === "Jotform") {
+    if (app.id === "Jotform") {
       data = app.init(appInfo, appAction.name, props.type);
     }
-    if (app.name === "Telegram") {
+    if (app.id === "Telegram") {
       data = app.init(appInfo, appAction.name, props.type, {
-        formId: inputValues.source.form_id,
+        formId: settingsSelections.source.form_id,
       });
     }
-    if (app.name === "ClickUp") {
+    if (app.id === "ClickUp") {
       data = app.init(appInfo, appAction.name, props.type, {
-        workspace: inputValues[props.type].workspace,
-        space: inputValues[props.type].space,
-        folder: inputValues[props.type].folder,
-        list: inputValues[props.type].list_id,
-        task: inputValues[props.type].task,
-        formId: inputValues.source.form_id,
+        workspace: settingsSelections[props.type].workspace,
+        space: settingsSelections[props.type].space,
+        folder: settingsSelections[props.type].folder,
+        list: settingsSelections[props.type].list_id,
+        task: settingsSelections[props.type].task,
+        formId: settingsSelections.source.form_id,
         subtask: appAction.name === "Create Subtask",
       });
     }
-    if (app.name === "GoogleContacts") {
+    if (app.id === "GoogleContacts") {
       data = app.init(appInfo, appAction.name, props.type, {
-        formId: inputValues.source.form_id,
+        formId: settingsSelections.source.form_id,
       });
     }
 
-    dispatch(setOptions({ options: { ...appOptions, [app.name]: data } }));
-  }, [app, appInfo, props.type, inputValues]);
+    dispatch(setOptions({ options: { ...appOptions, [app.id]: data } }));
+  }, [
+    app,
+    appInfo,
+    props.type,
+    settingsSelections,
+    appAction,
+    appOptions,
+    dispatch,
+  ]);
 
   const newValueHandler = (value, labelData, isExternal) => {
     props.onSettingsChange(value, props.type, labelData, isExternal);
   };
 
   const saveHandler = (event) => {
-    props.onSave(inputValues[props.type], props.type);
+    props.onSave(settingsSelections[props.type], props.type);
   };
 
   return (
@@ -78,8 +88,8 @@ const IntegrationSettings = (props) => {
         {appFields.map((e) => {
           if (e.type === "select") {
             if (
-              appOptions[app.name][e.selection] == null ||
-              appOptions[app.name][e.selection].length <= 0
+              appOptions[app.id][e.selection] == null ||
+              appOptions[app.id][e.selection].length <= 0
             )
               return null;
             return (
@@ -97,7 +107,7 @@ const IntegrationSettings = (props) => {
                   isClearable={true}
                   isSearchable={true}
                   name="actions"
-                  options={appOptions[app.name][e.selection]}
+                  options={appOptions[app.id][e.selection]}
                   styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
                   menuPortalTarget={document.body}
                   menuPlacement="bottom"
@@ -112,17 +122,18 @@ const IntegrationSettings = (props) => {
                     } else newValueHandler(event.value, e.selection);
                   }}
                   value={
-                    inputValues[props.type][e.selection] != null &&
+                    settingsSelections[props.type][e.selection] != null &&
                     (e.isMulti
-                      ? inputValues[props.type][e.selection].map((input) =>
-                          appOptions[app.name][e.selection].find(
-                            (option) => option.value === input
-                          )
+                      ? settingsSelections[props.type][e.selection].map(
+                          (input) =>
+                            appOptions[app.id][e.selection].find(
+                              (option) => option.value === input
+                            )
                         )
-                      : appOptions[app.name][e.selection].find(
+                      : appOptions[app.id][e.selection].find(
                           (option) =>
                             option.value ===
-                            inputValues[props.type][e.selection]
+                            settingsSelections[props.type][e.selection]
                         ))
                   }
                 />
@@ -130,8 +141,8 @@ const IntegrationSettings = (props) => {
             );
           } else if (e.type === "tagInput") {
             if (
-              appOptions[app.name][e.selection] == null ||
-              appOptions[app.name][e.selection].length <= 0
+              appOptions[app.id][e.selection] == null ||
+              appOptions[app.id][e.selection].length <= 0
             )
               return null;
             return (
@@ -141,15 +152,15 @@ const IntegrationSettings = (props) => {
                 onChange={(value) => {
                   newValueHandler(value, e.selection);
                 }}
-                defaultValue={inputValues[props.type][e.selection]}
-                whitelist={appOptions[app.name][e.selection]}
+                defaultValue={settingsSelections[props.type][e.selection]}
+                whitelist={appOptions[app.id][e.selection]}
               />
             );
           } else if (e.type === "matchFields") {
             if (
-              appOptions[app.name][e.selection] == null ||
-              appOptions[app.name][e.selection].source.length <= 0 ||
-              appOptions[app.name][e.selection].destination.length <= 0
+              appOptions[app.id][e.selection] == null ||
+              appOptions[app.id][e.selection].source.length <= 0 ||
+              appOptions[app.id][e.selection].destination.length <= 0
             )
               return null;
             return (
@@ -157,8 +168,8 @@ const IntegrationSettings = (props) => {
                 key={e.selection}
                 label={e.label}
                 maxLength={4}
-                datas={appOptions[app.name][e.selection]}
-                default={inputValues[props.type][e.selection]}
+                datas={appOptions[app.id][e.selection]}
+                default={settingsSelections[props.type][e.selection]}
                 onChange={(value) => {
                   newValueHandler(value, e.selection);
                 }}
@@ -171,7 +182,7 @@ const IntegrationSettings = (props) => {
                 inputLabel={e.label}
                 inputType={e.type}
                 setter={(value) => newValueHandler(value, e.selection)}
-                default={inputValues[props.type][e.selection]}
+                default={settingsSelections[props.type][e.selection]}
               />
             );
         })}

@@ -21,14 +21,14 @@ const TemplateItem = (props) => {
             width="60"
             height="60"
             src={source_app.url}
-            alt={source_app.name}
+            alt={source_app.id}
           />
           <img
             className={classes["image-container__destination"]}
             width="60"
             height="60"
             src={destination_app.url}
-            alt={destination_app.name}
+            alt={destination_app.id}
           />
         </div>
       </div>
@@ -36,11 +36,11 @@ const TemplateItem = (props) => {
         className={`${classes["template-item--app-names"]} flex justify-center items-center gap-1 mt-4`}
       >
         <h5 className="text-sm font-semibold line-height-lg overflow-hidden whitespace-nowrap">
-          {source_app.name}
+          {source_app.id}
         </h5>
         +
         <h5 className="text-sm font-semibold line-height-lg overflow-hidden whitespace-nowrap">
-          {destination_app.name}
+          {destination_app.id}
         </h5>
       </div>
       <p

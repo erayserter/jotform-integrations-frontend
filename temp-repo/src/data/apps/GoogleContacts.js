@@ -4,8 +4,8 @@ import Jotform from "./Jotform";
 import TagInput from "./fields/TagInput";
 import { cloneDeep } from "lodash";
 
-const ID = 4;
-const NAME = "GoogleContacts";
+const ID = "GoogleContacts";
+const NAME = "Google Contacts";
 const URL =
   "https://files.jotform.com/jotformapps/fa7716f93e1a40894d4ea2ab704842d1.png";
 const TRIGGERS = [];

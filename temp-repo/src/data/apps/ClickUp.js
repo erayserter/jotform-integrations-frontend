@@ -5,7 +5,7 @@ import Select from "./fields/Select";
 import MatchFields from "./fields/MatchFields";
 import TagInput from "./fields/TagInput";
 
-const ID = 3;
+const ID = "ClickUp";
 const NAME = "ClickUp";
 const URL =
   "https://files.jotform.com/jotformapps/cde74cfb4f0ca88ebc50767e1e211553.png";
@@ -82,6 +82,8 @@ export default class ClickUp extends App {
         if (requiredInfo.task != null)
           return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
         return [];
+      default:
+        return;
     }
   }
 

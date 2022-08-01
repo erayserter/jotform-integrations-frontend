@@ -2,7 +2,7 @@ import App from "../App";
 import Action from "./Action";
 import Select from "./fields/Select";
 
-const ID = 1;
+const ID = "Jotform";
 const NAME = "Jotform";
 const URL =
   "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg";
@@ -28,6 +28,8 @@ export default class Jotform extends App {
     switch (selection) {
       case "form_id":
         return this.getFormTitleOptions(datas[type]);
+      default:
+        return;
     }
   }
 

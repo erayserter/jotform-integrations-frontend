@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -108,8 +108,8 @@ const IntegrationAppSelector = (props) => {
         "https://" +
           configurations.DEV_RDS_NAME +
           ".jotform.dev/intern-api/" +
-          app.name.charAt(0).toLowerCase() +
-          app.name.slice(1)
+          app.id.charAt(0).toLowerCase() +
+          app.id.slice(1)
       );
       window.addEventListener("message", (event) => {
         if (
@@ -119,7 +119,7 @@ const IntegrationAppSelector = (props) => {
           const data = JSON.parse(event.data);
           if (
             data.responseCode === 200 &&
-            data.private_key.toLowerCase() === app.name.toLowerCase()
+            data.private_key.toLowerCase() === app.id.toLowerCase()
           ) {
             oauthHandler(app);
           }
@@ -127,7 +127,7 @@ const IntegrationAppSelector = (props) => {
       });
     } else {
       const res = await validateApiKey({
-        app_name: app.name.toLowerCase(),
+        app_name: app.id.toLowerCase(),
         action: appSelections[props.type].action.name,
         api_key: appSelections[props.type].key,
       });

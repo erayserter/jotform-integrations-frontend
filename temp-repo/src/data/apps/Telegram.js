@@ -5,7 +5,7 @@ import TagInput from "./fields/TagInput";
 import Jotform from "./Jotform";
 import Field from "./Field";
 
-const ID = 2;
+const ID = "Telegram";
 const NAME = "Telegram";
 const URL = "https://img.icons8.com/color/480/000000/telegram-app--v1.png";
 const TRIGGERS = [];
@@ -34,13 +34,14 @@ export default class Telegram extends App {
   }
 
   getOptionFromSelection(datas, selection, type, requiredInfo) {
-    const selectedTypeData = datas[type];
     const allTypeData = datas;
     switch (selection) {
       case "text":
         return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
       case "upload_fields":
         return Jotform.getFileUploadFieldsOptions(allTypeData, requiredInfo);
+      default:
+        return;
     }
   }
 
