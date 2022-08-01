@@ -10,8 +10,8 @@ const convertInput = (inputObject, fieldDatas) => {
   let temporaryArray = [];
 
   for (const fieldId in inputObject) {
-    const destinationField = fieldDatas.destination.find(
-      (field) => field.value === inputObject[fieldId]
+    let destinationField = fieldDatas.destination.find(
+      (field) => field.value == inputObject[fieldId]
     );
 
     if (destinationField == null && fieldDatas.predefined[fieldId]) {
@@ -20,9 +20,7 @@ const convertInput = (inputObject, fieldDatas) => {
       );
     }
 
-    const sourceField = fieldDatas.source.find(
-      (field) => field.value === fieldId
-    );
+    let sourceField = fieldDatas.source.find((field) => field.value == fieldId);
     if (sourceField == null && fieldDatas.predefined[inputObject[fieldId]])
       sourceField = fieldDatas.predefined[inputObject[fieldId]].find(
         (field) => field.value === fieldId
@@ -107,7 +105,7 @@ const MatchFieldsContainer = (props) => {
               <div
                 className={`${classes["fields__text"]} inline-block align-middle text-xs`}
               >
-                <span>{destination_app.name}</span>
+                <span>{destination_app.id}</span>
               </div>
             </div>
           </div>
@@ -124,7 +122,7 @@ const MatchFieldsContainer = (props) => {
               <div
                 className={`${classes["fields__text"]} inline-block align-middle text-xs`}
               >
-                <span>{source_app.name}</span>
+                <span>{source_app.id}</span>
               </div>
             </div>
           </div>

@@ -27,7 +27,7 @@ const SelectionCard = (props) => {
   });
 
   const filteredContent = Object.values(apps)
-    .filter((e) => e.name.includes(searchedWord))
+    .filter((e) => e.id.includes(searchedWord))
     .map((app) => {
       return (
         <li key={app.id} className="basis-1/3">

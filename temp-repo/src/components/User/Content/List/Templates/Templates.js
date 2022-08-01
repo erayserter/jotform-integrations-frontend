@@ -104,7 +104,7 @@ const Templates = (props) => {
             options={Object.values(apps)
               .filter((e) => e.triggers.length !== 0)
               .map((e) => {
-                return { label: e.name, value: e.name };
+                return { label: e.name, value: e.id };
               })}
             styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
             menuPortalTarget={document.body}
@@ -132,7 +132,7 @@ const Templates = (props) => {
             options={Object.values(apps)
               .filter((e) => e.actions.length !== 0)
               .map((e) => {
-                return { label: e.name, value: e.name };
+                return { label: e.name, value: e.id };
               })}
             styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
             menuPortalTarget={document.body}
@@ -160,11 +160,11 @@ const Templates = (props) => {
             if (searchedApps.source !== "")
               bool =
                 bool &&
-                permutation.source_item.name.includes(searchedApps.source);
+                permutation.source_item.id.includes(searchedApps.source);
             if (searchedApps.destination !== "")
               bool =
                 bool &&
-                permutation.destination_item.name.includes(
+                permutation.destination_item.id.includes(
                   searchedApps.destination
                 );
             return bool;

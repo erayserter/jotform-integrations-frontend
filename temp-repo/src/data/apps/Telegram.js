@@ -5,7 +5,7 @@ import TagInput from "./fields/TagInput";
 import Jotform from "./Jotform";
 import Field from "./Field";
 
-const ID = 2;
+const ID = "Telegram";
 const NAME = "Telegram";
 const URL = "https://img.icons8.com/color/480/000000/telegram-app--v1.png";
 const TRIGGERS = [];
