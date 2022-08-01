@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 
 import classes from "./IntegrationContent.module.css";
 
@@ -18,7 +18,7 @@ const IntegrationContent = (props) => {
   useEffect(() => {
     if (isUpdate || isTemplate)
       dispatch(setCurrentContent({ currentContent: "wizard" }));
-  }, [isUpdate, isTemplate]);
+  }, [isUpdate, isTemplate, dispatch]);
 
   const closeButtonHandler = (event) => {
     dispatch(setCurrentContent({ currentContent: "choice" }));

@@ -50,7 +50,7 @@ const SelectionCard = (props) => {
         <img
           className="w-5"
           src="https://img.icons8.com/material-outlined/384/000000/search--v1.png"
-          alt=""
+          alt="Search"
         />
         <input
           className="font-light h-10 px-4 w-full"

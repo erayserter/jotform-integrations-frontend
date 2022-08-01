@@ -128,11 +128,13 @@ const ContentSectionListItem = (props) => {
               width="40"
               height="40"
               src={apps[props.webhook.value.source.app_name].url}
+              alt={apps[props.webhook.value.source.app_name].name}
             />
             <img
               width="40"
               height="40"
               src={apps[props.webhook.value.destination.app_name].url}
+              alt={apps[props.webhook.value.destination.app_name].name}
             />
           </div>
         </div>
@@ -163,6 +165,7 @@ const ContentSectionListItem = (props) => {
                     className="inline-block"
                     src="https://img.icons8.com/ios-glyphs/30/undefined/right--v1.png"
                     width="15px"
+                    alt="Right Arrow"
                   />
                   {"  "}
                   {props.webhook.value.destination["app_name"]}

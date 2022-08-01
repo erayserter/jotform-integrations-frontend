@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import classes from "./IntegrationWizard.module.css";
@@ -14,8 +14,6 @@ import {
   setSettingsSelections,
   newSettingsHandler,
 } from "../../../../store/inputs";
-
-import { cloneDeep } from "lodash";
 
 const IntegrationWizard = (props) => {
   const dispatch = useDispatch();
@@ -51,7 +49,7 @@ const IntegrationWizard = (props) => {
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [isUpdate, isTemplate]);
+  }, [isUpdate, isTemplate, appSelections.source.app, apiStatusValid]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
@@ -198,7 +196,7 @@ const IntegrationWizard = (props) => {
           >
             <img
               src="https://img.icons8.com/ios-glyphs/100/000000/refresh--v2.png"
-              alt=""
+              alt="Switch"
             />
           </div>
           <IntegrationAppCard

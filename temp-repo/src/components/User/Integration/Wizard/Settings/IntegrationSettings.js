@@ -53,7 +53,15 @@ const IntegrationSettings = (props) => {
     }
 
     dispatch(setOptions({ options: { ...appOptions, [app.name]: data } }));
-  }, [app, appInfo, props.type, inputValues]);
+  }, [
+    app,
+    appInfo,
+    props.type,
+    inputValues,
+    dispatch,
+    appOptions,
+    appAction.name,
+  ]);
 
   const newValueHandler = (value, labelData, isExternal) => {
     props.onSettingsChange(value, props.type, labelData, isExternal);

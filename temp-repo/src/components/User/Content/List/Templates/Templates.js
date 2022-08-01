@@ -87,7 +87,7 @@ const Templates = (props) => {
     }
 
     setAllPermutations(per);
-  }, []);
+  }, [apps]);
 
   return (
     <div className={`${classes["templates"]} h-full overflow-auto`}>

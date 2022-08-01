@@ -34,13 +34,14 @@ export default class Telegram extends App {
   }
 
   getOptionFromSelection(datas, selection, type, requiredInfo) {
-    const selectedTypeData = datas[type];
     const allTypeData = datas;
     switch (selection) {
       case "text":
         return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
       case "upload_fields":
         return Jotform.getFileUploadFieldsOptions(allTypeData, requiredInfo);
+      default:
+        return;
     }
   }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
 import Navbar from "./Navbar/Navbar";
@@ -74,9 +74,6 @@ const AppContainer = (props) => {
   const apps = useSelector((state) => state.apps.apps);
 
   const appSelections = useSelector((state) => state.inputs.appSelections);
-  const settingsSelections = useSelector(
-    (state) => state.inputs.settingsSelections
-  );
 
   const isIntegrationContent = useSelector(
     (state) => state.ui.isIntegrationContent

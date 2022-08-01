@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 
@@ -11,21 +11,21 @@ const convertInput = (inputObject, fieldDatas) => {
 
   for (const fieldId in inputObject) {
     const destinationField = fieldDatas.destination.find(
-      (field) => field.value == inputObject[fieldId]
+      (field) => field.value === inputObject[fieldId]
     );
 
     if (destinationField == null && fieldDatas.predefined[fieldId]) {
       destinationField = fieldDatas.destination.predefined[fieldId].find(
-        (field) => field.value == fieldId
+        (field) => field.value === fieldId
       );
     }
 
     const sourceField = fieldDatas.source.find(
-      (field) => field.value == fieldId
+      (field) => field.value === fieldId
     );
     if (sourceField == null && fieldDatas.predefined[inputObject[fieldId]])
       sourceField = fieldDatas.predefined[inputObject[fieldId]].find(
-        (field) => field.value == fieldId
+        (field) => field.value === fieldId
       );
 
     temporaryArray.push({
@@ -69,7 +69,7 @@ const MatchFieldsContainer = (props) => {
   useEffect(() => {
     if (props.default && !isEmpty(props.default))
       setMappingChoices(convertInput(props.default, props.datas));
-  }, []);
+  }, [props.datas, props.default]);
 
   const destinationRequiredOptions = props.datas.destination.filter(
     (option) => {
@@ -102,6 +102,7 @@ const MatchFieldsContainer = (props) => {
                 src={destination_app.url}
                 height="15px"
                 className="mr-1 max-h-4 max-w-full align-middle"
+                alt={destination_app.name}
               />
               <div
                 className={`${classes["fields__text"]} inline-block align-middle text-xs`}
@@ -118,6 +119,7 @@ const MatchFieldsContainer = (props) => {
                 src={source_app.url}
                 height="15px"
                 className="mr-1 max-h-4 max-w-full align-middle"
+                alt={source_app.name}
               />
               <div
                 className={`${classes["fields__text"]} inline-block align-middle text-xs`}

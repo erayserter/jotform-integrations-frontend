@@ -82,6 +82,8 @@ export default class ClickUp extends App {
         if (requiredInfo.task != null)
           return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
         return [];
+      default:
+        return;
     }
   }
 

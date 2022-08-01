@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -165,7 +165,7 @@ const IntegrationAppSelector = (props) => {
         setIsAppSelectorVisible(false);
       }
     }
-  }, [app, apiInfo, props.type]);
+  }, [app, apiInfo, props.type, accountDetails.length]);
 
   return (
     <div
@@ -189,6 +189,7 @@ const IntegrationAppSelector = (props) => {
               width="86.3"
               height="86.3"
               onClick={appSelectorSectionHandler}
+              alt={app.name}
             />
           )}
           {app && (
@@ -198,6 +199,7 @@ const IntegrationAppSelector = (props) => {
               width="60"
               height="60"
               onClick={appSelectorSectionHandler}
+              alt="Switch Icon"
             />
           )}
         </div>

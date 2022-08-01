@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useRef } from "react";
+import React, { useState, Fragment } from "react";
 import { usePopper } from "react-popper";
 
 import classes from "./IntegrationApp.module.css";

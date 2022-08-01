@@ -1,14 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import classes from "./UserContentNavigationItem.module.css";
 
 const UserContentNavigationItem = (props) => {
-  const [activePage, setActivePage] = useState("");
-
-  useEffect(() => {
-    setActivePage(props.current);
-  }, [props.current]);
-
   const clickHandler = (event) => {
     props.sectionChange(props.item);
   };

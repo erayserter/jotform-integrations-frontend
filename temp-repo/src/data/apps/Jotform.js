@@ -28,6 +28,8 @@ export default class Jotform extends App {
     switch (selection) {
       case "form_id":
         return this.getFormTitleOptions(datas[type]);
+      default:
+        return;
     }
   }
 

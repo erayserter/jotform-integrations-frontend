@@ -1,7 +1,5 @@
 import React from "react";
 
-import classes from "./IntegrationAppAction.module.css";
-
 const IntegrationAppAction = (props) => {
   return (
     <li

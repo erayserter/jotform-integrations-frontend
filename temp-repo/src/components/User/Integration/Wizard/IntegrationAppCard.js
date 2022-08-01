@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import classes from "./IntegrationAppCard.module.css";
 
 const IntegrationAppCard = (props) => {
-  const apps = useSelector((state) => state.apps.apps);
   const appSelections = useSelector((state) => state.inputs.appSelections);
 
   let app;
@@ -39,6 +38,7 @@ const IntegrationAppCard = (props) => {
               src={app.url}
               width="53"
               height="51"
+              alt={app.name}
             />
           ) : (
             <>

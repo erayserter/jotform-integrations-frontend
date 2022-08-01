@@ -1,7 +1,5 @@
 import React from "react";
 
-import classes from "./IntegrationApp.module.css";
-
 const IntegrationApp = (props) => {
   const clickHandler = (event) => {
     props.onAppSelect(props.app);
@@ -12,7 +10,7 @@ const IntegrationApp = (props) => {
       <img
         className={`block cursor-pointer`}
         onClick={clickHandler}
-        alt=""
+        alt={props.app.name}
         src={props.app.url}
         width="50px"
       />
