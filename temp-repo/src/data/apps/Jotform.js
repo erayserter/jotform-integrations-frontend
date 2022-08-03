@@ -1,8 +1,9 @@
-import { isEmpty } from "lodash";
+import { cloneDeep, isEmpty } from "lodash";
 import configurations from "../../config";
 import App from "../App";
 import Action from "./Action";
 import Select from "./fields/Select";
+import { isNil } from "lodash";
 
 const ID = "Jotform";
 const NAME = "Jotform";
@@ -51,9 +52,16 @@ export default class Jotform extends App {
     return { fieldOption: titleOptions, newDatas };
   }
 
-  static getFormFieldOptions(datas, options) {
+  static async getFormFieldOptions(datas, authenticationInfo, options) {
     let formFieldOptions = [];
-    const fields = this.getFormFields(datas.source, options.source.form_id);
+    let datasCopy = { ...datas };
+    let formId = options.source.form_id;
+
+    if (isNil(datas.source[formId].fields)) {
+      datasCopy = await this.fetchFormInfo(authenticationInfo, formId);
+    }
+
+    const fields = this.getFormFields(datasCopy.source, formId);
     for (const fieldId in fields) {
       formFieldOptions.push({
         value: fieldId,
@@ -64,7 +72,8 @@ export default class Jotform extends App {
         ...this.getFormSubfieldOptions(fieldId, fields[fieldId]),
       ];
     }
-    return formFieldOptions;
+
+    return { formFieldOptions, newDatas: datasCopy };
   }
 
   static getFormSubfieldOptions(fieldId, field) {
@@ -75,16 +84,22 @@ export default class Jotform extends App {
         label: field.field_name + " - " + field.subfields[subfieldId],
       });
     }
+
     return formSubfieldOptions;
   }
 
-  static getFormTagInputOptions(datas, options) {
+  static async getFormTagInputOptions(datas, authenticationInfo, options) {
     let tagInputOptions = [];
 
-    const formFieldOptions = this.getFormFieldOptions(datas, options);
+    const { formFieldOptions, newDatas } = await this.getFormFieldOptions(
+      datas,
+      authenticationInfo,
+      options
+    );
 
     tagInputOptions = this.getOptionsInTagInputForm(formFieldOptions);
-    return tagInputOptions;
+    console.log(newDatas);
+    return { fieldOption: tagInputOptions, newDatas };
   }
 
   static getOptionsInTagInputForm(formFieldOptions) {
@@ -102,6 +117,7 @@ export default class Jotform extends App {
         value: fieldId,
         label: fields[fieldId].field_name,
       });
+
     return fileUploadFieldsOptions;
   }
 
@@ -119,10 +135,20 @@ export default class Jotform extends App {
 
   getFormHeaders(authenticationInfo) {
     const apiKey = authenticationInfo.apiKey;
-    return this.fetchDataFromBackend("getAllFormInfo", apiKey);
+    return this.fetchDataFromBackend({
+      action: "getAllFormInfo",
+      apiKey: apiKey,
+    });
   }
-
-  async fetchDataFromBackend(action, credentials) {
+  fetchFormInfo(authenticationInfo, formId) {
+    const apiKey = authenticationInfo.apiKey;
+    return this.fetchDataFromBackend({
+      action: "getFormInfo",
+      apiKey: apiKey,
+      formId: formId,
+    });
+  }
+  async fetchDataFromBackend(body) {
     const responseContent = fetch(
       "https://" +
         configurations.DEV_RDS_NAME +
@@ -132,10 +158,7 @@ export default class Jotform extends App {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          action: action,
-          apiKey: credentials,
-        }),
+        body: JSON.stringify(body),
       }
     )
       .then((data) => data.json())
