@@ -40,7 +40,7 @@ export default class Jotform extends App {
     let titleOptions = [];
     let newDatas = { ...datas };
     if (isEmpty(datas[type]))
-      newDatas[type] = await this.getFormHeaders(authenticationInfo);
+      newDatas[type] = await this.fetchFormHeaders(authenticationInfo);
     console.log("function return etti");
 
     for (const formId in newDatas[type])
@@ -133,20 +133,22 @@ export default class Jotform extends App {
     return datas[formId].file_upload_fields;
   }
 
-  getFormHeaders(authenticationInfo) {
+  fetchFormHeaders(authenticationInfo) {
     const apiKey = authenticationInfo.apiKey;
-    return this.fetchDataFromBackend({
+    const body = {
       action: "getAllFormInfo",
       apiKey: apiKey,
-    });
+    };
+    return this.fetchDataFromBackend(body);
   }
   fetchFormInfo(authenticationInfo, formId) {
     const apiKey = authenticationInfo.apiKey;
-    return this.fetchDataFromBackend({
+    const body = {
       action: "getFormInfo",
       apiKey: apiKey,
       formId: formId,
-    });
+    };
+    return this.fetchDataFromBackend(body);
   }
   async fetchDataFromBackend(body) {
     const responseContent = fetch(
