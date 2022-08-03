@@ -30,8 +30,8 @@ const InlineEdit = ({ value, setValue, isTitle, isSubtitle }) => {
   return (
     <input
       className={`${classes["inline-edit"]} ${isTitle && classes["title"]} ${
-        isSubtitle && classes["isSubtitle"]
-      } text-center border-0 bg-transparent font-semibold whitespace-nowrap overflow-hidden my-0 mx-auto color-navy-700 cursor-pointer`}
+        isSubtitle && classes["subtitle"]
+      } text-center border-0 bg-transparent font-semibold whitespace-nowrap overflow-hidden my-0 mx-auto color-navy-700 cursor-pointer line-clamp-1`}
       ref={inputRef}
       type="text"
       aria-label="Field name"

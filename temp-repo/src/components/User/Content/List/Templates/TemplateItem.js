@@ -10,21 +10,17 @@ const TemplateItem = (props) => {
 
   return (
     <div
-      className={`${classes["template-item--container"]} bg-navy-25 border border-solid border-navy-100 radius pt-8 px-1 flex flex-col text-center h-48 w-60`}
+      className={`bg-navy-25 border border-solid border-navy-100 radius pt-8 px-1 flex flex-col text-center h-48 w-60`}
     >
-      <div
-        className={`${classes["template-item--images"]} flex justify-center items-center`}
-      >
-        <div className={`${classes["image-container"]} flex gap-2 relative`}>
+      <div className={`flex justify-center items-center`}>
+        <div className={`flex gap-2 relative`}>
           <img
-            className={classes["image-containter__source"]}
             width="60"
             height="60"
             src={source_app.url}
             alt={source_app.id}
           />
           <img
-            className={classes["image-container__destination"]}
             width="60"
             height="60"
             src={destination_app.url}
@@ -35,16 +31,16 @@ const TemplateItem = (props) => {
       <div
         className={`${classes["template-item--app-names"]} flex justify-center items-center gap-1 mt-4`}
       >
-        <h5 className="text-sm font-semibold line-height-lg overflow-hidden whitespace-nowrap">
+        <h5 className="text-sm font-semibold line-height-lg overflow-hidden whitespace-nowrap line-clamp-1">
           {source_app.id}
         </h5>
         +
-        <h5 className="text-sm font-semibold line-height-lg overflow-hidden whitespace-nowrap">
+        <h5 className="text-sm font-semibold line-height-lg overflow-hidden whitespace-nowrap line-clamp-1">
           {destination_app.id}
         </h5>
       </div>
       <p
-        className={`${classes["template-item--paragraph"]} inline-block mt-1 px-4 overflow-hidden text-xs line-height-sm`}
+        className={`inline-block mt-1 px-4 overflow-hidden text-xs line-height-sm line-clamp-1`}
       >
         When {trigger.name}, {action.name}
       </p>

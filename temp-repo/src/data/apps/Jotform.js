@@ -1,3 +1,5 @@
+import { isEmpty } from "lodash";
+import configurations from "../../config";
 import App from "../App";
 import Action from "./Action";
 import Select from "./fields/Select";
@@ -24,28 +26,34 @@ export default class Jotform extends App {
     });
   }
 
-  getOptionFromSelection(datas, selection, type) {
+  getOptionFromSelection(datas, selection, type, authenticationInfo) {
     switch (selection) {
       case "form_id":
-        return this.getFormTitleOptions(datas[type]);
+        return this.getFormTitleOptions(datas, type, authenticationInfo);
       default:
         return;
     }
   }
 
-  getFormTitleOptions(datas) {
+  async getFormTitleOptions(datas, type, authenticationInfo) {
     let titleOptions = [];
-    for (const formId in datas)
+    let newDatas = { ...datas };
+    if (isEmpty(datas[type]))
+      newDatas[type] = await this.getFormHeaders(authenticationInfo);
+    console.log("function return etti");
+
+    for (const formId in newDatas[type])
       titleOptions.push({
         value: formId,
-        label: this.getTitle(datas, formId),
+        label: this.getTitle(newDatas[type], formId),
       });
-    return titleOptions;
+
+    return { fieldOption: titleOptions, newDatas };
   }
 
   static getFormFieldOptions(datas, options) {
     let formFieldOptions = [];
-    const fields = this.getFormFields(datas.source, options.formId);
+    const fields = this.getFormFields(datas.source, options.source.form_id);
     for (const fieldId in fields) {
       formFieldOptions.push({
         value: fieldId,
@@ -87,7 +95,8 @@ export default class Jotform extends App {
 
   static getFileUploadFieldsOptions(datas, options) {
     let fileUploadFieldsOptions = [];
-    const fields = this.getUploadFields(datas.source, options.formId);
+    const fields = this.getUploadFields(datas.source, options.source.formId);
+
     for (const fieldId in fields)
       fileUploadFieldsOptions.push({
         value: fieldId,
@@ -106,6 +115,34 @@ export default class Jotform extends App {
 
   static getUploadFields(datas, formId) {
     return datas[formId].file_upload_fields;
+  }
+
+  getFormHeaders(authenticationInfo) {
+    const apiKey = authenticationInfo.apiKey;
+    return this.fetchDataFromBackend("getAllFormInfo", apiKey);
+  }
+
+  async fetchDataFromBackend(action, credentials) {
+    const responseContent = fetch(
+      "https://" +
+        configurations.DEV_RDS_NAME +
+        ".jotform.dev/intern-api/jotform",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          action: action,
+          apiKey: credentials,
+        }),
+      }
+    )
+      .then((data) => data.json())
+      .then((data) => data.content.content)
+      .catch((err) => console.log(err));
+
+    return responseContent;
   }
 
   prepareData(data) {

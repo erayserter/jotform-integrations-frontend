@@ -1,6 +1,5 @@
 .inline-edit {
   max-width: calc(100% - 172px);
-  text-overflow: ellipsis;
   line-height: 1.15;
 }
 

@@ -56,17 +56,8 @@
   }
 }
 
-.content--title {
-  text-overflow: ellipsis;
-}
-
-.content--title > span {
-  text-overflow: ellipsis;
-}
-
 .content--list-item-headline-desc {
   color: rgb(111, 118, 167);
-  text-overflow: ellipsis;
   max-width: 45vw;
 }
 

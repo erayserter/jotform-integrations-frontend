@@ -93,7 +93,7 @@ const TagInputContainer = (props) => {
       >
         <label>{props.label}</label>
       </div>
-      <div className={classes["tag-input__input"]}>
+      <div>
         <MixedTags
           tagifyRef={tagRef}
           autoFocus={true}
@@ -136,7 +136,7 @@ const TagInputContainer = (props) => {
                 ></path>
               </svg>
             </div>
-            <div className={classes["form-fields__text"]}>Form Fields</div>
+            <div>Form Fields</div>
           </button>
           {isToggled &&
             ReactDOM.createPortal(

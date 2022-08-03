@@ -41,30 +41,6 @@ const postWebhookRequest = async (credentials) => {
   ).then((data) => data.json());
 };
 
-async function validateApiKey(credentials) {
-  return fetch(
-    "https://" +
-      configurations.DEV_RDS_NAME +
-      ".jotform.dev/intern-api/validateApiKey",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    }
-  ).then((data) => data.json());
-}
-
-async function getAllUserData(appName) {
-  return fetch(
-    "https://" +
-      configurations.DEV_RDS_NAME +
-      ".jotform.dev/intern-api/getAllUserData?app_name=" +
-      appName
-  ).then((res) => res.json());
-}
-
 const AppContainer = (props) => {
   const dispatch = useDispatch();
   const webhooks = useSelector((state) => state.webhooks.webhooks);
@@ -148,14 +124,16 @@ const AppContainer = (props) => {
     };
 
     if (source_app.isOauth) {
-      info.source.res = await getAllUserData(webhook.value.source.app_name);
+      info.source.res = await source_app.authenticate(
+        webhook.value.source.app_name
+      );
       const user = info.source.res.content.find(
         (e) => e.auth_user_id === webhook.value.source.auth_user_id
       );
       if (user) info.source.status = true;
       info.source.content = user;
     } else {
-      info.source.res = await validateApiKey({
+      info.source.res = await source_app.authenticate({
         app_name: webhook.value.source["app_name"].toLowerCase(),
         action: webhook.value.source["app_action"],
         api_key: webhook.value.source["api_key"],
@@ -164,7 +142,7 @@ const AppContainer = (props) => {
       info.source.content = info.source.res.content.content;
     }
     if (destination_app.isOauth) {
-      info.destination.res = await getAllUserData(
+      info.destination.res = await destination_app.authenticate(
         webhook.value.destination.app_name
       );
       const user = info.destination.res.content.find(
@@ -173,7 +151,7 @@ const AppContainer = (props) => {
       if (user) info.destination.status = true;
       info.destination.content = user;
     } else {
-      info.destination.res = await validateApiKey({
+      info.destination.res = await destination_app.authenticate({
         app_name: webhook.value.destination["app_name"].toLowerCase(),
         action: webhook.value.destination["app_action"],
         api_key: webhook.value.destination["api_key"],
@@ -218,14 +196,14 @@ const AppContainer = (props) => {
       })
     );
 
-    dispatch(
-      setAppInfo({
-        appInfo: {
-          source: info.source.content,
-          destination: info.destination.content,
-        },
-      })
-    );
+    // dispatch(
+    //   setAppInfo({
+    //     appInfo: {
+    //       source: info.source.content,
+    //       destination: info.destination.content,
+    //     },
+    //   })
+    // );
 
     dispatch(
       setApiInfo({

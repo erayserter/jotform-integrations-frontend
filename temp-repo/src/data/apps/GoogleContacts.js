@@ -31,7 +31,13 @@ export default class GoogleContacts extends App {
     });
   }
 
-  getOptionFromSelection(datas, selection, type, requiredInfo = {}) {
+  getOptionFromSelection(
+    datas,
+    selection,
+    type,
+    authenticationInfo,
+    requiredInfo = {}
+  ) {
     const allTypeData = datas;
     switch (selection) {
       case "givenName":

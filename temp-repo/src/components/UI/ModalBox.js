@@ -20,7 +20,7 @@ const ModalBox = (props) => {
       >
         {props.children}
         <button
-          className={`${classes["closeButton"]} absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
+          className={`absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
           onClick={() => props.onModalBoxClose(false)}
         >
           <svg

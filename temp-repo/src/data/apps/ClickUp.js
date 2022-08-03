@@ -49,37 +49,57 @@ export default class ClickUp extends App {
     });
   }
 
-  getOptionFromSelection(datas, selection, type, requiredInfo = {}) {
+  getOptionFromSelection(
+    datas,
+    selection,
+    type,
+    authenticationInfo,
+    requiredInfo = {}
+  ) {
     const selectedTypeData = datas[type];
+    const requiredInfoSelectedType = requiredInfo[type];
     const allTypeData = datas;
     switch (selection) {
       case "workspace":
         return this.getWorkspaceOptions(selectedTypeData);
       case "space":
-        if (requiredInfo.workspace != null)
-          return this.getSpaceOptions(selectedTypeData, requiredInfo);
+        if (requiredInfoSelectedType.workspace != null)
+          return this.getSpaceOptions(
+            selectedTypeData,
+            requiredInfoSelectedType
+          );
         return [];
       case "folder":
-        if (requiredInfo.space != null)
-          return this.getFolderOptions(selectedTypeData, requiredInfo);
+        if (requiredInfoSelectedType.space != null)
+          return this.getFolderOptions(
+            selectedTypeData,
+            requiredInfoSelectedType
+          );
         return [];
       case "list_id":
-        if (requiredInfo.folder != null)
-          return this.getListOptions(selectedTypeData, requiredInfo);
+        if (requiredInfoSelectedType.folder != null)
+          return this.getListOptions(
+            selectedTypeData,
+            requiredInfoSelectedType
+          );
         return [];
       case "task":
-        if (requiredInfo.list != null)
-          return this.getTaskOptions(selectedTypeData, requiredInfo);
+        if (requiredInfoSelectedType.list_id != null)
+          return this.getTaskOptions(
+            selectedTypeData,
+            requiredInfoSelectedType
+          );
         return [];
       case "match_fields":
         if (
-          requiredInfo.list != null &&
-          (!requiredInfo.subtask || requiredInfo.task != null)
+          requiredInfoSelectedType.list != null &&
+          (selection !== "Create Subtask" ||
+            requiredInfoSelectedType.task != null)
         )
           return this.getMatchFieldOptions(allTypeData, requiredInfo);
         return { source: [], destination: [] };
       case "comment":
-        if (requiredInfo.task != null)
+        if (requiredInfoSelectedType.task != null)
           return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
         return [];
       default:
@@ -217,13 +237,13 @@ export default class ClickUp extends App {
 
   getAccountFields(datas, options) {
     const lists = this.getLists(datas, options);
-    const list = lists.find((list) => list.id === options.list);
+    const list = lists.find((list) => list.id === options.list_id);
     return list.fields;
   }
 
   getTasks(datas, options) {
     const lists = this.getLists(datas, options);
-    const list = lists.find((list) => list.id === options.list);
+    const list = lists.find((list) => list.id === options.list_id);
     return list.tasks;
   }
 

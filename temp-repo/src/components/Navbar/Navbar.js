@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import classes from "./Navbar.module.css";
-
 const Navbar = (props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -139,7 +137,7 @@ const Navbar = (props) => {
             </Link>
           </li>
         </ul>
-        <div className={classes["navbar--profile"]}>
+        <div>
           <ul className="p-0 m-0 items-center flex-nowrap justify-end">
             <li className="menu-list-item cursor-pointer p-3 relative w-18 h-18">
               <Link

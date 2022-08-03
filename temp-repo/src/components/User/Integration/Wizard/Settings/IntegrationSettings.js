@@ -9,6 +9,7 @@ import MatchFieldsContainer from "../../../../UI/MatchFieldsContainer";
 import classes from "./IntegrationSettings.module.css";
 
 import { setOptions } from "../../../../../store/apps";
+import { setAppInfo } from "../../../../../store/infos";
 
 const IntegrationSettings = (props) => {
   const dispatch = useDispatch();
@@ -27,43 +28,26 @@ const IntegrationSettings = (props) => {
   const appFields = app.getFields(props.type, appAction.name);
 
   useEffect(() => {
-    let data = {};
+    fetchData();
+  }, [props.type, settingsSelections, appAction]);
 
-    if (app.id === "Jotform") {
-      data = app.init(appInfo, appAction.name, props.type);
-    }
-    if (app.id === "Telegram") {
-      data = app.init(appInfo, appAction.name, props.type, {
-        formId: settingsSelections.source.form_id,
-      });
-    }
-    if (app.id === "ClickUp") {
-      data = app.init(appInfo, appAction.name, props.type, {
-        workspace: settingsSelections[props.type].workspace,
-        space: settingsSelections[props.type].space,
-        folder: settingsSelections[props.type].folder,
-        list: settingsSelections[props.type].list_id,
-        task: settingsSelections[props.type].task,
-        formId: settingsSelections.source.form_id,
-        subtask: appAction.name === "Create Subtask",
-      });
-    }
-    if (app.id === "GoogleContacts") {
-      data = app.init(appInfo, appAction.name, props.type, {
-        formId: settingsSelections.source.form_id,
-      });
-    }
+  const fetchData = async () => {
+    const authenticationInfo = {
+      apiKey: appSelections[props.type].key,
+      authId: appSelections[props.type].auth_id,
+    };
+    // { newOptions: optionsCopy, newDatas: newDatas }
+    const { newDatas, newOptions } = await app.init(
+      appInfo,
+      appAction.name,
+      props.type,
+      authenticationInfo,
+      settingsSelections
+    );
 
-    dispatch(setOptions({ options: { ...appOptions, [app.id]: data } }));
-  }, [
-    app,
-    appInfo,
-    props.type,
-    settingsSelections,
-    appAction,
-    appOptions,
-    dispatch,
-  ]);
+    dispatch(setAppInfo({ appInfo: newDatas }));
+    dispatch(setOptions({ options: { ...appOptions, [app.id]: newOptions } }));
+  };
 
   const newValueHandler = (value, labelData, isExternal) => {
     props.onSettingsChange(value, props.type, labelData, isExternal);

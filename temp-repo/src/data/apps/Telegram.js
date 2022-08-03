@@ -33,7 +33,13 @@ export default class Telegram extends App {
     });
   }
 
-  getOptionFromSelection(datas, selection, type, requiredInfo) {
+  getOptionFromSelection(
+    datas,
+    selection,
+    type,
+    authenticationInfo,
+    requiredInfo
+  ) {
     const allTypeData = datas;
     switch (selection) {
       case "text":

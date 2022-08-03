@@ -154,11 +154,11 @@ const ContentSectionListItem = (props) => {
             }}
           >
             <div
-              className={`${classes["content--title"]} inline-flex items-center text-lg font-medium py-0.5 px-1.5 mr-1 -ml-1.5 color-navy-700 overflow-hidden whitespace-nowrap`}
+              className={`${classes["content--title"]} inline-flex items-center text-lg font-medium py-0.5 px-1.5 mr-1 -ml-1.5 color-navy-700 overflow-hidden whitespace-nowrap line-clamp-1`}
             >
               {props.webhook.webhook_name === "Integration" ||
               props.webhook.webhook_name === "" ? (
-                <span className="overflow-hidden whitespace-nowrap text-capitalize">
+                <span className="overflow-hidden whitespace-nowrap text-capitalize line-clamp-1">
                   {props.webhook.value.source["app_name"]}
                   {"  "}
                   <img
@@ -171,14 +171,14 @@ const ContentSectionListItem = (props) => {
                   {props.webhook.value.destination["app_name"]}
                 </span>
               ) : (
-                <span className="overflow-hidden whitespace-nowrap text-capitalize">
+                <span className="overflow-hidden whitespace-nowrap text-capitalize line-clamp-1">
                   {props.webhook.webhook_name}
                 </span>
               )}
             </div>
           </div>
           <div
-            className={`${classes["content--list-item-headline-desc"]} w-full text-sm font-medium overflow-hidden whitespace-nowrap text-capitalize mt-0.5`}
+            className={`${classes["content--list-item-headline-desc"]} w-full text-sm font-medium overflow-hidden whitespace-nowrap text-capitalize mt-0.5 line-clamp-1`}
           >
             <span>
               When {props.webhook.value.source["app_action"]} on{" "}

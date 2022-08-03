@@ -9,30 +9,6 @@ import configurations from "../../../../../config/index";
 import { setAppSelections } from "../../../../../store/inputs";
 import { isNil } from "lodash";
 
-async function getAllUserData(appName) {
-  return fetch(
-    "https://" +
-      configurations.DEV_RDS_NAME +
-      ".jotform.dev/intern-api/getAllUserData?app_name=" +
-      appName
-  ).then((res) => res.json());
-}
-
-async function validateApiKey(credentials) {
-  return fetch(
-    "https://" +
-      configurations.DEV_RDS_NAME +
-      ".jotform.dev/intern-api/validateApiKey",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(credentials),
-    }
-  ).then((data) => data.json());
-}
-
 const IntegrationAppSelector = (props) => {
   const dispatch = useDispatch();
 
@@ -126,7 +102,7 @@ const IntegrationAppSelector = (props) => {
         }
       });
     } else {
-      const res = await validateApiKey({
+      const res = await app.authenticate({
         app_name: app.id.toLowerCase(),
         action: appSelections[props.type].action.name,
         api_key: appSelections[props.type].key,
@@ -148,7 +124,7 @@ const IntegrationAppSelector = (props) => {
   };
 
   const oauthHandler = async (app, data) => {
-    const res = await getAllUserData(app.name);
+    const res = await app.authenticate(app.id);
     setAccountDetails(res.content);
     setIsLoading(false);
   };

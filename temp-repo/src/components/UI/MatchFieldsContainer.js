@@ -16,14 +16,15 @@ const convertInput = (inputObject, fieldDatas) => {
 
     if (destinationField == null && fieldDatas.predefined[fieldId]) {
       destinationField = fieldDatas.destination.predefined[fieldId].find(
-        (field) => field.value === fieldId
+        (field) => field.value == fieldId
       );
     }
 
     let sourceField = fieldDatas.source.find((field) => field.value == fieldId);
+
     if (sourceField == null && fieldDatas.predefined[inputObject[fieldId]])
       sourceField = fieldDatas.predefined[inputObject[fieldId]].find(
-        (field) => field.value === fieldId
+        (field) => field.value == fieldId
       );
 
     temporaryArray.push({
@@ -90,8 +91,8 @@ const MatchFieldsContainer = (props) => {
       <div className={`${classes["match-fields__title"]} mb-2`}>
         <label>{props.label}</label>
       </div>
-      <div className={`${classes["match-fields__container"]} w-full`}>
-        <div className={`${classes["match-fields__fields"]} mb-2 text-sm`}>
+      <div className={`w-full`}>
+        <div className={`mb-2 text-sm`}>
           <div
             className={`${classes["fields__title"]} items-center inline-block mt-1 text-xs line-height-xs align-middle font-normal`}
           >
@@ -102,9 +103,7 @@ const MatchFieldsContainer = (props) => {
                 className="mr-1 max-h-4 max-w-full align-middle"
                 alt={destination_app.name}
               />
-              <div
-                className={`${classes["fields__text"]} inline-block align-middle text-xs`}
-              >
+              <div className={`inline-block align-middle text-xs`}>
                 <span>{destination_app.id}</span>
               </div>
             </div>
@@ -119,27 +118,22 @@ const MatchFieldsContainer = (props) => {
                 className="mr-1 max-h-4 max-w-full align-middle"
                 alt={source_app.name}
               />
-              <div
-                className={`${classes["fields__text"]} inline-block align-middle text-xs`}
-              >
+              <div className={`inline-block align-middle text-xs`}>
                 <span>{source_app.id}</span>
               </div>
             </div>
           </div>
           {mappingChoices.map((choice, index) => {
             return (
-              <div
-                className={`${classes["match-fields__mapping"]} relative mb-2`}
-                key={index}
-              >
+              <div className={`relative mb-2`} key={index}>
                 <div
                   className={`${classes["mapping-connection-line"]} bg-white border-t border-solid left-0 w-full absolute top-1/2`}
                 >
                   {" "}
                 </div>
                 <div className={`${classes["mapping__leftside"]} inline-block`}>
-                  <div className={`${classes["mapping__dropdown"]} relative`}>
-                    <div className={`${classes["dropdown__wrapper"]} relative`}>
+                  <div className={`relative`}>
+                    <div className={`relative`}>
                       <Select
                         className={`basic-multi-select`}
                         classNamePrefix="select"
@@ -169,8 +163,8 @@ const MatchFieldsContainer = (props) => {
                   </div>
                 </div>
                 <div className={`${classes["mapping__rightside"]} float-right`}>
-                  <div className={`${classes["mapping__dropdown"]} relative`}>
-                    <div className={`${classes["dropdown__wrapper"]} relative`}>
+                  <div className={`relative`}>
+                    <div className={`relative`}>
                       <Select
                         className={`basic-multi-select`}
                         classNamePrefix="select"

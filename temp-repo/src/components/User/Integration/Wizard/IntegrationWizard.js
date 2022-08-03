@@ -8,7 +8,7 @@ import ModalBox from "../../../UI/ModalBox";
 import IntegrationAppSelector from "./Selector/IntegrationAppSelector";
 import IntegrationSettings from "./Settings/IntegrationSettings";
 import IntegrationTitle from "../Header/IntegrationTitle";
-import { setApiInfo, setAppInfo } from "../../../../store/infos";
+import { setApiInfo } from "../../../../store/infos";
 import {
   setAppSelections,
   setSettingsSelections,
@@ -29,7 +29,7 @@ const IntegrationWizard = (props) => {
   const [isSettingsChoice, setIsSettingsChoice] = useState(false);
 
   const apiInfo = useSelector((state) => state.infos.apiInfo);
-  const appInfo = useSelector((state) => state.infos.appInfo);
+  // const appInfo = useSelector((state) => state.infos.appInfo);
 
   const appSelections = useSelector((state) => state.inputs.appSelections);
   const settingsSelections = useSelector(
@@ -49,7 +49,7 @@ const IntegrationWizard = (props) => {
         integrationChoiceHandler(true, "source");
       }
     }
-  }, [isUpdate, isTemplate, appSelections.source.app, apiStatusValid]);
+  }, [isUpdate, isTemplate]);
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
@@ -95,7 +95,7 @@ const IntegrationWizard = (props) => {
       })
     );
 
-    dispatch(setAppInfo({ appInfo: { ...appInfo, [type]: appDatas } }));
+    // dispatch(setAppInfo({ appInfo: { ...appInfo, [type]: appDatas } }));
     dispatch(setApiInfo({ apiInfo: valid }));
 
     if (!valid.source) integrationChoiceHandler(true, "source");
