@@ -152,9 +152,7 @@ const IntegrationAppSelector = (props) => {
           Choose {props.type} App
         </h1>
       </div>
-      <div
-        className={`${classes["app-layout-body"]} md:flex items-start mt-12 md:mt-0 md:mb-6 gap-5`}
-      >
+      <div className={`md:flex items-start mt-12 md:mt-0 md:mb-6 gap-5`}>
         <div
           className={`${classes["app-selector"]} flex items-center justify-center relative`}
         >
@@ -180,8 +178,8 @@ const IntegrationAppSelector = (props) => {
           )}
         </div>
         {app && (
-          <div className={`${classes["key-action-selector"]} basis-10/12`}>
-            <div className={`${classes["action-selector"]} relative`}>
+          <div className={`basis-10/12`}>
+            <div className={`relative`}>
               <span>Action</span>
               <Select
                 className="basic-single"
@@ -213,7 +211,7 @@ const IntegrationAppSelector = (props) => {
               />
             </div>
             {app && app.isOauth ? (
-              <div className={`${classes["oauth"]} mt-2`}>
+              <div className={`mt-2`}>
                 {accountDetails && accountDetails.length > 0 ? (
                   <div>
                     <span>Account</span>
@@ -256,7 +254,7 @@ const IntegrationAppSelector = (props) => {
                   </div>
                 ) : (
                   <button
-                    className={`${classes["app-selector__oauth"]} mt-5 mb-1 mx-auto flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white grow-1 border border-solid radius`}
+                    className={`mt-5 mb-1 mx-auto flex items-center justify-center h-10 min-w-28 px-5 py-0.5 text-center text-uppercase duration-300 color-white grow-1 border border-solid radius`}
                     onClick={authHandler}
                   >
                     {isLoading
@@ -268,11 +266,9 @@ const IntegrationAppSelector = (props) => {
                 )}
               </div>
             ) : (
-              <div className={`${classes["key-selector"]} mt-2`}>
+              <div className={`mt-2`}>
                 <span>API Key</span>
-                <div
-                  className={`${classes["key-input"]} flex justify-between gap-2`}
-                >
+                <div className={`flex justify-between gap-2`}>
                   <input
                     className="w-0 grow-1 shrink-1 basis-3/5 block border border-solid border-navy-100 radius color-navy-700 font-light h-10 px-4 duration-300"
                     placeholder="API Key Here."

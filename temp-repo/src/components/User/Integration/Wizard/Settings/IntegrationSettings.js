@@ -179,7 +179,7 @@ const IntegrationSettings = (props) => {
       </div>
       {props.type !== "source" && (
         <button
-          className={`${classes["prevButton"]} cursor-pointer absolute radius-full left-4 top-4 md:top-5 md:left-5 p-3 bg-navy-75`}
+          className={`cursor-pointer absolute radius-full left-4 top-4 md:top-5 md:left-5 p-3 bg-navy-75`}
           onClick={() => props.onPreviousModal("source")}
         >
           <img

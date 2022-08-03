@@ -191,7 +191,7 @@ const IntegrationWizard = (props) => {
             type="source"
           />
           <div
-            className={`${classes["switch-icon"]} flex justify-center items-center mt-6 md:mt-0 w-10 h-10 md:mb-16 md:h-auto cursor-pointer`}
+            className={`flex justify-center items-center mt-6 md:mt-0 w-10 h-10 md:mb-16 md:h-auto cursor-pointer`}
             onClick={switchHandler}
           >
             <img
@@ -209,13 +209,13 @@ const IntegrationWizard = (props) => {
         </div>
         {isUpdate && !apiStatusValid && (
           <span
-            className={`${classes["wizard--invalid-auth"]} block color-red-500 text-lg text-center w-full font-bold mx-auto mt-5 mb-0 py-1 px-6`}
+            className={`block color-red-500 text-lg text-center w-full font-bold mx-auto mt-5 mb-0 py-1 px-6`}
           >
             Authentication is required!
           </span>
         )}
         {apiStatusValid && (
-          <div className={classes["settingContainer"]}>
+          <div>
             <button
               className={`${classes["settingsButton"]} flex justify-center items-center text-md h-10 mx-auto mt-5 mb-0 py-1 px-6 text-center text-uppercase duration-300 cursor-pointer color-white border border-solid radius `}
               onClick={settingsHandler}

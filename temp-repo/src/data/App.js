@@ -113,4 +113,24 @@ export default class App {
         credentials
     ).then((res) => res.json());
   }
+
+  async fetchDataFromBackend(body) {
+    const responseContent = fetch(
+      "https://" +
+        configurations.DEV_RDS_NAME +
+        ".jotform.dev/intern-api/jotform",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      }
+    )
+      .then((data) => data.json())
+      .then((data) => data.content.content)
+      .catch((err) => console.log(err));
+
+    return responseContent;
+  }
 }

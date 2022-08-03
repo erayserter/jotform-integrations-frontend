@@ -38,9 +38,9 @@ export default class Jotform extends App {
   async getFormTitleOptions(datas, type, authenticationInfo) {
     let titleOptions = [];
     let newDatas = { ...datas };
+
     if (isEmpty(datas[type]))
       newDatas[type] = await this.fetchFormHeaders(authenticationInfo);
-    console.log("function return etti");
 
     for (const formId in newDatas[type])
       titleOptions.push({
@@ -124,26 +124,6 @@ export default class Jotform extends App {
       apiKey: apiKey,
     };
     return this.fetchDataFromBackend(body);
-  }
-
-  async fetchDataFromBackend(body) {
-    const responseContent = fetch(
-      "https://" +
-        configurations.DEV_RDS_NAME +
-        ".jotform.dev/intern-api/jotform",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }
-    )
-      .then((data) => data.json())
-      .then((data) => data.content.content)
-      .catch((err) => console.log(err));
-
-    return responseContent;
   }
 
   prepareData(data) {

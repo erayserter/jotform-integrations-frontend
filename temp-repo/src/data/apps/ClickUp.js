@@ -4,6 +4,7 @@ import Jotform from "./Jotform";
 import Select from "./fields/Select";
 import MatchFields from "./fields/MatchFields";
 import TagInput from "./fields/TagInput";
+import { isNil } from "lodash";
 
 const ID = "ClickUp";
 const NAME = "ClickUp";
@@ -61,11 +62,12 @@ export default class ClickUp extends App {
     const allTypeData = datas;
     switch (selection) {
       case "workspace":
-        return this.getWorkspaceOptions(selectedTypeData);
+        return this.getWorkspaceOptions(selectedTypeData, authenticationInfo);
       case "space":
         if (requiredInfoSelectedType.workspace != null)
           return this.getSpaceOptions(
             selectedTypeData,
+            authenticationInfo,
             requiredInfoSelectedType
           );
         return [];
@@ -73,6 +75,7 @@ export default class ClickUp extends App {
         if (requiredInfoSelectedType.space != null)
           return this.getFolderOptions(
             selectedTypeData,
+            authenticationInfo,
             requiredInfoSelectedType
           );
         return [];
@@ -80,6 +83,7 @@ export default class ClickUp extends App {
         if (requiredInfoSelectedType.folder != null)
           return this.getListOptions(
             selectedTypeData,
+            authenticationInfo,
             requiredInfoSelectedType
           );
         return [];
@@ -87,6 +91,7 @@ export default class ClickUp extends App {
         if (requiredInfoSelectedType.list_id != null)
           return this.getTaskOptions(
             selectedTypeData,
+            authenticationInfo,
             requiredInfoSelectedType
           );
         return [];
@@ -107,59 +112,89 @@ export default class ClickUp extends App {
     }
   }
 
-  getWorkspaceOptions(datas) {
+  async getWorkspaceOptions(datas, authenticationInfo) {
     const workspaceOptions = [];
-    const workspaces = this.getWorkspaces(datas);
+    let datasCopy = { ...datas };
+
+    if (isNil(datas.workspaces))
+      datasCopy = await this.fetchData(authenticationInfo);
+
+    const workspaces = this.getWorkspaces(datasCopy);
     for (const workspace of workspaces)
       workspaceOptions.push({
         value: workspace.id,
         label: workspace.name,
       });
-    return workspaceOptions;
+
+    return { fieldOption: workspaceOptions, newDatas: datasCopy };
   }
 
-  getSpaceOptions(datas, workspace) {
+  async getSpaceOptions(datas, authenticationInfo, workspace) {
     const spaceOptions = [];
-    const spaces = this.getSpaces(datas, workspace);
+    let datasCopy = { ...datas };
+
+    if (isNil(this.getSpaces(datasCopy, workspace)))
+      datasCopy = await this.fetchData(authenticationInfo, workspace);
+
+    const spaces = this.getSpaces(datasCopy, workspace);
     for (const space of spaces)
       spaceOptions.push({
         value: space.id,
         label: space.name,
       });
-    return spaceOptions;
+
+    return { fieldOption: spaceOptions, newDatas: datasCopy };
   }
 
-  getFolderOptions(datas, space) {
+  async getFolderOptions(datas, authenticationInfo, space) {
     const folderOptions = [];
-    const folders = this.getFolders(datas, space);
+    let datasCopy = { ...datas };
+
+    if (isNil(this.getFolders(datas, space)))
+      datasCopy = await this.fetchData(authenticationInfo, space);
+
+    const folders = this.getFolders(datasCopy, space);
     for (const folder of folders)
       folderOptions.push({
         value: folder.id,
         label: folder.name,
       });
-    return folderOptions;
+
+    return { fieldOption: folderOptions, newDatas: datasCopy };
   }
 
-  getListOptions(datas, folder) {
+  async getListOptions(datas, authenticationInfo, folder) {
     const listOptions = [];
-    const lists = this.getLists(datas, folder);
+    let datasCopy = { ...datas };
+
+    if (isNil(this.getLists(datas, folder)))
+      datasCopy = await this.fetchData(authenticationInfo, folder);
+
+    const lists = this.getLists(datasCopy, folder);
     for (const list of lists)
       listOptions.push({
         value: list.id,
         label: list.name,
       });
-    return listOptions;
+
+    return { fieldOption: listOptions, newDatas: datasCopy };
   }
 
-  getTaskOptions(datas, list) {
+  async getTaskOptions(datas, authenticationInfo, list) {
     const taskOptions = [];
-    const tasks = this.getTasks(datas, list);
+    let datasCopy = { ...datas };
+
+    if (isNil(this.getTasks(datas, list)))
+      datasCopy = await this.fetchData(authenticationInfo, list);
+
+    const tasks = this.getTasks(datasCopy, list);
     for (const task of tasks)
       taskOptions.push({
         value: task.id,
         label: task.name,
       });
-    return taskOptions;
+
+    return { fieldOption: taskOptions, newDatas: datasCopy };
   }
 
   getMatchFieldOptions(datas, options) {
@@ -245,6 +280,12 @@ export default class ClickUp extends App {
     const lists = this.getLists(datas, options);
     const list = lists.find((list) => list.id === options.list_id);
     return list.tasks;
+  }
+
+  fetchData(authenticationInfo, requiredSelection) {
+    const authId = authenticationInfo.authId;
+    const body = {};
+    return this.fetchDataFromBackend(body);
   }
 
   prepareData(data) {

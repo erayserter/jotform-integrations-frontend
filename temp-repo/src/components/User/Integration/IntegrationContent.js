@@ -43,7 +43,7 @@ const IntegrationContent = (props) => {
         </div>
       )}
       <button
-        className={`${classes["closeButton"]} absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
+        className={`absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
         onClick={closeButtonHandler}
       >
         <svg
@@ -61,7 +61,7 @@ const IntegrationContent = (props) => {
       </button>
       {!isUpdate && !isTemplate && currentContent !== "choice" && (
         <div
-          className={`${classes["back-button-container"]} absolute top-5 left-4 md:left-5`}
+          className={`absolute top-5 left-4 md:left-5`}
           onClick={(event) => {
             dispatch(setCurrentContent({ currentContent: "choice" }));
           }}
@@ -82,7 +82,7 @@ const IntegrationContent = (props) => {
               ></path>
             </svg>
             <span
-              className={`${classes["back-button-container__text"]} border-navy-300 font-medium line-height-sm ml-2 text-uppercase`}
+              className={`border-navy-300 font-medium line-height-sm ml-2 text-uppercase`}
             >
               back
             </span>

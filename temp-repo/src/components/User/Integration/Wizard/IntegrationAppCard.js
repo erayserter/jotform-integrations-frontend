@@ -66,7 +66,7 @@ const IntegrationAppCard = (props) => {
         </div>
       </div>
       <div
-        className={`${classes["text__container"]} ${
+        className={`${
           isUpdate && !apiInfo[props.type] && classes["invalidApp"]
         } w-full`}
       >

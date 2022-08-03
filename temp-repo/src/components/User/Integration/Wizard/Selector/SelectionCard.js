@@ -41,9 +41,7 @@ const SelectionCard = (props) => {
     });
 
   return (
-    <div
-      className={`${classes["container"]} flex md:block flex-col grow-1 md:h-auto justify-end`}
-    >
+    <div className={`flex md:block flex-col grow-1 md:h-auto justify-end`}>
       <div
         className={`${classes["app-search"]} flex items-center justify-start border border-solid radius border-navy-100 py-0 px-4 order-last`}
       >
