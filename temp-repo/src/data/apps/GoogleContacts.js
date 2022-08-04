@@ -34,9 +34,11 @@ export default class GoogleContacts extends App {
   getOptionFromSelection(
     datas,
     selection,
+    actionName,
     type,
     authenticationInfo,
-    requiredInfo = {}
+    requiredInfo = {},
+    dependantApp
   ) {
     const allTypeData = datas;
     switch (selection) {
@@ -44,7 +46,7 @@ export default class GoogleContacts extends App {
       case "familyName":
       case "emailAddress":
       case "phoneNumber":
-        return Jotform.getFormTagInputOptions(allTypeData, requiredInfo);
+        return dependantApp.getFormTagInputOptions(allTypeData, requiredInfo);
       default:
         return;
     }

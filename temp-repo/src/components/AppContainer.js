@@ -10,6 +10,7 @@ import {
   setIsIntegrationContent,
   setIsUpdate,
   setIsTemplate,
+  setCurrentContent,
 } from "../store/ui";
 import { setApiInfo, setAppInfo } from "../store/infos";
 import { setAppSelections, setSettingsSelections } from "../store/inputs";
@@ -138,8 +139,8 @@ const AppContainer = (props) => {
         action: webhook.value.source["app_action"],
         api_key: webhook.value.source["api_key"],
       });
-      info.source.status = info.source.res.content.responseCode === 200;
-      info.source.content = info.source.res.content.content;
+      info.source.status = info.source.res.responseCode === 200;
+      info.source.content = info.source.res.content;
     }
     if (destination_app.isOauth) {
       info.destination.res = await destination_app.authenticate(
@@ -156,9 +157,8 @@ const AppContainer = (props) => {
         action: webhook.value.destination["app_action"],
         api_key: webhook.value.destination["api_key"],
       });
-      info.destination.status =
-        info.destination.res.content.responseCode === 200;
-      info.destination.content = info.destination.res.content.content;
+      info.destination.status = info.destination.res.responseCode === 200;
+      info.destination.content = info.destination.res.content;
     }
 
     dispatch(
@@ -196,15 +196,6 @@ const AppContainer = (props) => {
       })
     );
 
-    // dispatch(
-    //   setAppInfo({
-    //     appInfo: {
-    //       source: info.source.content,
-    //       destination: info.destination.content,
-    //     },
-    //   })
-    // );
-
     dispatch(
       setApiInfo({
         apiInfo: {
@@ -222,6 +213,7 @@ const AppContainer = (props) => {
     dispatch(setIsIntegrationContent({ isIntegrationContent: false }));
     dispatch(setIsUpdate({ isUpdate: false }));
     dispatch(setIsTemplate({ isTemplate: false }));
+    dispatch(setCurrentContent({ currentContent: "choice" }));
     dispatch(
       setAppSelections({
         appSelections: {

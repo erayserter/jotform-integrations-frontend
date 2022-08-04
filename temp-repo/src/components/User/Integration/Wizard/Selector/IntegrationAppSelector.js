@@ -107,7 +107,7 @@ const IntegrationAppSelector = (props) => {
         action: appSelections[props.type].action.name,
         api_key: appSelections[props.type].key,
       });
-      if (res.content.responseCode === 200) {
+      if (res.responseCode === 200) {
         props.onAuthenticate(
           {
             app: app,
@@ -115,8 +115,7 @@ const IntegrationAppSelector = (props) => {
             key: appSelections[props.type].key,
             auth_id: null,
           },
-          props.type,
-          res.content.content
+          props.type
         );
       }
     }

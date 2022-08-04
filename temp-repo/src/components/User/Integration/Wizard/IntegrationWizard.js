@@ -82,7 +82,7 @@ const IntegrationWizard = (props) => {
     );
   };
 
-  const authHandler = (datas, type, appDatas) => {
+  const authHandler = (datas, type) => {
     const valid = { ...apiInfo, [type]: true };
     setIsModelOpen(false);
     setIsAppChoice(false);

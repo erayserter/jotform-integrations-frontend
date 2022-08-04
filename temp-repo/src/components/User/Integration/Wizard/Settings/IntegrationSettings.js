@@ -33,17 +33,28 @@ const IntegrationSettings = (props) => {
 
   const fetchData = async () => {
     const authenticationInfo = {
-      apiKey: appSelections[props.type].key,
-      authId: appSelections[props.type].auth_id,
+      [appSelections.source.app.id]: {
+        apiKey: appSelections.source.key,
+        authId: appSelections.source.auth_id,
+      },
+      [appSelections.destination.app.id]: {
+        apiKey: appSelections.destination.key,
+        authId: appSelections.destination.auth_id,
+      },
     };
-    // { newOptions: optionsCopy, newDatas: newDatas }
+
     const { newDatas, newOptions } = await app.init(
       appInfo,
       appAction.name,
       props.type,
       authenticationInfo,
-      settingsSelections
+      settingsSelections,
+      appSelections.source.app
     );
+
+    // console.log(newDatas);
+    console.log(newOptions);
+    // console.log(settingsSelections);
 
     dispatch(setAppInfo({ appInfo: newDatas }));
     dispatch(setOptions({ options: { ...appOptions, [app.id]: newOptions } }));

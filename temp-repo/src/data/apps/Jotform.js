@@ -1,5 +1,4 @@
 import { isEmpty } from "lodash";
-import configurations from "../../config";
 import App from "../App";
 import Action from "./Action";
 import Select from "./fields/Select";
@@ -27,7 +26,13 @@ export default class Jotform extends App {
     });
   }
 
-  getOptionFromSelection(datas, selection, type, authenticationInfo) {
+  getOptionFromSelection(
+    datas,
+    selection,
+    actionName,
+    type,
+    authenticationInfo
+  ) {
     switch (selection) {
       case "form_id":
         return this.getFormTitleOptions(datas, type, authenticationInfo);
@@ -41,7 +46,10 @@ export default class Jotform extends App {
     let newDatas = { ...datas };
 
     if (isEmpty(datas[type]))
-      newDatas[type] = await this.fetchFormHeaders(authenticationInfo);
+      newDatas = {
+        ...newDatas,
+        [type]: await this.fetchFormHeaders(authenticationInfo),
+      };
 
     for (const formId in newDatas[type])
       titleOptions.push({
@@ -52,13 +60,21 @@ export default class Jotform extends App {
     return { fieldOption: titleOptions, newDatas };
   }
 
-  static async getFormFieldOptions(datas, authenticationInfo, options) {
+  async getFormFieldOptions(datas, authenticationInfo, options) {
     let formFieldOptions = [];
     let datasCopy = { ...datas };
     let formId = options.source.form_id;
 
     if (isNil(datas.source[formId].fields)) {
-      datasCopy = await this.fetchFormInfo(authenticationInfo, formId);
+      datasCopy = {
+        ...datasCopy,
+        source: {
+          ...datasCopy.source,
+          [formId]: (await this.fetchFormInfo(authenticationInfo, formId))[
+            formId
+          ],
+        },
+      };
     }
 
     const fields = this.getFormFields(datasCopy.source, formId);
@@ -76,7 +92,7 @@ export default class Jotform extends App {
     return { formFieldOptions, newDatas: datasCopy };
   }
 
-  static getFormSubfieldOptions(fieldId, field) {
+  getFormSubfieldOptions(fieldId, field) {
     let formSubfieldOptions = [];
     for (const subfieldId in field.subfields) {
       formSubfieldOptions.push({
@@ -88,7 +104,7 @@ export default class Jotform extends App {
     return formSubfieldOptions;
   }
 
-  static async getFormTagInputOptions(datas, authenticationInfo, options) {
+  async getFormTagInputOptions(datas, authenticationInfo, options) {
     let tagInputOptions = [];
 
     const { formFieldOptions, newDatas } = await this.getFormFieldOptions(
@@ -97,18 +113,18 @@ export default class Jotform extends App {
       options
     );
 
-    tagInputOptions = this.getOptionsInTagInputForm(formFieldOptions);
-    console.log(newDatas);
+    tagInputOptions = await this.getOptionsInTagInputForm(formFieldOptions);
+
     return { fieldOption: tagInputOptions, newDatas };
   }
 
-  static getOptionsInTagInputForm(formFieldOptions) {
+  getOptionsInTagInputForm(formFieldOptions) {
     return formFieldOptions.map((field) => {
       return { id: field.value, value: field.label };
     });
   }
 
-  static getFileUploadFieldsOptions(datas, options) {
+  getFileUploadFieldsOptions(datas, options) {
     let fileUploadFieldsOptions = [];
     const fields = this.getUploadFields(datas.source, options.source.formId);
 
@@ -125,16 +141,16 @@ export default class Jotform extends App {
     return datas[formId].title;
   }
 
-  static getFormFields(datas, formId) {
+  getFormFields(datas, formId) {
     return datas[formId].fields;
   }
 
-  static getUploadFields(datas, formId) {
+  getUploadFields(datas, formId) {
     return datas[formId].file_upload_fields;
   }
 
   fetchFormHeaders(authenticationInfo) {
-    const apiKey = authenticationInfo.apiKey;
+    const apiKey = authenticationInfo[this.id].apiKey;
     const body = {
       action: "getAllFormInfo",
       apiKey: apiKey,
@@ -143,33 +159,13 @@ export default class Jotform extends App {
   }
 
   fetchFormInfo(authenticationInfo, formId) {
-    const apiKey = authenticationInfo.apiKey;
+    const apiKey = authenticationInfo[this.id].apiKey;
     const body = {
       action: "getFormInfo",
       apiKey: apiKey,
       formId: formId,
     };
     return this.fetchDataFromBackend(body);
-  }
-
-  async fetchDataFromBackend(body) {
-    const responseContent = fetch(
-      "https://" +
-        configurations.DEV_RDS_NAME +
-        ".jotform.dev/intern-api/jotform",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      }
-    )
-      .then((data) => data.json())
-      .then((data) => data.content.content)
-      .catch((err) => console.log(err));
-
-    return responseContent;
   }
 
   prepareData(data) {

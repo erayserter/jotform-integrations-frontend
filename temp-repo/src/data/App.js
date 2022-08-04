@@ -1,4 +1,4 @@
-import { cloneDeep } from "lodash";
+import { cloneDeep, isNil } from "lodash";
 import configurations from "../config";
 
 export default class App {
@@ -18,7 +18,14 @@ export default class App {
     this.isOauth = appObject.isOauth;
   }
 
-  init(datas, actionName, type, authenticationInfo, requiredInfo) {
+  init(
+    datas,
+    actionName,
+    type,
+    authenticationInfo,
+    requiredInfo,
+    dependantApp
+  ) {
     const options = {};
 
     return this.addAllOptions(
@@ -27,7 +34,8 @@ export default class App {
       actionName,
       type,
       authenticationInfo,
-      requiredInfo
+      requiredInfo,
+      dependantApp
     );
   }
 
@@ -37,10 +45,9 @@ export default class App {
     actionName,
     type,
     authenticationInfo,
-    requiredInfo
+    requiredInfo,
+    dependantApp
   ) {
-    let optionsCopy = options;
-
     let action = this.actions.find((action) => action.getName() === actionName);
 
     if (!action)
@@ -48,20 +55,34 @@ export default class App {
         (trigger) => trigger.getName() === actionName
       );
 
+    let optionsCopy = { ...options };
     let newDatas = { ...datas };
+
     for (const field of action.getAllFields()) {
       const selection = field.getSelection();
       const returnObject = await this.getOptionFromSelection(
         newDatas,
         selection,
+        actionName,
         type,
         authenticationInfo,
-        requiredInfo
+        requiredInfo,
+        dependantApp
       );
-      newDatas = returnObject.newDatas;
-      const fieldOption = returnObject.fieldOption;
 
-      optionsCopy = this.addOption(options, selection, fieldOption);
+      if (
+        !isNil(returnObject) &&
+        !isNil(returnObject.newDatas) &&
+        !isNil(returnObject.fieldOption)
+      ) {
+        newDatas = returnObject.newDatas;
+        const fieldOption = returnObject.fieldOption;
+
+        optionsCopy = this.addOption(optionsCopy, selection, fieldOption);
+
+        // console.log(newDatas);
+        // console.log(optionsCopy);
+      }
     }
 
     return { newOptions: optionsCopy, newDatas: newDatas };
@@ -118,7 +139,9 @@ export default class App {
     const responseContent = fetch(
       "https://" +
         configurations.DEV_RDS_NAME +
-        ".jotform.dev/intern-api/jotform",
+        ".jotform.dev/intern-api/" +
+        this.id.charAt(0).toLowerCase() +
+        this.id.slice(1),
       {
         method: "POST",
         headers: {
@@ -128,7 +151,7 @@ export default class App {
       }
     )
       .then((data) => data.json())
-      .then((data) => data.content.content)
+      .then((data) => data.content)
       .catch((err) => console.log(err));
 
     return responseContent;
