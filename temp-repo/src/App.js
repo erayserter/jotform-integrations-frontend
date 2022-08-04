@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     const asyncHandler = async () => {
       const res = await alreadyLoggedIn();
-      if (res.content.responseCode === 200) setIsLoggedIn(true);
+      if (res.responseCode === 200) setIsLoggedIn(true);
       else setIsLoggedIn(false);
     };
     asyncHandler();
