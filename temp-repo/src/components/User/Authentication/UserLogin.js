@@ -8,6 +8,9 @@ import Navbar from "../../Navbar/Navbar";
 
 import configurations from "../../../config/index";
 
+import { useDispatch, useSelector } from "react-redux";
+import { setIsLoggedIn } from "../../../store/user";
+
 async function loginUser(credentials) {
   return fetch(
     "https://" + configurations.DEV_RDS_NAME + ".jotform.dev/intern-api/login",
@@ -23,6 +26,8 @@ async function loginUser(credentials) {
 }
 
 const UserLogin = (props) => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -33,11 +38,11 @@ const UserLogin = (props) => {
       password: password,
     });
     if (res.responseCode === 200) {
-      props.onSignIn(true);
+      dispatch(setIsLoggedIn({ isLoggedIn: true }));
     }
   };
 
-  if (props.isLoggedIn)
+  if (isLoggedIn)
     return (
       <Navigate
         to={{

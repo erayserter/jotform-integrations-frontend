@@ -1,11 +1,27 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import configurations from "../../config";
+import { setIsLoggedIn } from "../../store/user";
 
 const Navbar = (props) => {
+  const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(false);
 
   const expandMenuHandler = (event) => {
     setIsExpanded((prev) => !prev);
+  };
+
+  const logoutHandler = async () => {
+    const response = await fetch(
+      "https://" +
+        configurations.DEV_RDS_NAME +
+        ".jotform.dev/intern-api/logout"
+    ).then((data) => data.json());
+
+    if (response.responseCode === 200) {
+      dispatch(setIsLoggedIn({ isLoggedIn: false }));
+    }
   };
 
   return (
@@ -128,10 +144,11 @@ const Navbar = (props) => {
             }`}
           >
             <Link
-              to="/"
+              to="/login"
               className={`inline-block relative px-4 whitespace-nowrap ${
                 isExpanded ? "w-full font-normal line-height-6xl" : ""
               }`}
+              onClick={logoutHandler}
             >
               Logout
             </Link>

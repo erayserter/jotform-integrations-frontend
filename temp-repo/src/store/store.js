@@ -4,6 +4,7 @@ import appsReducer from "./apps";
 import uiReducer from "./ui";
 import infosReducer from "./infos";
 import inputsReducer from "./inputs";
+import userReducer from "./user";
 
 export const store = configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export const store = configureStore({
     ui: uiReducer,
     infos: infosReducer,
     inputs: inputsReducer,
+    user: userReducer,
   },
 });

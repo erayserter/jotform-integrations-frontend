@@ -45,6 +45,7 @@ const postWebhookRequest = async (credentials) => {
 const AppContainer = (props) => {
   const dispatch = useDispatch();
   const webhooks = useSelector((state) => state.webhooks.webhooks);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const selectedWebhooks = useSelector(
     (state) => state.webhooks.selectedWebhooks
   );
@@ -278,10 +279,10 @@ const AppContainer = (props) => {
   };
 
   useEffect(() => {
-    if (props.isLoggedIn) getWebhooks();
+    if (isLoggedIn) getWebhooks();
   }, []);
 
-  if (!props.isLoggedIn)
+  if (!isLoggedIn)
     return (
       <Navigate
         to={{

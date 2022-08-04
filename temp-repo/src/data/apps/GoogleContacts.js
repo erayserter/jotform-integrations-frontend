@@ -46,7 +46,11 @@ export default class GoogleContacts extends App {
       case "familyName":
       case "emailAddress":
       case "phoneNumber":
-        return dependantApp.getFormTagInputOptions(allTypeData, requiredInfo);
+        return dependantApp.getFormTagInputOptions(
+          allTypeData,
+          authenticationInfo,
+          requiredInfo
+        );
       default:
         return;
     }

@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Routes, Route, HashRouter } from "react-router-dom";
 
 import AppContainer from "./components/AppContainer";
 import UserLogin from "./components/User/Authentication/UserLogin";
 
 import configurations from "./config/index";
+
+import { useDispatch } from "react-redux";
+import { setIsLoggedIn } from "./store/user";
 
 async function alreadyLoggedIn() {
   return fetch(
@@ -15,13 +18,14 @@ async function alreadyLoggedIn() {
 }
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const asyncHandler = async () => {
       const res = await alreadyLoggedIn();
-      if (res.responseCode === 200) setIsLoggedIn(true);
-      else setIsLoggedIn(false);
+      if (res.responseCode === 200)
+        dispatch(setIsLoggedIn({ isLoggedIn: true }));
+      else dispatch(setIsLoggedIn({ isLoggedIn: false }));
     };
     asyncHandler();
   }, []);
@@ -29,18 +33,8 @@ function App() {
   return (
     <HashRouter>
       <Routes>
-        <Route
-          exact
-          path="/"
-          element={<AppContainer isLoggedIn={isLoggedIn} />}
-        ></Route>
-        <Route
-          exact
-          path="login"
-          element={
-            <UserLogin isLoggedIn={isLoggedIn} onSignIn={setIsLoggedIn} />
-          }
-        ></Route>
+        <Route exact path="/" element={<AppContainer />}></Route>
+        <Route exact path="login" element={<UserLogin />}></Route>
       </Routes>
     </HashRouter>
   );
