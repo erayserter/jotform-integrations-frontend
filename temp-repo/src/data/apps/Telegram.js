@@ -2,7 +2,6 @@ import App from "../App";
 import Action from "./Action";
 import Select from "./fields/Select";
 import TagInput from "./fields/TagInput";
-import Jotform from "./Jotform";
 import Field from "./Field";
 
 const ID = "Telegram";
