@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import configurations from "../../config";
 import { setIsLoggedIn } from "../../store/user";
@@ -7,6 +7,7 @@ import { setIsLoggedIn } from "../../store/user";
 const Navbar = (props) => {
   const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(false);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
 
   const expandMenuHandler = (event) => {
     setIsExpanded((prev) => !prev);
@@ -115,58 +116,66 @@ const Navbar = (props) => {
               isExpanded ? "border-t border-solid" : ""
             }`}
           >
-            <Link
-              to="/"
-              className={`inline-block relative px-4 whitespace-nowrap ${
-                isExpanded ? "w-full font-normal line-height-6xl" : ""
-              }`}
-            >
-              All Integrations
-            </Link>
-          </li>
-          <li
-            className={`cursor-pointer w-full relative ${
-              isExpanded ? "border-t border-solid" : ""
-            }`}
-          >
-            <Link
-              to="/"
-              className={`inline-block relative px-4 whitespace-nowrap ${
-                isExpanded ? "w-full font-normal line-height-6xl" : ""
-              }`}
-            >
-              Login
-            </Link>
-          </li>
-          <li
-            className={`cursor-pointer w-full relative ${
-              isExpanded ? "border-t border-solid" : ""
-            }`}
-          >
-            <Link
-              to="/login"
-              className={`inline-block relative px-4 whitespace-nowrap ${
-                isExpanded ? "w-full font-normal line-height-6xl" : ""
-              }`}
-              onClick={logoutHandler}
-            >
-              Logout
-            </Link>
-          </li>
-        </ul>
-        <div>
-          <ul className="p-0 m-0 items-center flex-nowrap justify-end">
-            <li className="menu-list-item cursor-pointer p-3 relative w-18 h-18">
+            {isLoggedIn && (
               <Link
                 to="/"
-                className={`menu-list-item__link radius-full border-2 border-solid border-black border-opacity-30 w-12 h-12 cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal`}
-                style={{
-                  backgroundImage: `url("https://lh3.googleusercontent.com/a/AATXAJw7-enkIx0trd2ZVHHpIU_2BzI70ZqeA5gqR_QU=s96-c")`,
-                }}
-              ></Link>
-            </li>
-          </ul>
-        </div>
+                className={`inline-block relative px-4 whitespace-nowrap ${
+                  isExpanded ? "w-full font-normal line-height-6xl" : ""
+                }`}
+              >
+                All Integrations
+              </Link>
+            )}
+          </li>
+          {/* <li
+            className={`cursor-pointer w-full relative ${
+              isExpanded ? "border-t border-solid" : ""
+            }`}
+          >
+            { {!isLoggedIn && (
+              <Link
+                to="/"
+                className={`inline-block relative px-4 whitespace-nowrap ${
+                  isExpanded ? "w-full font-normal line-height-6xl" : ""
+                }`}
+              >
+                Login
+              </Link>
+            )} }
+          </li> */}
+          <li
+            className={`cursor-pointer w-full relative ${
+              isExpanded ? "border-t border-solid" : ""
+            }`}
+          >
+            {isLoggedIn && (
+              <Link
+                to="/login"
+                className={`inline-block relative px-4 whitespace-nowrap ${
+                  isExpanded ? "w-full font-normal line-height-6xl" : ""
+                }`}
+                onClick={logoutHandler}
+              >
+                Logout
+              </Link>
+            )}
+          </li>
+        </ul>
+        {isLoggedIn && (
+          <div>
+            <ul className="p-0 m-0 items-center flex-nowrap justify-end">
+              <li className="menu-list-item cursor-pointer p-3 relative w-18 h-18">
+                <Link
+                  to="/"
+                  className={`menu-list-item__link radius-full border-2 border-solid border-black border-opacity-30 w-12 h-12 cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal`}
+                  style={{
+                    backgroundImage: `url("https://lh3.googleusercontent.com/a/AATXAJw7-enkIx0trd2ZVHHpIU_2BzI70ZqeA5gqR_QU=s96-c")`,
+                  }}
+                ></Link>
+              </li>
+            </ul>
+          </div>
+        )}
       </div>
     </header>
   );
