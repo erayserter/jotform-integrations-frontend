@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 
-import classes from "./UserLogin.module.css";
-
 import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
@@ -10,6 +8,7 @@ import configurations from "../../../config/index";
 
 import { useDispatch, useSelector } from "react-redux";
 import { setIsLoggedIn } from "../../../store/user";
+import IntegrationTitle from "../Integration/Header/IntegrationTitle";
 
 async function loginUser(credentials) {
   return fetch(
@@ -52,11 +51,16 @@ const UserLogin = (props) => {
     );
 
   return (
-    <div>
+    <div className={` user-login h-100vh `}>
       <Navbar />
-      <div className={` flex justify-center max-w-3/4 h-full m-auto`}>
+      <div
+        className={` user-login__main flex justify-center max-w-3/4 m-auto `}
+      >
         <div>
-          <h1 className={`my-12`}>Welcome Back!</h1>
+          <IntegrationTitle
+            title={"Welcome Back!"}
+            subtitle={"Workflow automation for everyone."}
+          />
           <form>
             <InputContainer
               inputLabel="Username"
@@ -64,6 +68,7 @@ const UserLogin = (props) => {
               setter={(v) => {
                 setUsername(v);
               }}
+              labelClassName={`block mb-2 text-md font-semibold mt-10`}
               default={username}
             />
             <InputContainer
@@ -72,9 +77,23 @@ const UserLogin = (props) => {
               setter={(v) => {
                 setPassword(v);
               }}
+              labelClassName={` block mb-2 text-md font-semibold `}
               default={password}
             />
-            <button onClick={handleSubmit}>Submit</button>
+            <div className={` py-5 `}>
+              <button
+                className={` bg-green-400 w-full h-10 radius color-white hover:bg-green-500 text-sm `}
+                onClick={handleSubmit}
+              >
+                Log in
+              </button>
+              <p className={` text-center `}>
+                Don’t have an account?{" "}
+                <a href="/register" className={` color-blue-400 `}>
+                  Sign up
+                </a>
+              </p>
+            </div>
           </form>
         </div>
       </div>

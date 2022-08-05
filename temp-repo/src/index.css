@@ -139,3 +139,7 @@ html {
 .navbar.isExpanded .jl-pen-middle {
   fill: #ff6100;
 }
+
+.user-login__main{
+  height: calc(100% - 72px);
+}

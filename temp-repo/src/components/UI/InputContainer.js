@@ -8,7 +8,9 @@ const InputContainer = (props) => {
       key={props.key}
       className={`${classes["input--container"]} border-b border-solid py-5`}
     >
-      <label className="block mb-2 text-sm font-semibold">
+      <label
+        className={props.labelClassName || "block mb-2 text-sm font-semibold"}
+      >
         {props.inputLabel}
       </label>
       <input
