@@ -11,12 +11,12 @@ const URL = "https://img.icons8.com/color/480/000000/telegram-app--v1.png";
 const TRIGGERS = [];
 const ACTIONS = [
   new Action("Send Message", [
-    new Field("Chat ID", "chat_id", "input", "8576375"),
-    new TagInput("Text", "text"),
+    new Field("Chat ID", "chat_id", "input", [], "8576375"),
+    new TagInput("Text", "text", []),
   ]),
   new Action("Send Attachments", [
-    new Field("Chat ID", "chat_id", "input", "8576375"),
-    new Select("File Upload Field", "upload_fields", true),
+    new Field("Chat ID", "chat_id", "input", [], "8576375"),
+    new Select("File Upload Field", "upload_fields", [], true),
   ]),
 ];
 const IS_OAUTH = false;

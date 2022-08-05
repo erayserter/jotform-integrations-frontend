@@ -1,6 +1,5 @@
 import App from "../App";
 import Action from "./Action";
-import Jotform from "./Jotform";
 import Select from "./fields/Select";
 import MatchFields from "./fields/MatchFields";
 import TagInput from "./fields/TagInput";
@@ -13,27 +12,67 @@ const URL =
 const TRIGGERS = [];
 const ACTIONS = [
   new Action("Create Task", [
-    new Select("Choose a Workspace", "workspace", false),
-    new Select("Choose a Space", "space", false),
-    new Select("Choose a Folder", "folder", false),
-    new Select("Choose a List", "list_id", false),
-    new MatchFields("Match Your Fields", "match_fields"),
+    new Select(
+      "Choose a Workspace",
+      "workspace",
+      ["space", "folder", "list_id", "match_fields"],
+      false
+    ),
+    new Select(
+      "Choose a Space",
+      "space",
+      ["folder", "list_id", "match_fields"],
+      false
+    ),
+    new Select("Choose a Folder", "folder", ["list_id", "match_fields"], false),
+    new Select("Choose a List", "list_id", ["match_fields"], false),
+    new MatchFields("Match Your Fields", "match_fields", []),
   ]),
   new Action("Create Subtask", [
-    new Select("Choose a Workspace", "workspace", false),
-    new Select("Choose a Space", "space", false),
-    new Select("Choose a Folder", "folder", false),
-    new Select("Choose a List", "list_id", false),
-    new Select("Choose a Task", "task", false),
-    new MatchFields("Match Your Fields", "match_fields"),
+    new Select(
+      "Choose a Workspace",
+      "workspace",
+      ["space", "folder", "list_id", "task", "match_fields"],
+      false
+    ),
+    new Select(
+      "Choose a Space",
+      "space",
+      ["folder", "list_id", "task", "match_fields"],
+      false
+    ),
+    new Select(
+      "Choose a Folder",
+      "folder",
+      ["list_id", "task", "match_fields"],
+      false
+    ),
+    new Select("Choose a List", "list_id", ["task", "match_fields"], false),
+    new Select("Choose a Task", "task", ["match_fields"], false),
+    new MatchFields("Match Your Fields", "match_fields", []),
   ]),
   new Action("Create Comment", [
-    new Select("Choose a Workspace", "workspace", false),
-    new Select("Choose a Space", "space", false),
-    new Select("Choose a Folder", "folder", false),
-    new Select("Choose a List", "list_id", false),
-    new Select("Choose a Task", "task", false),
-    new TagInput("Enter a Comment", "comment"),
+    new Select(
+      "Choose a Workspace",
+      "workspace",
+      ["space", "folder", "list_id", "task", "comment"],
+      false
+    ),
+    new Select(
+      "Choose a Space",
+      "space",
+      ["folder", "list_id", "task", "comment"],
+      false
+    ),
+    new Select(
+      "Choose a Folder",
+      "folder",
+      ["list_id", "task", "comment"],
+      false
+    ),
+    new Select("Choose a List", "list_id", ["task", "comment"], false),
+    new Select("Choose a Task", "task", ["comment"], false),
+    new TagInput("Enter a Comment", "comment", []),
   ]),
 ];
 const IS_OAUTH = true;
@@ -135,7 +174,7 @@ export default class ClickUp extends App {
         ...datasCopy,
         [type]: {
           ...datasCopy[type],
-          workspaces: await this.fetchData(authenticationInfo, "getWorkspaces"),
+          workspace: await this.fetchData(authenticationInfo, "getWorkspaces"),
         },
       };
 
@@ -158,7 +197,7 @@ export default class ClickUp extends App {
         ...datasCopy,
         [type]: {
           ...datasCopy[type],
-          spaces: await this.fetchData(
+          space: await this.fetchData(
             authenticationInfo,
             "getSpaces",
             workspace
@@ -185,11 +224,7 @@ export default class ClickUp extends App {
         ...datasCopy,
         [type]: {
           ...datasCopy[type],
-          folders: await this.fetchData(
-            authenticationInfo,
-            "getFolders",
-            space
-          ),
+          folder: await this.fetchData(authenticationInfo, "getFolders", space),
         },
       };
 
@@ -217,7 +252,7 @@ export default class ClickUp extends App {
         ...datasCopy,
         [type]: {
           ...datasCopy[type],
-          lists: await this.fetchData(authenticationInfo, action, id),
+          list_id: await this.fetchData(authenticationInfo, action, id),
         },
       };
 
@@ -240,7 +275,7 @@ export default class ClickUp extends App {
         ...datasCopy,
         [type]: {
           ...datasCopy[type],
-          tasks: await this.fetchData(authenticationInfo, "getTasks", list),
+          task: await this.fetchData(authenticationInfo, "getTasks", list),
         },
       };
 
@@ -321,7 +356,7 @@ export default class ClickUp extends App {
         ...datasCopy,
         [type]: {
           ...datasCopy[type],
-          fields: await this.fetchData(
+          match_fields: await this.fetchData(
             authenticationInfo,
             "getCustomFields",
             listId
@@ -341,27 +376,27 @@ export default class ClickUp extends App {
   }
 
   getWorkspaces(datas) {
-    return datas.workspaces;
+    return datas.workspace;
   }
 
   getSpaces(datas) {
-    return datas.spaces;
+    return datas.space;
   }
 
   getFolders(datas) {
-    return datas.folders;
+    return datas.folder;
   }
 
   getLists(datas) {
-    return datas.lists;
-  }
-
-  getAccountFields(datas) {
-    return datas.fields;
+    return datas.list_id;
   }
 
   getTasks(datas) {
-    return datas.tasks;
+    return datas.task;
+  }
+
+  getAccountFields(datas) {
+    return datas.match_fields;
   }
 
   fetchData(authenticationInfo, action, requiredSelection) {

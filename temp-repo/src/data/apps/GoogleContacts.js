@@ -11,10 +11,10 @@ const URL =
 const TRIGGERS = [];
 const ACTIONS = [
   new Action("Create Contact", [
-    new TagInput("First Name", "givenName"),
-    new TagInput("Family Name", "familyName"),
-    new TagInput("Email", "emailAddress"),
-    new TagInput("Phone Number", "phoneNumber"),
+    new TagInput("First Name", "givenName", []),
+    new TagInput("Family Name", "familyName", []),
+    new TagInput("Email", "emailAddress", []),
+    new TagInput("Phone Number", "phoneNumber", []),
   ]),
 ];
 const IS_OAUTH = true;

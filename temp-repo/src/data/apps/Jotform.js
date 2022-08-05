@@ -9,7 +9,9 @@ const NAME = "Jotform";
 const URL =
   "https://www.jotform.com/resources/assets/svg/jotform-icon-transparent.svg";
 const TRIGGERS = [
-  new Action("Get Submission", [new Select("Choose Form", "form_id", false)]),
+  new Action("Get Submission", [
+    new Select("Choose Form", "form_id", [], false),
+  ]),
 ];
 const ACTIONS = [];
 const IS_OAUTH = false;

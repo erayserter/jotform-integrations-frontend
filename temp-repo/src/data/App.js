@@ -79,9 +79,6 @@ export default class App {
         const fieldOption = returnObject.fieldOption;
 
         optionsCopy = this.addOption(optionsCopy, selection, fieldOption);
-
-        // console.log(newDatas);
-        // console.log(optionsCopy);
       }
     }
 
@@ -100,6 +97,11 @@ export default class App {
       type === "source" ? this.triggers : this.actions;
 
     return actArray(type).find(selectedAct).getAllFields();
+  }
+
+  getDependantFields(action, id, type) {
+    return action.getAllFields().find((field) => field.getSelection() === id)
+      .dependantFieldList;
   }
 
   isSameApp(app) {

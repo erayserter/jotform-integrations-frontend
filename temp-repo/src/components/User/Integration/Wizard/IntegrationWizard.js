@@ -29,7 +29,6 @@ const IntegrationWizard = (props) => {
   const [isSettingsChoice, setIsSettingsChoice] = useState(false);
 
   const apiInfo = useSelector((state) => state.infos.apiInfo);
-  // const appInfo = useSelector((state) => state.infos.appInfo);
 
   const appSelections = useSelector((state) => state.inputs.appSelections);
   const settingsSelections = useSelector(
@@ -95,7 +94,6 @@ const IntegrationWizard = (props) => {
       })
     );
 
-    // dispatch(setAppInfo({ appInfo: { ...appInfo, [type]: appDatas } }));
     dispatch(setApiInfo({ apiInfo: valid }));
 
     if (!valid.source) integrationChoiceHandler(true, "source");

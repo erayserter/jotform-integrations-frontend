@@ -10,6 +10,8 @@ import classes from "./IntegrationSettings.module.css";
 
 import { setOptions } from "../../../../../store/apps";
 import { setAppInfo } from "../../../../../store/infos";
+import { setSettingsSelections } from "../../../../../store/inputs";
+import { omit } from "lodash";
 
 const IntegrationSettings = (props) => {
   const dispatch = useDispatch();
@@ -52,15 +54,31 @@ const IntegrationSettings = (props) => {
       appSelections.source.app
     );
 
-    // console.log(newDatas);
-    console.log(newOptions);
-    // console.log(settingsSelections);
-
     dispatch(setAppInfo({ appInfo: newDatas }));
     dispatch(setOptions({ options: { ...appOptions, [app.id]: newOptions } }));
   };
 
   const newValueHandler = (value, labelData, isExternal) => {
+    const dependantChildFields = app.getDependantFields(
+      appAction,
+      labelData,
+      props.type
+    );
+
+    const temporaryObject = omit(
+      settingsSelections[props.type],
+      dependantChildFields
+    );
+
+    dispatch(
+      setSettingsSelections({
+        settingsSelections: {
+          ...settingsSelections,
+          [props.type]: temporaryObject,
+        },
+      })
+    );
+
     props.onSettingsChange(value, props.type, labelData, isExternal);
   };
 

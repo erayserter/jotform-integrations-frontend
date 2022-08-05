@@ -5,8 +5,8 @@ const TYPE = "select";
 export default class Select extends Field {
   isMulti;
 
-  constructor(label, selection, isMulti) {
-    super(label, selection, TYPE);
+  constructor(label, selection, dependantFieldList, isMulti) {
+    super(label, selection, TYPE, dependantFieldList);
 
     this.isMulti = isMulti;
   }
