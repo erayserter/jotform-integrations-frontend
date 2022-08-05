@@ -1,4 +1,4 @@
-import { cloneDeep, isNil } from "lodash";
+import { isNil } from "lodash";
 import configurations from "../config";
 
 export default class App {

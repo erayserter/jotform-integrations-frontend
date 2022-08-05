@@ -1,6 +1,5 @@
 import App from "../App";
 import Action from "./Action";
-import Jotform from "./Jotform";
 import TagInput from "./fields/TagInput";
 import { cloneDeep } from "lodash";
 

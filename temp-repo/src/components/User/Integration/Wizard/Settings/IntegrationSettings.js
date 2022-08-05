@@ -45,6 +45,8 @@ const IntegrationSettings = (props) => {
       },
     };
 
+    console.log(appInfo);
+
     const { newDatas, newOptions } = await app.init(
       appInfo,
       appAction.name,
@@ -65,17 +67,24 @@ const IntegrationSettings = (props) => {
       props.type
     );
 
-    const temporaryObject = omit(
+    const temporarySettingsObject = omit(
       settingsSelections[props.type],
       dependantChildFields
     );
+    const temporaryDataObject = omit(appInfo[props.type], dependantChildFields);
 
     dispatch(
       setSettingsSelections({
         settingsSelections: {
           ...settingsSelections,
-          [props.type]: temporaryObject,
+          [props.type]: temporarySettingsObject,
         },
+      })
+    );
+
+    dispatch(
+      setAppInfo({
+        appInfo: { ...appInfo, [props.type]: temporaryDataObject },
       })
     );
 

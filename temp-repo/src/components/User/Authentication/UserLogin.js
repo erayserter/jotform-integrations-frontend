@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 
-import classes from "./UserLogin.module.css";
-
 import InputContainer from "../../UI/InputContainer";
 import Navbar from "../../Navbar/Navbar";
 
