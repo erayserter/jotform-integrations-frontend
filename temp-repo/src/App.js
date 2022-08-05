@@ -3,6 +3,7 @@ import { Routes, Route, HashRouter } from "react-router-dom";
 
 import AppContainer from "./components/AppContainer";
 import UserLogin from "./components/User/Authentication/UserLogin";
+import UserRegister from "./components/User/Registration/UserRegister";
 
 import configurations from "./config/index";
 
@@ -35,6 +36,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<AppContainer />}></Route>
         <Route exact path="login" element={<UserLogin />}></Route>
+        <Route exact path="register" element={<UserRegister />}></Route>
       </Routes>
     </HashRouter>
   );

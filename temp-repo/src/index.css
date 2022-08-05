@@ -140,6 +140,6 @@ html {
   fill: #ff6100;
 }
 
-.user-login__main{
+.user-login__main .user-register__main{
   height: calc(100% - 72px);
 }

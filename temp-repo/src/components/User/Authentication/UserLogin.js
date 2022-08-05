@@ -89,7 +89,7 @@ const UserLogin = (props) => {
               </button>
               <p className={` text-center `}>
                 Don’t have an account?{" "}
-                <a href="/register" className={` color-blue-400 `}>
+                <a href="./index.html#/register" className={` color-blue-400 `}>
                   Sign up
                 </a>
               </p>
