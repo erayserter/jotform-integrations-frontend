@@ -14,6 +14,7 @@ const ContentSectionListItem = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const itemTitleRef = useRef();
+  const itemFavoriteRef = useRef();
 
   useEffect(() => {
     setIsFavorite(Number(props.webhook["is_favorite"]));
@@ -32,15 +33,21 @@ const ContentSectionListItem = (props) => {
     <div
       className={`${classes["content--list-item"]} ${
         isLoading ? "bg-navy-25" : ""
-      } flex justify-between items-center w-full h-16 radius-md hover:bg-navy-25`}
+      } flex justify-between items-center w-full h-16 radius-md hover:bg-navy-25 mb-1`}
       style={
         selectedWebhooks.includes(props.webhook["webhook_id"])
           ? { backgroundColor: "#edf8ff" }
           : {}
       }
       onClick={(event) => {
-        if (itemTitleRef && !itemTitleRef.current.contains(event.target))
+        if (
+          itemTitleRef &&
+          !itemTitleRef.current.contains(event.target) &&
+          !itemFavoriteRef.current.contains(event.target) &&
+          window.screen.width < 768
+        ) {
           props.onSelect(props.webhook["webhook_id"]);
+        }
       }}
     >
       <div
@@ -77,6 +84,7 @@ const ContentSectionListItem = (props) => {
           </label>
         </div>
         <div
+          ref={itemFavoriteRef}
           className={`${classes["content--list-item-sections"]} ${
             classes["content--list-item-favorite-icon-wrapper"]
           } relative z-1 mr-4 ${
