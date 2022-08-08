@@ -8,7 +8,7 @@
 
 .input__form-fields button {
   background: none;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='7'%3E%3Cpath fill='none' stroke='%235E74E6' stroke-linecap='round' stroke-width='2' d='m1.866 1 4.115 4L9.88 1'/%3E%3C/svg%3E");
+  background-image: url("../../assets/tagInput-form-fields.svg");
   background-position: calc(100% - 0.5em);
   background-repeat: no-repeat;
   background-size: 9px;
