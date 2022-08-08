@@ -105,7 +105,7 @@ const TagInputContainer = (props) => {
             );
             props.onChange(converted);
           }}
-          defaultValue={str}
+          value={str}
         />
         <div className={classes["input__form-fields"]}>
           <button
@@ -139,7 +139,7 @@ const TagInputContainer = (props) => {
             <div>Form Fields</div>
           </button>
           {isToggled &&
-            (ReactDOM.createPortal(
+            ReactDOM.createPortal(
               <div
                 className={`${classes["form-fields__popper"]} bg-white radius min-w-72 shadow-md`}
                 ref={setPopperElement}
@@ -154,28 +154,26 @@ const TagInputContainer = (props) => {
                     className={`${classes["popper__list"]} px-3 w-full max-w-80`}
                   >
                     <ul className="my-3">
-                      {props.whitelist.map((e) => {
-                        return (
-                          <li
-                            className="flex cursor-pointer radius items-center justify-start max-w-72 line-height-xl duration-300 w-full p-2"
-                            onClick={(event) => {
-                              if (props.defaultValue) {
-                                props.onChange(
-                                  props.defaultValue + "[[" + e.id + "]]"
-                                );
-                              } else props.onChange("[[" + e.id + "]]");
-                            }}
-                          >
-                            {e.value}
-                          </li>
-                        );
-                      })}
+                      {props.whitelist.map((e) => (
+                        <li
+                          className="flex cursor-pointer radius items-center justify-start max-w-72 line-height-xl duration-300 w-full p-2"
+                          onClick={(event) => {
+                            if (props.defaultValue) {
+                              props.onChange(
+                                props.defaultValue + "[[" + e.id + "]]"
+                              );
+                            } else props.onChange("[[" + e.id + "]]");
+                          }}
+                        >
+                          {e.value}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
-              </div>
-            ),
-            document.querySelector("#root"))}
+              </div>,
+              document.querySelector("#root")
+            )}
         </div>
       </div>
     </div>

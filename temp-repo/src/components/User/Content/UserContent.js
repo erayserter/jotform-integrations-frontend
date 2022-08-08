@@ -318,6 +318,7 @@ const UserContent = (props) => {
           <Templates />
         ) : (
           <UserContentSection
+            webhooksLoading={props.webhooksLoading}
             onIntegrationUpdate={props.onIntegrationUpdate}
             content={sectionContent}
             searchedWord={searchedWord}

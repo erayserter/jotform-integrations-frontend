@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -15,6 +15,8 @@ import { omit } from "lodash";
 
 const IntegrationSettings = (props) => {
   const dispatch = useDispatch();
+  const [optionsLoading, setOptionsLoading] = useState(true);
+
   const appOptions = useSelector((state) => state.apps.options);
 
   const userInputs = useSelector((state) => state.inputs);
@@ -29,11 +31,14 @@ const IntegrationSettings = (props) => {
 
   const appFields = app.getFields(props.type, appAction.name);
 
+  const isUpdate = useSelector((state) => state.ui.isUpdate);
+
   useEffect(() => {
     fetchData();
   }, [props.type, settingsSelections, appAction]);
 
   const fetchData = async () => {
+    setOptionsLoading(true);
     const authenticationInfo = {
       [appSelections.source.app.id]: {
         apiKey: appSelections.source.key,
@@ -44,8 +49,6 @@ const IntegrationSettings = (props) => {
         authId: appSelections.destination.auth_id,
       },
     };
-
-    console.log(appInfo);
 
     const { newDatas, newOptions } = await app.init(
       appInfo,
@@ -58,6 +61,7 @@ const IntegrationSettings = (props) => {
 
     dispatch(setAppInfo({ appInfo: newDatas }));
     dispatch(setOptions({ options: { ...appOptions, [app.id]: newOptions } }));
+    setOptionsLoading(false);
   };
 
   const newValueHandler = (value, labelData, isExternal) => {
@@ -107,107 +111,118 @@ const IntegrationSettings = (props) => {
         {app.name} Settings
       </h1>
       <div>
-        {appFields.map((e) => {
-          if (e.type === "select") {
-            if (
-              appOptions[app.id][e.selection] == null ||
-              appOptions[app.id][e.selection].length <= 0
-            )
-              return null;
-            return (
-              <div
-                key={e.selection}
-                className={`${classes["select--container"]} py-5 border-b border-solid`}
-              >
-                <label className="block mb-2 text-sm font-semibold">
-                  {e.label}
-                </label>
-                <Select
-                  isMulti={e.isMulti}
-                  className="basic-multi-select"
-                  classNamePrefix="select"
-                  isClearable={true}
-                  isSearchable={true}
-                  name="actions"
-                  options={appOptions[app.id][e.selection]}
-                  styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-                  menuPortalTarget={document.body}
-                  menuPlacement="bottom"
-                  onChange={(event) => {
-                    if (e.isMulti) {
-                      newValueHandler(
-                        event.map((element) => {
-                          return parseInt(element.value, 10);
-                        }),
-                        e.selection
-                      );
-                    } else newValueHandler(event.value, e.selection);
+        {(!optionsLoading || !isUpdate) &&
+          appFields.map((e) => {
+            if (e.type === "select") {
+              if (
+                appOptions[app.id][e.selection] == null ||
+                appOptions[app.id][e.selection].length <= 0
+              )
+                return null;
+              return (
+                <div
+                  key={e.selection}
+                  className={`${classes["select--container"]} py-5 border-b border-solid`}
+                >
+                  <label className="block mb-2 text-sm font-semibold">
+                    {e.label}
+                  </label>
+                  <Select
+                    isMulti={e.isMulti}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    isClearable={true}
+                    isSearchable={true}
+                    name="actions"
+                    options={appOptions[app.id][e.selection]}
+                    styles={{
+                      menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                    }}
+                    menuPortalTarget={document.body}
+                    menuPlacement="bottom"
+                    onChange={(event) => {
+                      if (e.isMulti) {
+                        newValueHandler(
+                          event.map((element) => {
+                            return parseInt(element.value, 10);
+                          }),
+                          e.selection
+                        );
+                      } else newValueHandler(event.value, e.selection);
+                    }}
+                    value={
+                      settingsSelections[props.type][e.selection] != null &&
+                      (e.isMulti
+                        ? settingsSelections[props.type][e.selection].map(
+                            (input) =>
+                              appOptions[app.id][e.selection].find(
+                                (option) => option.value === input
+                              )
+                          )
+                        : appOptions[app.id][e.selection].find(
+                            (option) =>
+                              option.value ===
+                              settingsSelections[props.type][e.selection]
+                          ))
+                    }
+                  />
+                </div>
+              );
+            } else if (e.type === "tagInput") {
+              if (
+                appOptions[app.id][e.selection] == null ||
+                appOptions[app.id][e.selection].length <= 0
+              )
+                return null;
+              return (
+                <TagInputContainer
+                  key={e.selection}
+                  label={e.label}
+                  onChange={(value) => {
+                    newValueHandler(value, e.selection);
                   }}
-                  value={
-                    settingsSelections[props.type][e.selection] != null &&
-                    (e.isMulti
-                      ? settingsSelections[props.type][e.selection].map(
-                          (input) =>
-                            appOptions[app.id][e.selection].find(
-                              (option) => option.value === input
-                            )
-                        )
-                      : appOptions[app.id][e.selection].find(
-                          (option) =>
-                            option.value ===
-                            settingsSelections[props.type][e.selection]
-                        ))
-                  }
+                  defaultValue={settingsSelections[props.type][e.selection]}
+                  whitelist={appOptions[app.id][e.selection]}
                 />
-              </div>
-            );
-          } else if (e.type === "tagInput") {
-            if (
-              appOptions[app.id][e.selection] == null ||
-              appOptions[app.id][e.selection].length <= 0
-            )
-              return null;
-            return (
-              <TagInputContainer
-                key={e.selection}
-                label={e.label}
-                onChange={(value) => {
-                  newValueHandler(value, e.selection);
-                }}
-                defaultValue={settingsSelections[props.type][e.selection]}
-                whitelist={appOptions[app.id][e.selection]}
-              />
-            );
-          } else if (e.type === "matchFields") {
-            if (
-              appOptions[app.id][e.selection] == null ||
-              appOptions[app.id][e.selection].source.length <= 0 ||
-              appOptions[app.id][e.selection].destination.length <= 0
-            )
-              return null;
-            return (
-              <MatchFieldsContainer
-                key={e.selection}
-                label={e.label}
-                maxLength={4}
-                datas={appOptions[app.id][e.selection]}
-                default={settingsSelections[props.type][e.selection]}
-                onChange={(value) => {
-                  newValueHandler(value, e.selection);
-                }}
-              />
-            );
-          } else
-            return (
-              <InputContainer
-                key={e.selection}
-                inputLabel={e.label}
-                inputType={e.type}
-                setter={(value) => newValueHandler(value, e.selection)}
-                default={settingsSelections[props.type][e.selection]}
-              />
-            );
-        })}
+              );
+            } else if (e.type === "matchFields") {
+              if (
+                appOptions[app.id][e.selection] == null ||
+                appOptions[app.id][e.selection].source.length <= 0 ||
+                appOptions[app.id][e.selection].destination.length <= 0
+              )
+                return null;
+              return (
+                <MatchFieldsContainer
+                  key={e.selection}
+                  label={e.label}
+                  maxLength={4}
+                  datas={appOptions[app.id][e.selection]}
+                  default={settingsSelections[props.type][e.selection]}
+                  onChange={(value) => {
+                    newValueHandler(value, e.selection);
+                  }}
+                />
+              );
+            } else
+              return (
+                <InputContainer
+                  key={e.selection}
+                  inputLabel={e.label}
+                  inputType={e.type}
+                  setter={(value) => newValueHandler(value, e.selection)}
+                  default={settingsSelections[props.type][e.selection]}
+                />
+              );
+          })}
+        {optionsLoading &&
+          (isUpdate ? (
+            appFields.map((e) => (
+              <div className="w-full h-8 bg-navy-25 my-4 radius-full"></div>
+            ))
+          ) : (
+            <div className="w-full h-8 bg-navy-25 my-4 radius-full"></div>
+          ))}
         <button
           className={`${classes["settings--sendButton"]} flex items-center justify-center mt-6 mb-5 mx-auto bg-orange-500 color-white border border-solid radius h-10 min-w-28 px-4 text-center text-uppercase duration-300`}
           onClick={saveHandler}
