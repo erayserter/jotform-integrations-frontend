@@ -4,12 +4,11 @@
 }
 
 .inline-edit.title {
-  font-size: calc(16.57143px + 1.07143vw);
+  font-size: calc(16px + 1vw);
 }
 
 .inline-edit.subtitle {
-  font-size: calc(12.28571px + 0.53571vw);
-  letter-spacing: 0.001px;
+  font-size: calc(12px + 1vw);
 }
 
 @media screen and (min-width: 769px) {
