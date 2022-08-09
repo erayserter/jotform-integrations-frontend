@@ -1,13 +1,28 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import configurations from "../../config";
 import { setIsLoggedIn } from "../../store/user";
+import { usePopper } from "react-popper";
+import useOnClickOutside from "../Hooks/useOnClickOutside";
 
 const Navbar = (props) => {
   const dispatch = useDispatch();
   const [isExpanded, setIsExpanded] = useState(false);
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
+  const [referenceElement, setReferenceElement] = useState(null);
+  const [popperElement, setPopperElement] = useState(null);
+  const [arrowElement, setArrowElement] = useState(null);
+  const [showAccountMenu, setShowAccountMenu] = useState(false);
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    modifiers: [
+      { name: "arrow", options: { element: arrowElement } },
+      { name: "offset", options: { offset: [-62, 0] } },
+    ],
+  });
+  const accountMenuRef = useRef();
+  useOnClickOutside(accountMenuRef, () => setShowAccountMenu(false));
 
   const expandMenuHandler = (event) => {
     setIsExpanded((prev) => !prev);
@@ -131,33 +146,62 @@ const Navbar = (props) => {
             className={`cursor-pointer w-full relative ${
               isExpanded ? "border-t border-solid" : ""
             }`}
-          >
-            {isLoggedIn && (
-              <Link
-                to="/login"
-                className={`inline-block relative px-4 whitespace-nowrap ${
-                  isExpanded ? "w-full font-normal line-height-6xl" : ""
-                }`}
-                onClick={logoutHandler}
-              >
-                Logout
-              </Link>
-            )}
-          </li>
+          ></li>
         </ul>
         {isLoggedIn && (
-          <div>
-            <ul className="p-0 m-0 items-center flex-nowrap justify-end">
+          <div ref={accountMenuRef}>
+            <ul
+              className="p-0 m-0 items-center flex-nowrap justify-end"
+              ref={setReferenceElement}
+            >
               <li className="menu-list-item cursor-pointer p-3 relative w-18 h-18">
-                <Link
-                  to="/"
+                <div
+                  onClick={(e) => setShowAccountMenu((prev) => !prev)}
                   className={`menu-list-item__link radius-full border-2 border-solid border-black border-opacity-30 w-12 h-12 cursor-pointer p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal`}
                   style={{
                     backgroundImage: `url("https://lh3.googleusercontent.com/a/AATXAJw7-enkIx0trd2ZVHHpIU_2BzI70ZqeA5gqR_QU=s96-c")`,
                   }}
-                ></Link>
+                ></div>
               </li>
             </ul>
+            {showAccountMenu && (
+              <div>
+                <div
+                  ref={setPopperElement}
+                  style={styles.popper}
+                  {...attributes.popper}
+                  className="border-x border-b border-navy-100 radius-lg color-black bg-white"
+                >
+                  <div className="py-3 px-6 flex flex-row">
+                    <div
+                      className={`menu-list-item__link radius-full border-2 border-solid border-black border-opacity-30 w-12 h-12 p-0 bg-no-repeat bg-size-cover my-0 mx-auto inline-block relative whitespace-nowrap line-height-70 font-normal`}
+                      style={{
+                        backgroundImage: `url("https://lh3.googleusercontent.com/a/AATXAJw7-enkIx0trd2ZVHHpIU_2BzI70ZqeA5gqR_QU=s96-c")`,
+                      }}
+                    ></div>
+                    <div className="flex flex-col justify-center pl-3">
+                      <p className="color-navy-300">Hello,</p>
+                      <p>Gigachad</p>
+                    </div>
+                  </div>
+                  <ul>
+                    <li className="py-3 px-6">Popper element1</li>
+                    <li className="py-3 px-6">Popper element2</li>
+                    <li className="py-3 px-6">Popper element3</li>
+                  </ul>
+                  <Link
+                    to="/login"
+                    className={`color-red-400 inline-block relative px-4 whitespace-nowrap py-3 px-6 ${
+                      isExpanded ? "w-full font-normal line-height-6xl" : ""
+                    }`}
+                    onClick={logoutHandler}
+                  >
+                    Logout
+                  </Link>
+                  <div ref={setArrowElement} style={styles.arrow} />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
