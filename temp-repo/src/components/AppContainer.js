@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
 import Navbar from "./Navbar/Navbar";
@@ -49,6 +49,8 @@ const AppContainer = (props) => {
   const selectedWebhooks = useSelector(
     (state) => state.webhooks.selectedWebhooks
   );
+  const [webhooksLoading, setWebhooksLoading] = useState(true);
+
   const apps = useSelector((state) => state.apps.apps);
 
   const appSelections = useSelector((state) => state.inputs.appSelections);
@@ -61,6 +63,7 @@ const AppContainer = (props) => {
     const res = await getWebhookRequest();
     if (res.responseCode === 200) {
       dispatch(setWebhooks({ webhooks: res.content }));
+      setWebhooksLoading(false);
     }
   };
 
@@ -301,6 +304,7 @@ const AppContainer = (props) => {
         />
       ) : (
         <UserContent
+          webhooksLoading={webhooksLoading}
           onIntegrationUpdate={integrationUpdateHandler}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}

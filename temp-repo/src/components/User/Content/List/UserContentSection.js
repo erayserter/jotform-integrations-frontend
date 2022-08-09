@@ -6,6 +6,8 @@ import ContentSectionListItem from "./ContentSectionListItem";
 
 import { useSelector } from "react-redux";
 
+const dummyArray = [...Array(10)];
+
 const UserContentSection = (props) => {
   const webhooks = useSelector((state) => state.webhooks.webhooks);
   const askedContent = webhooks.filter((m) => {
@@ -18,6 +20,21 @@ const UserContentSection = (props) => {
     }
     return false;
   });
+
+  if (props.webhooksLoading)
+    return (
+      <div className={`${classes["content--list"]} grow-1 h-full`}>
+        <div
+          className={`${classes["content--list-wrapper"]} w-full h-full flex flex-col py-1 px-0.5 md:py-4 md:px-5`}
+        >
+          {dummyArray.map((e) => (
+            <div
+              className={`flex justify-between items-center w-full h-8 radius-full bg-navy-25 mb-9`}
+            ></div>
+          ))}
+        </div>
+      </div>
+    );
 
   return (
     <div className={`${classes["content--list"]} grow-1 h-full`}>
