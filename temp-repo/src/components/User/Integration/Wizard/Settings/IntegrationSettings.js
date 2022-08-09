@@ -35,7 +35,7 @@ const IntegrationSettings = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, [props.type, settingsSelections, appAction]);
+  }, [props.type, settingsSelections]);
 
   const fetchData = async () => {
     setOptionsLoading(true);

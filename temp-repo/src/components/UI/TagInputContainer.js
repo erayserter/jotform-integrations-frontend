@@ -22,6 +22,7 @@ const TagInputContainer = (props) => {
   const [popperElement, setPopperElement] = useState(null);
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: "bottom-end",
+    strategy: "fixed",
   });
 
   const [isToggled, setIsToggled] = useState(false);
@@ -106,6 +107,7 @@ const TagInputContainer = (props) => {
             props.onChange(converted);
           }}
           value={str}
+          onBlur={props.onBlur}
         />
         <div className={classes["input__form-fields"]}>
           <button
@@ -138,8 +140,9 @@ const TagInputContainer = (props) => {
             </div>
             <div>Form Fields</div>
           </button>
-          {isToggled &&
-            ReactDOM.createPortal(
+          {
+            isToggled && (
+              // ReactDOM.createPortal(
               <div
                 className={`${classes["form-fields__popper"]} bg-white radius min-w-72 shadow-md`}
                 ref={setPopperElement}
@@ -171,9 +174,12 @@ const TagInputContainer = (props) => {
                     </ul>
                   </div>
                 </div>
-              </div>,
-              document.querySelector("#root")
-            )}
+              </div>
+            )
+            // ,
+            // document.querySelector("#root")
+            // )
+          }
         </div>
       </div>
     </div>
