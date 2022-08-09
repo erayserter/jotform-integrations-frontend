@@ -7,6 +7,7 @@ import classes from "./TagInputContainer.module.css";
 import { useRef } from "react";
 
 import useOnClickOutside from "../Hooks/useOnClickOutside";
+import { useEffect } from "react";
 
 const settings = {
   pattern: /@/,
@@ -30,9 +31,14 @@ const TagInputContainer = (props) => {
   const tagRef = useRef();
   const openRef = useRef();
 
-  useOnClickOutside(openRef, () => {
+  useOnClickOutside({ openRef, popperRef: props.popperRefs[props.key] }, () => {
     setIsToggled(false);
   });
+
+  useEffect(() => {
+    if (!props.popperRefs[props.key]) props.onPopperRefChange(props.key);
+    return props.onPopperRefChange(props.key);
+  }, []);
 
   let str = "";
   let index = 0;
@@ -107,9 +113,8 @@ const TagInputContainer = (props) => {
             props.onChange(converted);
           }}
           value={str}
-          onBlur={props.onBlur}
         />
-        <div className={classes["input__form-fields"]}>
+        <div className={classes["input__form-fields"]} ref={openRef}>
           <button
             className="absolute top-4 cursor-pointer right-0 duration-300 flex items-center justify-center radius py-2 pr-6 pl-2"
             ref={setReferenceElement}
@@ -140,9 +145,8 @@ const TagInputContainer = (props) => {
             </div>
             <div>Form Fields</div>
           </button>
-          {
-            isToggled && (
-              // ReactDOM.createPortal(
+          {isToggled &&
+            ReactDOM.createPortal(
               <div
                 className={`${classes["form-fields__popper"]} bg-white radius min-w-72 shadow-md`}
                 ref={setPopperElement}
@@ -151,7 +155,7 @@ const TagInputContainer = (props) => {
               >
                 <div
                   className={`${classes["popper__wrapper"]} overflow-x-hidden overflow-y-auto max-h-60 text-sm line-height-xl`}
-                  ref={openRef}
+                  ref={props.popperRefs[props.key]}
                 >
                   <div
                     className={`${classes["popper__list"]} px-3 w-full max-w-80`}
@@ -174,12 +178,9 @@ const TagInputContainer = (props) => {
                     </ul>
                   </div>
                 </div>
-              </div>
-            )
-            // ,
-            // document.querySelector("#root")
-            // )
-          }
+              </div>,
+              document.body
+            )}
         </div>
       </div>
     </div>

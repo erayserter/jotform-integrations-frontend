@@ -19,7 +19,6 @@ const InputContainer = (props) => {
         required
         value={props.default || ""}
         onChange={(e) => props.setter(e.target.value)}
-        onBlur={props.onBlur}
       />
     </div>
   );

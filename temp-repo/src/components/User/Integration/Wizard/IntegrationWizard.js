@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import classes from "./IntegrationWizard.module.css";
@@ -14,9 +14,12 @@ import {
   setSettingsSelections,
   newSettingsHandler,
 } from "../../../../store/inputs";
+import { omit } from "lodash";
 
 const IntegrationWizard = (props) => {
   const dispatch = useDispatch();
+
+  const [popperRefs, setPopperRefs] = useState({});
 
   const isTemplate = useSelector((state) => state.ui.isTemplate);
   const isUpdate = useSelector((state) => state.ui.isUpdate);
@@ -49,6 +52,12 @@ const IntegrationWizard = (props) => {
       }
     }
   }, [isUpdate, isTemplate]);
+
+  const popperRefChangeHandler = (selection) => {
+    if (!popperRefs[selection])
+      setPopperRefs((prev) => ({ ...prev, [selection]: createRef() }));
+    else setPopperRefs((prev) => omit(prev, selection));
+  };
 
   const modalBoxHandler = (bool) => {
     setIsModelOpen(bool);
@@ -224,7 +233,7 @@ const IntegrationWizard = (props) => {
         )}
 
         {isModelOpen && (
-          <ModalBox onModalBoxClose={modalBoxHandler}>
+          <ModalBox onModalBoxClose={modalBoxHandler} refs={popperRefs}>
             {isAppChoice && (
               <IntegrationAppSelector
                 onAuthenticate={authHandler}
@@ -234,6 +243,8 @@ const IntegrationWizard = (props) => {
             )}
             {isSettingsChoice && (
               <IntegrationSettings
+                popperRefs={popperRefs}
+                onPopperRefChange={popperRefChangeHandler}
                 onSettingsChange={settingsChangeHandler}
                 onSave={saveSettingsHandler}
                 onPreviousModal={setSettingsChoice}

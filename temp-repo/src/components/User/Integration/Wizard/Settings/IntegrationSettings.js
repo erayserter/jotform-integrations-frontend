@@ -183,6 +183,8 @@ const IntegrationSettings = (props) => {
                   }}
                   defaultValue={settingsSelections[props.type][e.selection]}
                   whitelist={appOptions[app.id][e.selection]}
+                  popperRefs={props.popperRefs}
+                  onPopperRefChange={props.onPopperRefChange}
                 />
               );
             } else if (e.type === "matchFields") {

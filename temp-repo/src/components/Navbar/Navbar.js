@@ -127,22 +127,6 @@ const Navbar = (props) => {
               </Link>
             )}
           </li>
-          {/* <li
-            className={`cursor-pointer w-full relative ${
-              isExpanded ? "border-t border-solid" : ""
-            }`}
-          >
-            { {!isLoggedIn && (
-              <Link
-                to="/"
-                className={`inline-block relative px-4 whitespace-nowrap ${
-                  isExpanded ? "w-full font-normal line-height-6xl" : ""
-                }`}
-              >
-                Login
-              </Link>
-            )} }
-          </li> */}
           <li
             className={`cursor-pointer w-full relative ${
               isExpanded ? "border-t border-solid" : ""

@@ -57,7 +57,7 @@ const UserContent = (props) => {
 
   const ref = useRef();
 
-  useOnClickOutside(ref, () => {
+  useOnClickOutside({ ref }, () => {
     setIsSortingPopperOpen(false);
   });
 

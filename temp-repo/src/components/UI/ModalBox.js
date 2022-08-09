@@ -4,10 +4,10 @@ import classes from "./ModalBox.module.css";
 
 import useOnClickOutside from "../Hooks/useOnClickOutside";
 
-const ModalBox = (props) => {
+const ModalBox = ({ onModalBoxClose, refs, children }) => {
   const ref = useRef();
 
-  useOnClickOutside(ref, () => props.onModalBoxClose(false));
+  useOnClickOutside({ ...refs, modalRef: ref }, () => onModalBoxClose(false));
 
   return (
     <div
@@ -18,10 +18,10 @@ const ModalBox = (props) => {
         className={`${classes["modal-content"]} flex flex-col grow-1 absolute top-0 left-0 w-full h-full md:max-w-md md:h-auto md:top-1/2 md:left-1/2 bg-white radius overflow-auto`}
         ref={ref}
       >
-        {props.children}
+        {children}
         <button
           className={`absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
-          onClick={() => props.onModalBoxClose(false)}
+          onClick={() => onModalBoxClose(false)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
