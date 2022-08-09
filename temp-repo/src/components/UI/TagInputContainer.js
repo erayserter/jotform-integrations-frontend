@@ -139,7 +139,7 @@ const TagInputContainer = (props) => {
             <div>Form Fields</div>
           </button>
           {isToggled &&
-            (ReactDOM.createPortal(
+            ReactDOM.createPortal(
               <div
                 className={`${classes["form-fields__popper"]} bg-white radius min-w-72 shadow-md`}
                 ref={setPopperElement}
@@ -173,9 +173,9 @@ const TagInputContainer = (props) => {
                     </ul>
                   </div>
                 </div>
-              </div>
-            ),
-            document.querySelector("#root"))}
+              </div>,
+              document.querySelector("#root")
+            )}
         </div>
       </div>
     </div>
