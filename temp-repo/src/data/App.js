@@ -109,7 +109,7 @@ export default class App {
   }
 
   authenticate(credentials) {
-    if (this.isOauth) return this.getAllUserData(credentials);
+    if (this.isOauth) return this.getAllUserAccounts(credentials);
     return this.validateApiKey(credentials);
   }
 
@@ -128,11 +128,11 @@ export default class App {
     ).then((data) => data.json());
   }
 
-  async getAllUserData(credentials) {
+  async getAllUserAccounts(credentials) {
     return fetch(
       "https://" +
         configurations.DEV_RDS_NAME +
-        ".jotform.dev/intern-api/getAllUserData?app_name=" +
+        ".jotform.dev/intern-api/getAllUserAccounts?app_name=" +
         credentials
     ).then((res) => res.json());
   }
