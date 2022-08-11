@@ -105,7 +105,7 @@ const IntegrationSettings = (props) => {
     >
       <h1
         className={`color-navy-700 text-3xl font-semibold pt-1 text-center ${
-          props.type !== "source" && "pl-14"
+          props.type !== "source" && "md:pl-14"
         }`}
       >
         {app.name} Settings
@@ -139,7 +139,7 @@ const IntegrationSettings = (props) => {
                       menuPortal: (base) => ({ ...base, zIndex: 9999 }),
                     }}
                     menuPortalTarget={document.body}
-                    menuPlacement="bottom"
+                    menuPlacement="auto"
                     onChange={(event) => {
                       if (e.isMulti) {
                         newValueHandler(
@@ -190,8 +190,8 @@ const IntegrationSettings = (props) => {
             } else if (e.type === "matchFields") {
               if (
                 appOptions[app.id][e.selection] == null ||
-                appOptions[app.id][e.selection].source.length <= 0 ||
-                appOptions[app.id][e.selection].destination.length <= 0
+                (appOptions[app.id][e.selection].source.length <= 0 &&
+                  appOptions[app.id][e.selection].destination.length <= 0)
               )
                 return null;
               return (
@@ -204,6 +204,7 @@ const IntegrationSettings = (props) => {
                   onChange={(value) => {
                     newValueHandler(value, e.selection);
                   }}
+                  inputTypes={e.inputTypes}
                 />
               );
             } else

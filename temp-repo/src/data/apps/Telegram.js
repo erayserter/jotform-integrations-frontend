@@ -58,8 +58,4 @@ export default class Telegram extends App {
         return;
     }
   }
-
-  prepareData(data) {
-    return data;
-  }
 }

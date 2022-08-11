@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import Select from "react-select";
 
-import { isEmpty } from "lodash";
+import { cloneDeep, isEmpty, isObject } from "lodash";
 
 import classes from "./MatchFieldsContainer.module.css";
 
 const convertInput = (inputObject, fieldDatas) => {
   let temporaryArray = [];
+
+  console.log({ inputObject, fieldDatas });
 
   for (const fieldId in inputObject) {
     let destinationField = fieldDatas.destination.find(
@@ -33,13 +35,13 @@ const convertInput = (inputObject, fieldDatas) => {
             value: destinationField.value,
             label: destinationField.label,
           }
-        : {},
+        : { value: inputObject[fieldId], label: inputObject[fieldId] },
       source: sourceField
         ? {
             value: sourceField.value,
             label: sourceField.label,
           }
-        : {},
+        : { value: fieldId, label: fieldId },
     });
   }
 
@@ -57,7 +59,7 @@ const convertOutput = (outputArray) => {
 
 const MatchFieldsContainer = (props) => {
   const [mappingChoices, setMappingChoices] = useState([
-    { destination: { value: "name", label: "Name" }, source: {} },
+    { destination: {}, source: {} },
   ]);
 
   const appSelections = useSelector((state) => state.inputs.appSelections);
@@ -88,8 +90,12 @@ const MatchFieldsContainer = (props) => {
       key={props.key}
       className={`${classes["match-fields"]} py-5 border-b border-solid`}
     >
-      <div className={`${classes["match-fields__title"]} mb-2`}>
-        <label>{props.label}</label>
+      <div className={`mb-2`}>
+        <label
+          className={`${classes["match-fields__title"]} block text-sm fonr-semibold`}
+        >
+          {props.label}
+        </label>
       </div>
       <div className={`w-full`}>
         <div className={`mb-2 text-sm`}>
@@ -104,7 +110,7 @@ const MatchFieldsContainer = (props) => {
                 alt={destination_app.name}
               />
               <div className={`inline-block align-middle text-xs`}>
-                <span>{destination_app.id}</span>
+                <span>{destination_app.name}</span>
               </div>
             </div>
           </div>
@@ -119,7 +125,7 @@ const MatchFieldsContainer = (props) => {
                 alt={source_app.name}
               />
               <div className={`inline-block align-middle text-xs`}>
-                <span>{source_app.id}</span>
+                <span>{source_app.name}</span>
               </div>
             </div>
           </div>
@@ -134,70 +140,97 @@ const MatchFieldsContainer = (props) => {
                 <div className={`${classes["mapping__leftside"]} inline-block`}>
                   <div className={`relative`}>
                     <div className={`relative`}>
-                      <Select
-                        className={`basic-multi-select`}
-                        classNamePrefix="select"
-                        isSearchable={true}
-                        name="actions"
-                        options={destinationRequiredOptions}
-                        placeholder="Please select..."
-                        styles={{
-                          menuPortal: (base) => ({ ...base, zIndex: 9998 }),
-                        }}
-                        menuPortalTarget={document.body}
-                        menuPlacement="bottom"
-                        onChange={(value) => {
-                          let temp = [...mappingChoices];
-                          temp[index] = {
-                            ...temp[index],
-                            destination: value,
-                          };
-                          setMappingChoices(temp);
-                          if (choice.source.value) {
-                            props.onChange(convertOutput(temp));
-                          }
-                        }}
-                        value={choice.destination}
-                      />
+                      {props.inputTypes.destination === "select" ? (
+                        <Select
+                          className={`basic-multi-select`}
+                          classNamePrefix="select"
+                          isSearchable={true}
+                          name="actions"
+                          options={destinationRequiredOptions}
+                          placeholder="Please select..."
+                          styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9998 }),
+                          }}
+                          menuPortalTarget={document.body}
+                          menuPlacement="bottom"
+                          onChange={(value) => {
+                            let temp = [...mappingChoices];
+                            temp[index] = {
+                              ...temp[index],
+                              destination: value,
+                            };
+                            setMappingChoices(temp);
+                            if (choice.source.value) {
+                              props.onChange(convertOutput(temp));
+                            }
+                          }}
+                          value={choice.destination}
+                        />
+                      ) : (
+                        <input
+                          className="h-9 w-full border border-solid radius-md py-px px-3"
+                          style={{ borderColor: "rgb(204, 204, 204)" }}
+                          placeholder="Enter Column Name"
+                          value={choice.destination.value}
+                          onChange={(event) => {
+                            let temp = cloneDeep(mappingChoices);
+                            temp[index] = {
+                              ...temp[index],
+                              destination: {
+                                value: event.target.value,
+                                label: event.target.value,
+                              },
+                            };
+                            setMappingChoices(temp);
+                            if (choice.source.value) {
+                              props.onChange(convertOutput(temp));
+                            }
+                          }}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className={`${classes["mapping__rightside"]} float-right`}>
                   <div className={`relative`}>
                     <div className={`relative`}>
-                      <Select
-                        className={`basic-multi-select`}
-                        classNamePrefix="select"
-                        placeholder="Please select..."
-                        isSearchable={true}
-                        name="actions"
-                        options={
-                          !isEmpty(choice.destination) &&
-                          props.datas.predefined[choice.destination.value]
-                            ? [
-                                ...props.datas.predefined[
-                                  choice.destination.value
-                                ],
-                                ...sourceRequiredOptions,
-                              ]
-                            : sourceRequiredOptions
-                        }
-                        styles={{
-                          menuPortal: (base) => ({ ...base, zIndex: 9998 }),
-                        }}
-                        menuPortalTarget={document.body}
-                        menuPlacement="bottom"
-                        onChange={(value) => {
-                          let temp = [...mappingChoices];
-                          temp[index] = {
-                            ...temp[index],
-                            source: value,
-                          };
-                          setMappingChoices(temp);
-                          props.onChange(convertOutput(temp));
-                        }}
-                        value={choice.source}
-                      />
+                      {props.inputTypes.source === "select" ? (
+                        <Select
+                          className={`basic-multi-select`}
+                          classNamePrefix="select"
+                          placeholder="Please select..."
+                          isSearchable={true}
+                          name="actions"
+                          options={
+                            !isEmpty(choice.destination) &&
+                            props.datas.predefined[choice.destination.value]
+                              ? [
+                                  ...props.datas.predefined[
+                                    choice.destination.value
+                                  ],
+                                  ...sourceRequiredOptions,
+                                ]
+                              : sourceRequiredOptions
+                          }
+                          styles={{
+                            menuPortal: (base) => ({ ...base, zIndex: 9998 }),
+                          }}
+                          menuPortalTarget={document.body}
+                          menuPlacement="bottom"
+                          onChange={(value) => {
+                            let temp = [...mappingChoices];
+                            temp[index] = {
+                              ...temp[index],
+                              source: value,
+                            };
+                            setMappingChoices(temp);
+                            props.onChange(convertOutput(temp));
+                          }}
+                          value={choice.source}
+                        />
+                      ) : (
+                        <input />
+                      )}
                     </div>
                   </div>
                 </div>

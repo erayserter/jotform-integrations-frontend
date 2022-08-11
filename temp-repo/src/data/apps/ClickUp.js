@@ -26,7 +26,12 @@ const ACTIONS = [
     ),
     new Select("Choose a Folder", "folder", ["list_id", "match_fields"], false),
     new Select("Choose a List", "list_id", ["match_fields"], false),
-    new MatchFields("Match Your Fields", "match_fields", []),
+    new MatchFields(
+      "Match Your Fields",
+      "match_fields",
+      { source: "select", destination: "select" },
+      []
+    ),
   ]),
   new Action("Create Subtask", [
     new Select(
@@ -49,7 +54,12 @@ const ACTIONS = [
     ),
     new Select("Choose a List", "list_id", ["task", "match_fields"], false),
     new Select("Choose a Task", "task", ["match_fields"], false),
-    new MatchFields("Match Your Fields", "match_fields", []),
+    new MatchFields(
+      "Match Your Fields",
+      "match_fields",
+      { source: "select", destination: "select" },
+      []
+    ),
   ]),
   new Action("Create Comment", [
     new Select(
@@ -407,9 +417,5 @@ export default class ClickUp extends App {
       id: requiredSelection,
     };
     return this.fetchDataFromBackend(body);
-  }
-
-  prepareData(data) {
-    return data;
   }
 }

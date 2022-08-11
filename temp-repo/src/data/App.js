@@ -158,4 +158,8 @@ export default class App {
 
     return responseContent;
   }
+
+  prepareData(data) {
+    return data;
+  }
 }

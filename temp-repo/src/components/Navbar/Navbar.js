@@ -22,7 +22,7 @@ const Navbar = (props) => {
     ],
   });
   const accountMenuRef = useRef();
-  useOnClickOutside(accountMenuRef, () => setShowAccountMenu(false));
+  useOnClickOutside({ accountMenuRef }, () => setShowAccountMenu(false));
 
   const expandMenuHandler = (event) => {
     setIsExpanded((prev) => !prev);

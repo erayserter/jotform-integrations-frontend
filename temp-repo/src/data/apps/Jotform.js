@@ -169,8 +169,4 @@ export default class Jotform extends App {
     };
     return this.fetchDataFromBackend(body);
   }
-
-  prepareData(data) {
-    return data;
-  }
 }

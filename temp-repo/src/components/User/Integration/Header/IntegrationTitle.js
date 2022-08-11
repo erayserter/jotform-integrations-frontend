@@ -17,15 +17,11 @@ const IntegrationTitle = ({
   return (
     <div className={`${classes["integration-title"]} static p-0`}>
       {isTitleInlineEdit ? (
-        <div
-          className={`${classes["settingsInlineEdit"]} flex justify-center items-center`}
-        >
-          <InlineEdit
-            value={titleValue}
-            setValue={titleSetValue}
-            isTitle={true}
-          />
-        </div>
+        <InlineEdit
+          value={titleValue}
+          setValue={titleSetValue}
+          isTitle={true}
+        />
       ) : (
         <h1 className=" text-center color-navy-700 font-semibold">{title}</h1>
       )}
