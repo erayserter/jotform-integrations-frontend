@@ -159,7 +159,11 @@ export default class App {
     return responseContent;
   }
 
-  prepareData(data) {
+  prepareDataServerSide(data) {
+    return data;
+  }
+
+  prepareDataClientSide(data) {
     return data;
   }
 }

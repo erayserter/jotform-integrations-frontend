@@ -120,7 +120,7 @@ export default class Excel extends App {
     return this.fetchDataFromBackend(body);
   }
 
-  prepareData(data) {
+  prepareDataServerSide(data) {
     return {
       ...data,
       destination: {
@@ -142,4 +142,29 @@ export default class Excel extends App {
       },
     };
   }
+
+  prepareDataClientSide(data) {
+    console.log(data);
+    return {
+      ...data,
+      destination: {
+        ...data.destination,
+        settings: {
+          ...data.destination.settings,
+          fields: data.destination.settings.selected_fields.reduce(
+            (object, field) => ({
+              ...object,
+              [field.form_field_id]: field.form_field_name,
+            }),
+            {}
+          ),
+          edit: data.destination.settings.edit == 1 ? true : false,
+          add_old_submissions:
+            data.destination.settings.add_old_submissions == 1 ? true : false,
+        },
+      },
+    };
+  }
+
+  // TODO: [{form_field_id:a, form_field_name: b}, ...] -> {a:b, c:d, ...}
 }

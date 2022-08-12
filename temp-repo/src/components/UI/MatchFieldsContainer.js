@@ -9,8 +9,6 @@ import classes from "./MatchFieldsContainer.module.css";
 const convertInput = (inputObject, fieldDatas) => {
   let temporaryArray = [];
 
-  console.log({ inputObject, fieldDatas });
-
   for (const fieldId in inputObject) {
     let destinationField = fieldDatas.destination.find(
       (field) => field.value == inputObject[fieldId]

@@ -55,7 +55,7 @@ export default class GoogleContacts extends App {
     }
   }
 
-  prepareData(data) {
+  prepareDataServerSide(data) {
     const dataCopy = cloneDeep(data);
     dataCopy.destination.settings = {
       contact_information: {
@@ -68,5 +68,24 @@ export default class GoogleContacts extends App {
       },
     };
     return dataCopy;
+  }
+
+  prepareDataClientSide(data) {
+    return {
+      ...data,
+      destination: {
+        ...data.destination,
+        settings: {
+          givenName:
+            data.destination.settings.contact_information.names.givenName,
+          familyName:
+            data.destination.settings.contact_information.names.familyName,
+          emailAddress:
+            data.destination.settings.contact_information.emailAddresses.value,
+          phoneNumber:
+            data.destination.settings.contact_information.phoneNumbers.value,
+        },
+      },
+    };
   }
 }

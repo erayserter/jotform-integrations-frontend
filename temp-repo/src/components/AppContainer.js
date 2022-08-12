@@ -123,6 +123,8 @@ const AppContainer = (props) => {
     const source_app = apps[webhook.value.source.app_name];
     const destination_app = apps[webhook.value.destination.app_name];
 
+    const clientData = destination_app.prepareDataClientSide(webhook.value);
+
     const info = {
       source: { res: null, status: false, content: null },
       destination: { res: null, status: false, content: null },
@@ -130,36 +132,36 @@ const AppContainer = (props) => {
 
     if (source_app.isOauth) {
       info.source.res = await source_app.authenticate(
-        webhook.value.source.app_name
+        clientData.source.app_name
       );
       const user = info.source.res.content.find(
-        (e) => e.auth_user_id === webhook.value.source.auth_user_id
+        (e) => e.auth_user_id === clientData.source.auth_user_id
       );
       if (user) info.source.status = true;
       info.source.content = user;
     } else {
       info.source.res = await source_app.authenticate({
-        app_name: webhook.value.source["app_name"].toLowerCase(),
-        action: webhook.value.source["app_action"],
-        api_key: webhook.value.source["api_key"],
+        app_name: clientData.source["app_name"].toLowerCase(),
+        action: clientData.source["app_action"],
+        api_key: clientData.source["api_key"],
       });
       info.source.status = info.source.res.responseCode === 200;
       info.source.content = info.source.res.content;
     }
     if (destination_app.isOauth) {
       info.destination.res = await destination_app.authenticate(
-        webhook.value.destination.app_name
+        clientData.destination.app_name
       );
       const user = info.destination.res.content.find(
-        (e) => e.auth_user_id === webhook.value.destination.auth_user_id
+        (e) => e.auth_user_id === clientData.destination.auth_user_id
       );
       if (user) info.destination.status = true;
       info.destination.content = user;
     } else {
       info.destination.res = await destination_app.authenticate({
-        app_name: webhook.value.destination["app_name"].toLowerCase(),
-        action: webhook.value.destination["app_action"],
-        api_key: webhook.value.destination["api_key"],
+        app_name: clientData.destination["app_name"].toLowerCase(),
+        action: clientData.destination["app_action"],
+        api_key: clientData.destination["api_key"],
       });
       info.destination.status = info.destination.res.responseCode === 200;
       info.destination.content = info.destination.res.content;
@@ -174,18 +176,18 @@ const AppContainer = (props) => {
           source: {
             app: source_app,
             action: source_app.triggers.find(
-              (e) => e.name === webhook.value.source.app_action
+              (e) => e.name === clientData.source.app_action
             ),
-            key: webhook.value.source.api_key,
-            auth_id: webhook.value.source.auth_user_id,
+            key: clientData.source.api_key,
+            auth_id: clientData.source.auth_user_id,
           },
           destination: {
             app: destination_app,
             action: destination_app.actions.find(
-              (e) => e.name === webhook.value.destination.app_action
+              (e) => e.name === clientData.destination.app_action
             ),
-            key: webhook.value.destination.api_key,
-            auth_id: webhook.value.destination.auth_user_id,
+            key: clientData.destination.api_key,
+            auth_id: clientData.destination.auth_user_id,
           },
         },
       })
@@ -194,8 +196,8 @@ const AppContainer = (props) => {
     dispatch(
       setSettingsSelections({
         settingsSelections: {
-          source: webhook.value.source.settings,
-          destination: webhook.value.destination.settings,
+          source: clientData.source.settings,
+          destination: clientData.destination.settings,
         },
       })
     );
@@ -254,15 +256,19 @@ const AppContainer = (props) => {
   };
 
   const integrationSaveHandler = async (data, isUpdate) => {
-    data = apps[data.destination.app_name].prepareData(data);
-    const res = await postWebhookRequest(data);
+    const backendData =
+      apps[data.destination.app_name].prepareDataServerSide(data);
+    const res = await postWebhookRequest(backendData);
     const newWebhooks = isUpdate
       ? webhooks.map((webhook) => {
           if (webhook.webhook_id === res.content.webhookId)
             return {
               ...webhook,
-              webhook_name: data.webhook_name,
-              value: { source: data.source, destination: data.destination },
+              webhook_name: backendData.webhook_name,
+              value: {
+                source: backendData.source,
+                destination: backendData.destination,
+              },
             };
           return webhook;
         })
@@ -270,8 +276,11 @@ const AppContainer = (props) => {
           ...webhooks,
           {
             webhook_id: res.content.webhookId,
-            webhook_name: data.webhook_name,
-            value: { source: data.source, destination: data.destination },
+            webhook_name: backendData.webhook_name,
+            value: {
+              source: backendData.source,
+              destination: backendData.destination,
+            },
             status: "ENABLED",
             is_favorite: "0",
           },
