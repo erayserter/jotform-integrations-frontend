@@ -1,6 +1,8 @@
 import React, { useState, useEffect, createRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
+import { toast } from "react-toastify";
+
 import classes from "./IntegrationWizard.module.css";
 
 import IntegrationAppCard from "./IntegrationAppCard";
@@ -128,37 +130,42 @@ const IntegrationWizard = (props) => {
   const saveSettingsHandler = (values, type) => {
     if (settingsChoice === "source") {
       setSettingsChoice("destination");
-    } else {
-      const source_app = appSelections.source.app;
-      const destination_app = appSelections.destination.app;
-
-      const allData = {
-        source: {
-          app_name: source_app.id,
-          app_action: appSelections.source.action.name,
-          api_key: appSelections.source.key,
-          auth_user_id: appSelections.source.auth_id,
-          settings: settingsSelections.source,
-        },
-        destination: {
-          app_name: destination_app.id,
-          app_action: appSelections.destination.action.name,
-          api_key: appSelections.destination.key,
-          auth_user_id: appSelections.destination.auth_id,
-          settings: settingsSelections.destination,
-        },
-        webhook_name: appSelections.name,
-      };
-
-      if (isUpdate) {
-        allData.action = "update";
-        allData["webhook_id"] = appSelections.webhookId;
-      } else {
-        allData.action = "create";
-      }
-
-      props.onIntegrationSave(allData, isUpdate);
+      return;
     }
+
+    isUpdate
+      ? toast.success("Successfully updated an integration!")
+      : toast.success("Successfully created an integration!");
+
+    const source_app = appSelections.source.app;
+    const destination_app = appSelections.destination.app;
+
+    const allData = {
+      source: {
+        app_name: source_app.id,
+        app_action: appSelections.source.action.name,
+        api_key: appSelections.source.key,
+        auth_user_id: appSelections.source.auth_id,
+        settings: settingsSelections.source,
+      },
+      destination: {
+        app_name: destination_app.id,
+        app_action: appSelections.destination.action.name,
+        api_key: appSelections.destination.key,
+        auth_user_id: appSelections.destination.auth_id,
+        settings: settingsSelections.destination,
+      },
+      webhook_name: appSelections.name,
+    };
+
+    if (isUpdate) {
+      allData.action = "update";
+      allData["webhook_id"] = appSelections.webhookId;
+    } else {
+      allData.action = "create";
+    }
+
+    props.onIntegrationSave(allData, isUpdate);
   };
 
   const typeChangeHandler = (type) => {

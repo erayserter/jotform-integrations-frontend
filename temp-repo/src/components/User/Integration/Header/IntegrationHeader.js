@@ -37,7 +37,6 @@ const TEMPLATE_IMG = (
 const IntegrationHeader = (props) => {
   const dispatch = useDispatch();
 
-  const PREFILL_URL = require("../../../../assets/prefill.svg");
   const PrefillImage = (
     <img src={`../src/assets/prefill.svg`} alt="prefill-icon" />
   );

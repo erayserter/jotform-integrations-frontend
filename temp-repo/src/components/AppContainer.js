@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import { Navigate } from "react-router-dom";
 
 import Navbar from "./Navbar/Navbar";
@@ -320,6 +321,7 @@ const AppContainer = (props) => {
           onSelect={selectWebhookHandler}
         />
       )}
+      <ToastContainer />
     </div>
   );
 };

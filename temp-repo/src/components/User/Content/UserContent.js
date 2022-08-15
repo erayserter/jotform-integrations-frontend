@@ -24,8 +24,8 @@ const LIST_ITEMS = [
 const SORT_LIST_ITEMS = [
   "Title [a-z]",
   "Title [z-a]",
-  "Creation Date",
-  "Last Edit",
+  "Last Created",
+  "Last Edited",
 ];
 
 const FIRST_ITEM = 0;
@@ -41,9 +41,7 @@ const UserContent = (props) => {
 
   const [isSidebarMenuOpen, setIsSidebarMenuOpen] = useState(false);
   const [isSortingPopperOpen, setIsSortingPopperOpen] = useState(false);
-  const [sortedItemsBy, setSortedItemsBy] = useState(
-    SORT_LIST_ITEMS[FIRST_ITEM]
-  );
+  const [sortedItemsBy, setSortedItemsBy] = useState("Last Created");
 
   const [referenceElement, setReferenceElement] = useState(null);
   const [popperElement, setPopperElement] = useState(null);

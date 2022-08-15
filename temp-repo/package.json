@@ -15,6 +15,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
     "react-select": "^5.3.2",
+    "react-toastify": "^9.0.8",
     "watch": "^1.0.2"
   },
   "scripts": {
