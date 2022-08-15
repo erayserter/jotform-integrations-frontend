@@ -26,9 +26,6 @@ const SORT_LIST_ITEMS = [
   "Title [z-a]",
   "Creation Date",
   "Last Edit",
-  "Submission Count",
-  "Unread",
-  "Last Submission",
 ];
 
 const FIRST_ITEM = 0;
@@ -322,6 +319,7 @@ const UserContent = (props) => {
             onIntegrationUpdate={props.onIntegrationUpdate}
             content={sectionContent}
             searchedWord={searchedWord}
+            sortItemsBy={sortedItemsBy}
             onSelect={props.onSelect}
             onFavorite={props.onFavorite}
             onStatusChangeWebhook={props.onStatusChangeWebhook}

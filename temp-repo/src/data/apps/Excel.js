@@ -144,7 +144,6 @@ export default class Excel extends App {
   }
 
   prepareDataClientSide(data) {
-    console.log(data);
     return {
       ...data,
       destination: {
@@ -165,6 +164,4 @@ export default class Excel extends App {
       },
     };
   }
-
-  // TODO: [{form_field_id:a, form_field_name: b}, ...] -> {a:b, c:d, ...}
 }

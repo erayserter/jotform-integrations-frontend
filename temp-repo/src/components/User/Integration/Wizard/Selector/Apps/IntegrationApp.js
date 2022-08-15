@@ -14,7 +14,7 @@ const IntegrationApp = (props) => {
         src={props.app.url}
         width="50px"
       />
-      <span>{props.app.name}</span>
+      <span className="text-center">{props.app.name}</span>
     </div>
   );
 };

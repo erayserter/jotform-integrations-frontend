@@ -14,9 +14,12 @@ const SelectionCard = (props) => {
     props.onAppSelect(app);
   };
 
-  const fullContent = Object.values(apps).map((app) => {
+  const fullContent = Object.values(apps).map((app, index, appArr) => {
     return (
-      <li key={app.id} className="basis-1/3">
+      <li
+        key={app.id}
+        className={`basis-1/3 ${index < appArr.length - 1 && "mb-5"}`}
+      >
         <IntegrationApp
           className="flex justify-center"
           onAppSelect={appSelectHandler}
@@ -28,9 +31,12 @@ const SelectionCard = (props) => {
 
   const filteredContent = Object.values(apps)
     .filter((e) => e.id.includes(searchedWord))
-    .map((app) => {
+    .map((app, index, appArr) => {
       return (
-        <li key={app.id} className="basis-1/3">
+        <li
+          key={app.id}
+          className={`basis-1/3 ${index < appArr.length - 1 && "mb-5"}`}
+        >
           <IntegrationApp
             className="flex justify-center"
             onAppSelect={appSelectHandler}

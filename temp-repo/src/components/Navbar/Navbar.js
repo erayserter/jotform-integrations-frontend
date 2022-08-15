@@ -131,7 +131,7 @@ const Navbar = (props) => {
               isExpanded ? "border-t border-solid" : ""
             }`}
           >
-            {isLoggedIn && (
+            {/* {isLoggedIn && (
               <Link
                 to="/"
                 className={`inline-block relative px-4 whitespace-nowrap ${
@@ -140,7 +140,7 @@ const Navbar = (props) => {
               >
                 All Integrations
               </Link>
-            )}
+            )} */}
           </li>
           <li
             className={`cursor-pointer w-full relative ${

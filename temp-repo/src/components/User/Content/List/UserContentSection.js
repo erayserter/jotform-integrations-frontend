@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import classes from "./UserContentSection.module.css";
 
@@ -8,9 +8,46 @@ import { useSelector } from "react-redux";
 
 const dummyArray = [...Array(10)];
 
+const sortContent = (array, restriction) => {
+  if (array.length === 0) return [];
+
+  const sortedArray = [...array];
+
+  switch (restriction) {
+    case "Title [a-z]":
+      return sortedArray.sort((a, b) =>
+        a.webhook_name.localeCompare(b.webhook_name)
+      );
+    case "Title [z-a]":
+      return sortedArray.sort((a, b) =>
+        b.webhook_name.localeCompare(a.webhook_name)
+      );
+    case "Last Created":
+      return sortedArray.sort((a, b) => {
+        const dateA = new Date(a.created_at);
+        const dateB = new Date(b.created_at);
+
+        return dateA.getTime() > dateB.getTime();
+      });
+    case "Last Edited":
+      return sortedArray.sort((a, b) => {
+        const dateA = new Date(a.updated_at);
+        const dateB = new Date(b.updated_at);
+
+        return dateA.getTime() > dateB.getTime();
+      });
+    default:
+      return sortedArray;
+  }
+};
+
 const UserContentSection = (props) => {
   const webhooks = useSelector((state) => state.webhooks.webhooks);
-  const askedContent = webhooks.filter((m) => {
+  const sortedContent = useMemo(
+    () => sortContent(webhooks, props.sortItemsBy),
+    [webhooks, props.sortItemsBy]
+  );
+  const askedContent = sortedContent.filter((m) => {
     if (m.status !== "PURGED") {
       if (props.content.header === "Integrations")
         return m.status === "ENABLED" || m.status === "DISABLED";

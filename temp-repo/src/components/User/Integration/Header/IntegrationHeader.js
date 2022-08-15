@@ -36,6 +36,12 @@ const TEMPLATE_IMG = (
 
 const IntegrationHeader = (props) => {
   const dispatch = useDispatch();
+
+  const PREFILL_URL = require("../../../../assets/prefill.svg");
+  const PrefillImage = (
+    <img src={`../src/assets/prefill.svg`} alt="prefill-icon" />
+  );
+
   return (
     <>
       <IntegrationTitle
@@ -53,6 +59,13 @@ const IntegrationHeader = (props) => {
             text="Create with Wizard"
             onClick={() => {
               dispatch(setCurrentContent({ currentContent: "wizard" }));
+            }}
+          />
+          <IntegrationAppCard
+            text="Create Prefill"
+            img={PrefillImage}
+            onClick={() => {
+              dispatch(setCurrentContent({ currentContent: "prefill" }));
             }}
           />
           <IntegrationAppCard
