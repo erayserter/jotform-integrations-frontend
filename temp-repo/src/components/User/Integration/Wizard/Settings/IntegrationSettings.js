@@ -29,7 +29,7 @@ const IntegrationSettings = (props) => {
 
   const appInfo = useSelector((state) => state.infos.appInfo);
 
-  const appFields = app.getFields(props.type, appAction.name);
+  const appFields = app.getFields(props.type, appAction?.name);
 
   const isUpdate = useSelector((state) => state.ui.isUpdate);
 
@@ -40,19 +40,23 @@ const IntegrationSettings = (props) => {
   const fetchData = async () => {
     setOptionsLoading(true);
     const authenticationInfo = {
-      [appSelections.source.app.id]: {
+      [appSelections.source.app?.id]: {
         apiKey: appSelections.source.key,
         authId: appSelections.source.auth_id,
       },
-      [appSelections.destination.app.id]: {
+      [appSelections.destination.app?.id]: {
         apiKey: appSelections.destination.key,
         authId: appSelections.destination.auth_id,
+      },
+      [appSelections.prefill.app?.id]: {
+        apiKey: appSelections.prefill.key,
+        authId: appSelections.prefill.auth_id,
       },
     };
 
     const { newDatas, newOptions } = await app.init(
       appInfo,
-      appAction.name,
+      appAction?.name,
       props.type,
       authenticationInfo,
       settingsSelections,
@@ -105,7 +109,7 @@ const IntegrationSettings = (props) => {
     >
       <h1
         className={`color-navy-700 text-3xl font-semibold pt-1 text-center ${
-          props.type !== "source" && "md:pl-14"
+          props.type === "destination" && "md:pl-14"
         }`}
       >
         {app.name} Settings
@@ -142,6 +146,7 @@ const IntegrationSettings = (props) => {
                     menuPlacement="auto"
                     onChange={(event) => {
                       if (e.isMulti) {
+                        console.log(event);
                         newValueHandler(
                           event.map((element) => {
                             return parseInt(element.value, 10);
@@ -156,12 +161,12 @@ const IntegrationSettings = (props) => {
                         ? settingsSelections[props.type][e.selection].map(
                             (input) =>
                               appOptions[app.id][e.selection].find(
-                                (option) => option.value === input
+                                (option) => option.value == input
                               )
                           )
                         : appOptions[app.id][e.selection].find(
                             (option) =>
-                              option.value ===
+                              option.value ==
                               settingsSelections[props.type][e.selection]
                           ))
                     }

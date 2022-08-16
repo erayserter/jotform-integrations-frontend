@@ -8,6 +8,7 @@ export default class App {
   actions;
   triggers;
   isOauth;
+  prefills;
 
   constructor(appObject) {
     this.id = appObject.id;
@@ -16,6 +17,7 @@ export default class App {
     this.triggers = appObject.triggers;
     this.actions = appObject.actions;
     this.isOauth = appObject.isOauth;
+    this.prefills = appObject.prefills;
   }
 
   init(
@@ -48,17 +50,12 @@ export default class App {
     requiredInfo,
     dependantApp
   ) {
-    let action = this.actions.find((action) => action.getName() === actionName);
-
-    if (!action)
-      action = this.triggers.find(
-        (trigger) => trigger.getName() === actionName
-      );
+    const fields = this.getFields(type, actionName);
 
     let optionsCopy = { ...options };
     let newDatas = { ...datas };
 
-    for (const field of action.getAllFields()) {
+    for (const field of fields) {
       const selection = field.getSelection();
       const returnObject = await this.getOptionFromSelection(
         newDatas,
@@ -92,6 +89,8 @@ export default class App {
   }
 
   getFields(type, actName) {
+    if (!actName) return this.prefills;
+
     const selectedAct = (a) => a.name === actName;
     const actArray = (actType) =>
       type === "source" ? this.triggers : this.actions;
@@ -100,6 +99,10 @@ export default class App {
   }
 
   getDependantFields(action, id, type) {
+    if (!action)
+      return this.prefills.find((field) => field.getSelection() === id)
+        .dependantFieldList;
+
     return action.getAllFields().find((field) => field.getSelection() === id)
       .dependantFieldList;
   }

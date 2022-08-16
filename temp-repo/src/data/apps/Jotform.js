@@ -15,6 +15,7 @@ const TRIGGERS = [
 ];
 const ACTIONS = [];
 const IS_OAUTH = false;
+const PREFILLS = [new Select("Choose Form", "form_id", [], false)];
 
 export default class Jotform extends App {
   constructor() {
@@ -25,6 +26,7 @@ export default class Jotform extends App {
       triggers: TRIGGERS,
       actions: ACTIONS,
       isOauth: IS_OAUTH,
+      prefills: PREFILLS,
     });
   }
 
@@ -126,9 +128,24 @@ export default class Jotform extends App {
     });
   }
 
-  getFileUploadFieldsOptions(datas, options) {
+  async getFileUploadFieldsOptions(datas, authenticationInfo, options) {
     let fileUploadFieldsOptions = [];
-    const fields = this.getUploadFields(datas.source, options.source.formId);
+    let datasCopy = { ...datas };
+    const formId = options.source.form_id;
+
+    if (isNil(this.getUploadFields(datas.source, formId))) {
+      datasCopy = {
+        ...datasCopy,
+        source: {
+          ...datasCopy.source,
+          [formId]: (await this.fetchFormInfo(authenticationInfo, formId))[
+            formId
+          ],
+        },
+      };
+    }
+
+    const fields = this.getUploadFields(datasCopy.source, formId);
 
     for (const fieldId in fields)
       fileUploadFieldsOptions.push({
@@ -136,7 +153,7 @@ export default class Jotform extends App {
         label: fields[fieldId].field_name,
       });
 
-    return fileUploadFieldsOptions;
+    return { fieldOption: fileUploadFieldsOptions, newDatas: datasCopy };
   }
 
   getTitle(datas, formId) {

@@ -1,0 +1,22 @@
+.prefill-body {
+  margin: 4vh 0 0;
+}
+
+@media screen and (min-width: 769px) {
+  .prefill-body {
+    margin: 50px 0;
+  }
+
+  .prefill-card {
+    flex-direction: row;
+  }
+}
+
+.settingsButton {
+  background-color: #78bb07;
+  border-color: #b8b9c9;
+}
+
+.settingsButton:hover {
+  background-color: #68a206;
+}

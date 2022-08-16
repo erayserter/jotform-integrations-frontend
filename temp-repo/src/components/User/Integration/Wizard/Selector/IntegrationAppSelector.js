@@ -104,7 +104,7 @@ const IntegrationAppSelector = (props) => {
     } else {
       const res = await app.authenticate({
         app_name: app.id.toLowerCase(),
-        action: appSelections[props.type].action.name,
+        action: appSelections[props.type].action?.name,
         api_key: appSelections[props.type].key,
       });
       if (res.responseCode === 200) {
@@ -129,7 +129,7 @@ const IntegrationAppSelector = (props) => {
   };
 
   useEffect(() => {
-    if (app !== null) {
+    if (app != null) {
       if (app.isOauth && accountDetails.length <= 0) {
         setIsLoading(true);
         oauthHandler(app);
@@ -175,37 +175,39 @@ const IntegrationAppSelector = (props) => {
             />
           </div>
           <div className={`basis-10/12`}>
-            <div className={`relative`}>
-              <span>Action</span>
-              <Select
-                className="basic-single"
-                classNamePrefix="select"
-                isClearable={true}
-                isSearchable={true}
-                name="actions"
-                options={
-                  props.type === "source"
-                    ? app.triggers.map((e) => {
-                        return { value: e.name, label: e.name };
-                      })
-                    : app.actions.map((e) => {
-                        return { value: e.name, label: e.name };
-                      })
-                }
-                styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
-                menuPortalTarget={document.body}
-                menuPlacement="bottom"
-                onChange={(e) => {
-                  if (e) actionSelectHandler(e.value);
-                }}
-                value={
-                  appSelections[props.type].action && {
-                    label: appSelections[props.type].action.name,
-                    value: appSelections[props.type].action.name,
+            {!props.prefillSelector && (
+              <div className={`relative`}>
+                <span>Action</span>
+                <Select
+                  className="basic-single"
+                  classNamePrefix="select"
+                  isClearable={true}
+                  isSearchable={true}
+                  name="actions"
+                  options={
+                    props.type === "source"
+                      ? app.triggers.map((e) => {
+                          return { value: e.name, label: e.name };
+                        })
+                      : app.actions.map((e) => {
+                          return { value: e.name, label: e.name };
+                        })
                   }
-                }
-              />
-            </div>
+                  styles={{ menuPortal: (base) => ({ ...base, zIndex: 9999 }) }}
+                  menuPortalTarget={document.body}
+                  menuPlacement="bottom"
+                  onChange={(e) => {
+                    if (e) actionSelectHandler(e.value);
+                  }}
+                  value={
+                    appSelections[props.type].action && {
+                      label: appSelections[props.type].action.name,
+                      value: appSelections[props.type].action.name,
+                    }
+                  }
+                />
+              </div>
+            )}
             {app && app.isOauth ? (
               <div className={`mt-2`}>
                 {accountDetails && accountDetails.length > 0 ? (

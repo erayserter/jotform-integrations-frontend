@@ -5,6 +5,7 @@ import classes from "./IntegrationContent.module.css";
 import IntegrationWizard from "./Wizard/IntegrationWizard";
 import IntegrationHeader from "./Header/IntegrationHeader";
 import Templates from "../Content/List/Templates/Templates";
+import PrefillWizard from "../Prefill/PrefillWizard";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentContent } from "../../../store/ui";
@@ -36,6 +37,7 @@ const IntegrationContent = (props) => {
         {currentContent === "wizard" && (
           <IntegrationWizard onIntegrationSave={props.onIntegrationSave} />
         )}
+        {currentContent === "prefill" && <PrefillWizard />}
       </div>
       {currentContent === "template" && (
         <div className="h-full w-full mt-16">

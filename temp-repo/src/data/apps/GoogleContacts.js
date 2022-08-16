@@ -1,7 +1,9 @@
 import App from "../App";
 import Action from "./Action";
 import TagInput from "./fields/TagInput";
+import Select from "./fields/Select";
 import { cloneDeep } from "lodash";
+import Jotform from "./Jotform";
 
 const ID = "GoogleContacts";
 const NAME = "Google Contacts";
@@ -17,6 +19,7 @@ const ACTIONS = [
   ]),
 ];
 const IS_OAUTH = true;
+const PREFILLS = [new Select("Choose Contacts", "contactChoices", [], true)];
 
 export default class GoogleContacts extends App {
   constructor() {
@@ -27,6 +30,7 @@ export default class GoogleContacts extends App {
       triggers: TRIGGERS,
       actions: ACTIONS,
       isOauth: IS_OAUTH,
+      prefills: PREFILLS,
     });
   }
 
@@ -37,18 +41,23 @@ export default class GoogleContacts extends App {
     type,
     authenticationInfo,
     requiredInfo = {},
-    dependantApp
+    dependantApp = new Jotform()
   ) {
-    const allTypeData = datas;
     switch (selection) {
       case "givenName":
       case "familyName":
       case "emailAddress":
       case "phoneNumber":
         return dependantApp.getFormTagInputOptions(
-          allTypeData,
+          datas,
           authenticationInfo,
           requiredInfo
+        );
+      case "contactChoices":
+        return dependantApp.getFormTitleOptions(
+          datas,
+          "source",
+          authenticationInfo
         );
       default:
         return;

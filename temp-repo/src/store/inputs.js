@@ -4,22 +4,28 @@ export const inputsSlice = createSlice({
   name: "inputs",
   initialState: {
     appSelections: {
-      webhookId: null,
+      webhookId: undefined,
       name: "Integration",
       source: {
-        app: null,
-        action: null,
-        key: null,
-        auth_id: null,
+        app: undefined,
+        action: undefined,
+        key: undefined,
+        auth_id: undefined,
       },
       destination: {
-        app: null,
-        action: null,
-        key: null,
-        auth_id: null,
+        app: undefined,
+        action: undefined,
+        key: undefined,
+        auth_id: undefined,
+      },
+      prefill: {
+        app: undefined,
+        action: undefined,
+        key: undefined,
+        auth_id: undefined,
       },
     },
-    settingsSelections: { source: {}, destination: {} },
+    settingsSelections: { source: {}, destination: {}, prefill: {} },
   },
   reducers: {
     setAppSelections(state, { payload }) {

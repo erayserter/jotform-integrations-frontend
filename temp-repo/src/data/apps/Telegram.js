@@ -52,6 +52,7 @@ export default class Telegram extends App {
       case "upload_fields":
         return dependantApp.getFileUploadFieldsOptions(
           allTypeData,
+          authenticationInfo,
           requiredInfo
         );
       default:

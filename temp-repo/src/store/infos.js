@@ -7,10 +7,12 @@ export const infosSlice = createSlice({
     appInfo: {
       source: {},
       destination: {},
+      prefill: {},
     },
     apiInfo: {
       source: false,
       destination: false,
+      prefill: false,
     },
   },
   reducers: {
