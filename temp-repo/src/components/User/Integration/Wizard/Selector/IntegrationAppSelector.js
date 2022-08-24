@@ -291,30 +291,30 @@ const IntegrationAppSelector = (props) => {
       )}
       {isAppSelectorVisible && <SelectionCard onAppSelect={appSelectHandler} />}
 
-      <div className={`${classes["pointer"]} absolute flex top-3 gap-3`}>
-        <div
-          className={`${classes["pointer__circle"]} ${
-            classes["pointer__circle-source"]
-          } ${
-            props.type === "source" && "bg-navy-700"
-          } w-3 h-3 bg-navy-100 cursor-pointer radius-full`}
-          onClick={(event) => {
-            props.onTypeChange("source");
-          }}
-        />
-        <div
-          className={`${classes["pointer__circle"]} ${
-            classes["pointer__circle-destination"]
-          } ${
-            props.type === "destination" && "bg-navy-700"
-          } w-3 h-3 bg-navy-100 cursor-pointer radius-full`}
-          onClick={(event) => {
-            props.onTypeChange(
-              props.prefillSelector ? "prefill" : "destination"
-            );
-          }}
-        />
-      </div>
+      {!props.prefillSelector && (
+        <div className={`${classes["pointer"]} absolute flex top-3 gap-3`}>
+          <div
+            className={`${classes["pointer__circle"]} ${
+              classes["pointer__circle-source"]
+            } ${
+              props.type === "source" && "bg-navy-700"
+            } w-3 h-3 bg-navy-100 cursor-pointer radius-full`}
+            onClick={(event) => {
+              props.onTypeChange("source");
+            }}
+          />
+          <div
+            className={`${classes["pointer__circle"]} ${
+              classes["pointer__circle-destination"]
+            } ${
+              props.type === "destination" && "bg-navy-700"
+            } w-3 h-3 bg-navy-100 cursor-pointer radius-full`}
+            onClick={(event) => {
+              props.onTypeChange("destination");
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -50,7 +50,7 @@ const IntegrationContent = (props) => {
         </div>
       )}
       <button
-        className={`absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
+        className={`flex items-center justify-center absolute cursor-pointer top-4 right-4 md:top-5 md:right-5 p-3 m-0 bg-navy-75 radius-full`}
         onClick={closeButtonHandler}
       >
         <svg

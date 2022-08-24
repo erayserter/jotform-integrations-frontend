@@ -234,14 +234,14 @@ export default class GoogleContacts extends App {
           ),
         },
         emailAddresses: Object.keys(matchFields).find(
-          (key) => matchFields[key] === "emailAddress:value"
+          (key) => matchFields[key] === "emailAddresses:value"
         ) && {
           value: Object.keys(matchFields).find(
             (key) => matchFields[key] === "emailAddresses:value"
           ),
         },
         phoneNumbers: Object.keys(matchFields).find(
-          (key) => matchFields[key] === "phoneNumber:value"
+          (key) => matchFields[key] === "phoneNumbers:value"
         ) && {
           value: Object.keys(matchFields).find(
             (key) => matchFields[key] === "phoneNumbers:value"
