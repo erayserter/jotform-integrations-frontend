@@ -73,7 +73,8 @@ export default class GoogleContacts extends App {
           type,
           authenticationInfo,
           requiredInfo,
-          dependantApp
+          dependantApp,
+          actionName
         );
       case "matchContactFields":
         return this.getMatchFieldOptions(
