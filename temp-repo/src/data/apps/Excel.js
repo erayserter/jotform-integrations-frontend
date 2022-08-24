@@ -10,7 +10,7 @@ const NAME = "Microsoft Excel";
 const URL = "/intern/src/assets/excel.svg";
 const TRIGGERS = [];
 const ACTIONS = [
-  new Action("Add Row to Table", [
+  new Action("Add Row To Table", [
     new Field("Worksheet Name", "worksheet_name", "input", []),
     new Select("Choose a Workbook", "workbook_id", [], false),
     new MatchFields(
