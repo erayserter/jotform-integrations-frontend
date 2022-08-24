@@ -9,6 +9,8 @@ const ContentSectionListItem = (props) => {
   const selectedWebhooks = useSelector(
     (state) => state.webhooks.selectedWebhooks
   );
+  const source_app = apps[props.webhook.value.source.app_name];
+  const destination_app = apps[props.webhook.value.destination.app_name];
 
   const [isFavorite, setIsFavorite] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
@@ -167,7 +169,7 @@ const ContentSectionListItem = (props) => {
               {props.webhook.webhook_name === "Integration" ||
               props.webhook.webhook_name === "" ? (
                 <span className="overflow-hidden whitespace-nowrap text-capitalize line-clamp-1">
-                  {props.webhook.value.source["app_name"]}
+                  {source_app.name}
                   {"  "}
                   <img
                     className="inline-block"
@@ -176,10 +178,10 @@ const ContentSectionListItem = (props) => {
                     alt="Right Arrow"
                   />
                   {"  "}
-                  {props.webhook.value.destination["app_name"]}
+                  {destination_app.name}
                 </span>
               ) : (
-                <span className="overflow-hidden whitespace-nowrap text-capitalize line-clamp-1">
+                <span className="overflow-hidden whitespace-nowrap line-clamp-1">
                   {props.webhook.webhook_name}
                 </span>
               )}
@@ -190,9 +192,8 @@ const ContentSectionListItem = (props) => {
           >
             <span>
               When {props.webhook.value.source["app_action"]} on{" "}
-              {props.webhook.value.source["app_name"]},{" "}
-              {props.webhook.value.destination["app_action"]} on{" "}
-              {props.webhook.value.destination["app_name"]}
+              {source_app.name}, {props.webhook.value.destination["app_action"]}{" "}
+              on {destination_app.name}
             </span>
           </div>
         </div>
