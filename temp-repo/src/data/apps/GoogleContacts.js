@@ -82,8 +82,7 @@ export default class GoogleContacts extends App {
           type,
           authenticationInfo,
           requiredInfo,
-          dependantApp,
-          actionName
+          dependantApp
         );
       case "contactChoices":
         return this.getContactOptions(datas, type, authenticationInfo);

@@ -192,7 +192,9 @@ const UserContent = (props) => {
                 }}
               >
                 <span className="whitespace-nowrap hidden lg:inline">
-                  Move To Trash
+                  {sectionContent.header === "Trash"
+                    ? "Purge"
+                    : "Move To Trash"}
                 </span>
               </button>
               {sectionContent.header === "Trash" && (
