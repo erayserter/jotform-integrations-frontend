@@ -159,7 +159,8 @@ export default class ClickUp extends App {
             type,
             authenticationInfo,
             requiredInfo,
-            dependantApp
+            dependantApp,
+            actionName
           );
         return { source: [], destination: [] };
       case "comment":
@@ -167,7 +168,8 @@ export default class ClickUp extends App {
           return dependantApp.getFormTagInputOptions(
             datas,
             authenticationInfo,
-            requiredInfo
+            requiredInfo,
+            actionName
           );
         return [];
       default:
@@ -304,7 +306,8 @@ export default class ClickUp extends App {
     type,
     authenticationInfo,
     requiredInfo,
-    dependantApp
+    dependantApp,
+    actionName
   ) {
     let matchFieldOptions = {
       source: [],
@@ -332,7 +335,8 @@ export default class ClickUp extends App {
       await dependantApp.getFormFieldOptions(
         datas,
         authenticationInfo,
-        requiredInfo
+        requiredInfo,
+        actionName
       );
 
     const { fieldOptions, newDatas: destinationDatas } =
@@ -350,6 +354,7 @@ export default class ClickUp extends App {
     };
 
     const newDatas = {
+      ...datas,
       source: sourceDatas.source,
       destination: destinationDatas.destination,
     };

@@ -6,6 +6,7 @@ import Navbar from "./Navbar/Navbar";
 import UserContent from "./User/Content/UserContent";
 import IntegrationContent from "./User/Integration/IntegrationContent";
 
+import { setPrefills } from "../store/prefills";
 import { setWebhooks, setSelectedWebhooks } from "../store/webhooks";
 import {
   setIsIntegrationContent,
@@ -25,6 +26,14 @@ const getWebhookRequest = async () => {
     "https://" +
       configurations.DEV_RDS_NAME +
       ".jotform.dev/intern-api/getAllWebhooks"
+  ).then((res) => res.json());
+};
+
+const getPrefillRequest = async () => {
+  return fetch(
+    "https://" +
+      configurations.DEV_RDS_NAME +
+      ".jotform.dev/intern-api/getAllPrefills"
   ).then((res) => res.json());
 };
 
@@ -51,6 +60,7 @@ const AppContainer = (props) => {
     (state) => state.webhooks.selectedWebhooks
   );
   const [webhooksLoading, setWebhooksLoading] = useState(true);
+  const [prefillsLoading, setPrefillsLoading] = useState(false);
 
   const apps = useSelector((state) => state.apps.apps);
 
@@ -65,6 +75,22 @@ const AppContainer = (props) => {
     if (res.responseCode === 200) {
       dispatch(setWebhooks({ webhooks: res.content }));
       setWebhooksLoading(false);
+    }
+  };
+
+  const getPrefills = async () => {
+    const res = await getPrefillRequest();
+    if (res.responseCode === 200) {
+      dispatch(
+        setPrefills({
+          prefills: res.content.map((prefill) => ({
+            id: prefill.id,
+            url: prefill.prefill_url,
+            title: prefill.prefill_name,
+          })),
+        })
+      );
+      setPrefillsLoading(false);
     }
   };
 
@@ -227,23 +253,29 @@ const AppContainer = (props) => {
           ...appSelections,
           name: "Integration",
           source: {
-            app: null,
-            action: null,
-            key: null,
-            auth_id: null,
+            app: undefined,
+            action: undefined,
+            key: undefined,
+            auth_id: undefined,
           },
           destination: {
-            app: null,
-            action: null,
-            key: null,
-            auth_id: null,
+            app: undefined,
+            action: undefined,
+            key: undefined,
+            auth_id: undefined,
+          },
+          prefill: {
+            app: undefined,
+            action: undefined,
+            key: undefined,
+            auth_id: undefined,
           },
         },
       })
     );
     dispatch(
       setSettingsSelections({
-        settingsSelections: { source: {}, destination: {} },
+        settingsSelections: { source: {}, destination: {}, prefill: {} },
       })
     );
     dispatch(
@@ -251,6 +283,7 @@ const AppContainer = (props) => {
         apiInfo: {
           source: false,
           destination: false,
+          prefill: false,
         },
       })
     );
@@ -292,7 +325,10 @@ const AppContainer = (props) => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) getWebhooks();
+    if (isLoggedIn) {
+      getWebhooks();
+      getPrefills();
+    }
   }, []);
 
   if (!isLoggedIn)
@@ -310,15 +346,18 @@ const AppContainer = (props) => {
       {isIntegrationContent ? (
         <IntegrationContent
           onClose={closeHandler}
+          prefillsLoading={prefillsLoading}
           onIntegrationSave={integrationSaveHandler}
         />
       ) : (
         <UserContent
           webhooksLoading={webhooksLoading}
+          prefillsLoading={prefillsLoading}
           onIntegrationUpdate={integrationUpdateHandler}
           onStatusChangeWebhook={statusChangeWebhookHandler}
           onFavorite={favoriteWebhookHandler}
           onSelect={selectWebhookHandler}
+          onClose={closeHandler}
         />
       )}
       <ToastContainer />

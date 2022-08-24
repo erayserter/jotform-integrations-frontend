@@ -37,7 +37,12 @@ const IntegrationContent = (props) => {
         {currentContent === "wizard" && (
           <IntegrationWizard onIntegrationSave={props.onIntegrationSave} />
         )}
-        {currentContent === "prefill" && <PrefillWizard />}
+        {currentContent === "prefill" && (
+          <PrefillWizard
+            prefillsLoading={props.prefillsLoading}
+            onClose={props.onClose}
+          />
+        )}
       </div>
       {currentContent === "template" && (
         <div className="h-full w-full mt-16">

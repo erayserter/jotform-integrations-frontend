@@ -12,13 +12,14 @@ import { useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setIsIntegrationContent } from "../../../store/ui";
+import UserPrefillContentSection from "../Prefill/UserPrefillContentSection";
 
 const LIST_ITEMS = [
   { header: "Integrations", value: "Integrations" },
   { header: "Templates", value: "Templates" },
-  { header: "Keys", value: "Keys" },
   { header: "Favorites", value: "Favorite Integrations" },
   { header: "Trash", value: "Deleted Integrations" },
+  { header: "Prefills", value: "Prefills" },
 ];
 
 const SORT_LIST_ITEMS = [
@@ -29,6 +30,7 @@ const SORT_LIST_ITEMS = [
 ];
 
 const FIRST_ITEM = 0;
+const LAST_ITEM = LIST_ITEMS.length - 1;
 
 const UserContent = (props) => {
   const dispatch = useDispatch();
@@ -309,20 +311,27 @@ const UserContent = (props) => {
             </div>
           </div>
         </div>
-        {sectionContent.header === "Templates" ? (
-          <Templates />
-        ) : (
-          <UserContentSection
-            webhooksLoading={props.webhooksLoading}
-            onIntegrationUpdate={props.onIntegrationUpdate}
-            content={sectionContent}
-            searchedWord={searchedWord}
-            sortItemsBy={sortedItemsBy}
-            onSelect={props.onSelect}
-            onFavorite={props.onFavorite}
-            onStatusChangeWebhook={props.onStatusChangeWebhook}
+        {sectionContent.header === "Templates" && <Templates />}
+        {sectionContent.header === "Prefills" && (
+          <UserPrefillContentSection
+            onClose={props.onClose}
+            prefillsLoading={props.prefillsLoading}
+            content={LIST_ITEMS[LAST_ITEM]}
           />
         )}
+        {sectionContent.header !== "Templates" &&
+          sectionContent.header !== "Prefills" && (
+            <UserContentSection
+              webhooksLoading={props.webhooksLoading}
+              onIntegrationUpdate={props.onIntegrationUpdate}
+              content={sectionContent}
+              searchedWord={searchedWord}
+              sortItemsBy={sortedItemsBy}
+              onSelect={props.onSelect}
+              onFavorite={props.onFavorite}
+              onStatusChangeWebhook={props.onStatusChangeWebhook}
+            />
+          )}
       </div>
     </main>
   );

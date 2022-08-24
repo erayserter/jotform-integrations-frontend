@@ -60,10 +60,8 @@ const UserContentSection = (props) => {
 
   if (props.webhooksLoading)
     return (
-      <div className={`${classes["content--list"]} grow-1 h-full`}>
-        <div
-          className={`${classes["content--list-wrapper"]} w-full h-full flex flex-col py-1 px-0.5 md:py-4 md:px-5`}
-        >
+      <div className={`grow-1 h-full mt-5`}>
+        <div className={`w-full h-full flex flex-col py-1 md:py-4 px-5`}>
           {dummyArray.map((e) => (
             <div
               className={`flex justify-between items-center w-full h-8 radius-full bg-navy-25 mb-9`}
@@ -74,9 +72,9 @@ const UserContentSection = (props) => {
     );
 
   return (
-    <div className={`${classes["content--list"]} grow-1 h-full`}>
+    <div className={`grow-1 h-full`}>
       <div
-        className={`${classes["content--list-wrapper"]} w-full h-full flex flex-col py-1 px-0.5 md:py-4 md:px-5`}
+        className={`w-full h-full flex flex-col py-1 px-0.5 md:py-4 md:px-5`}
       >
         {askedContent.length !== 0 &&
           askedContent
@@ -114,16 +112,14 @@ const UserContentSection = (props) => {
             })}
         {askedContent.length === 0 && (
           <div
-            className={`${classes["content--no-content"]} flex items-center justify-center grow-1 h-full py-4 px-5 relative mt-8 md:mt-0`}
+            className={`flex items-center justify-center grow-1 h-full py-4 px-5 relative mt-8 md:mt-0`}
           >
-            <div
-              className={`${classes["content--no-content-wrapper"]} line-height-xl text-center`}
-            >
+            <div className={`line-height-xl text-center`}>
               <div
                 className={`${classes["content--no-content-icon"]} bg-center bg-no-repeat inline-block relative mb-7 h-28 w-28`}
               ></div>
               <div
-                className={`${classes["content--no-content-primary-text"]} text-lg font-medium text-uppercase mb-1 color-navy-700`}
+                className={`text-lg font-medium text-uppercase mb-1 color-navy-700`}
               >
                 YOU DON'T HAVE ANY {props.content.value} YET!
               </div>

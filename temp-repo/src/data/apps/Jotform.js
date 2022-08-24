@@ -64,7 +64,7 @@ export default class Jotform extends App {
     return { fieldOption: titleOptions, newDatas };
   }
 
-  async getFormFieldOptions(datas, authenticationInfo, options) {
+  async getFormFieldOptions(datas, authenticationInfo, options, actionName) {
     let formFieldOptions = [];
     let datasCopy = { ...datas };
     let formId = options.source.form_id;
@@ -74,14 +74,35 @@ export default class Jotform extends App {
         ...datasCopy,
         source: {
           ...datasCopy.source,
-          [formId]: (await this.fetchFormInfo(authenticationInfo, formId))[
-            formId
-          ],
+          [formId]: actionName
+            ? (
+                await this.fetchFormInfo(
+                  authenticationInfo,
+                  formId,
+                  "getFormInfo"
+                )
+              )[formId]
+            : {
+                ...datasCopy.source[formId],
+                fields: await this.fetchFormInfo(
+                  authenticationInfo,
+                  formId,
+                  "getPrefillKeys"
+                ),
+              },
         },
       };
     }
 
     const fields = this.getFormFields(datasCopy.source, formId);
+
+    if (!actionName) {
+      fields.forEach((field) =>
+        formFieldOptions.push({ value: field.prefill_key, label: field.text })
+      );
+      return { formFieldOptions, newDatas: datasCopy };
+    }
+
     for (const fieldId in fields) {
       formFieldOptions.push({
         value: fieldId,
@@ -108,13 +129,14 @@ export default class Jotform extends App {
     return formSubfieldOptions;
   }
 
-  async getFormTagInputOptions(datas, authenticationInfo, options) {
+  async getFormTagInputOptions(datas, authenticationInfo, options, actionName) {
     let tagInputOptions = [];
 
     const { formFieldOptions, newDatas } = await this.getFormFieldOptions(
       datas,
       authenticationInfo,
-      options
+      options,
+      actionName
     );
 
     tagInputOptions = await this.getOptionsInTagInputForm(formFieldOptions);
@@ -177,10 +199,10 @@ export default class Jotform extends App {
     return this.fetchDataFromBackend(body);
   }
 
-  fetchFormInfo(authenticationInfo, formId) {
+  fetchFormInfo(authenticationInfo, formId, action) {
     const apiKey = authenticationInfo[this.id].apiKey;
     const body = {
-      action: "getFormInfo",
+      action: action,
       apiKey: apiKey,
       formId: formId,
     };

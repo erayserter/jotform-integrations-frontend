@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { omit } from "lodash";
 
+import { setPrefills } from "../../../store/prefills";
 import { setApiInfo } from "../../../store/infos";
 import { setAppSelections } from "../../../store/inputs";
 import {
@@ -18,9 +19,11 @@ import IntegrationSettings from "../Integration/Wizard/Settings/IntegrationSetti
 
 import classes from "./PrefillWizard.module.css";
 import Jotform from "../../../data/apps/Jotform";
+import UserPrefillContentSection from "./UserPrefillContentSection";
 
-const PrefillWizard = () => {
+const PrefillWizard = ({ prefillsLoading, onClose }) => {
   const dispatch = useDispatch();
+  const prefills = useSelector((state) => state.prefills.prefills);
   const appSelections = useSelector((state) => state.inputs.appSelections);
   const settingsSelections = useSelector(
     (state) => state.inputs.settingsSelections
@@ -29,6 +32,7 @@ const PrefillWizard = () => {
   const [isModelOpen, setIsModelOpen] = useState(true);
   const [isAppChoice, setIsAppChoice] = useState(true);
   const [isSettingsChoice, setIsSettingsChoice] = useState(false);
+  const [isPrefillChoice, setIsPrefillChoice] = useState(false);
   const [settingsChoice, setSettingsChoice] = useState("source");
   const [appChoice, setAppChoice] = useState("source");
 
@@ -106,43 +110,37 @@ const PrefillWizard = () => {
       );
   };
 
-  const saveSettingsHandler = (values, type) => {
+  const saveSettingsHandler = async () => {
     if (settingsChoice === "source") {
       setSettingsChoice("prefill");
       return;
     }
 
-    toast.success("Successfully created an integration!");
-
     const jotform = appSelections.source.app;
     const prefill_app = appSelections.prefill.app;
 
-    // const allData = {
-    //   source: {
-    //     app_name: source_app.id,
-    //     app_action: appSelections.source.action.name,
-    //     api_key: appSelections.source.key,
-    //     auth_user_id: appSelections.source.auth_id,
-    //     settings: settingsSelections.source,
-    //   },
-    //   destination: {
-    //     app_name: destination_app.id,
-    //     app_action: appSelections.destination.action.name,
-    //     api_key: appSelections.destination.key,
-    //     auth_user_id: appSelections.destination.auth_id,
-    //     settings: settingsSelections.destination,
-    //   },
-    //   webhook_name: appSelections.name,
-    // };
+    const prefillResponse = await prefill_app.createPrefill(
+      appSelections,
+      settingsSelections
+    );
 
-    // if (isUpdate) {
-    //   allData.action = "update";
-    //   allData["webhook_id"] = appSelections.webhookId;
-    // } else {
-    //   allData.action = "create";
-    // }
+    dispatch(
+      setPrefills({
+        prefills: [
+          ...prefills,
+          ...prefillResponse.map((prefill) => ({
+            id: prefill.contact_id,
+            url: prefill.url,
+            title: settingsSelections.prefill.prefill_title,
+          })),
+        ],
+      })
+    );
 
-    // props.onIntegrationSave(allData, isUpdate);
+    setIsSettingsChoice(false);
+    setIsPrefillChoice(true);
+
+    toast.success("Successfully created a prefill!");
   };
 
   return (
@@ -182,6 +180,7 @@ const PrefillWizard = () => {
               onAuthenticate={authHandler}
               type={appChoice}
               prefillSelector
+              onTypeChange={setAppChoice}
             />
           )}
           {isSettingsChoice && (
@@ -190,10 +189,28 @@ const PrefillWizard = () => {
               onPopperRefChange={popperRefChangeHandler}
               onSettingsChange={settingsChangeHandler}
               onSave={saveSettingsHandler}
-              //   onPreviousModal={setSettingsChoice}
+              onPreviousModal={setSettingsChoice}
               prefillSettings
               type={settingsChoice}
             />
+          )}
+          {isPrefillChoice && (
+            <>
+              <div className="mb-5">
+                <IntegrationTitle title="Your Prefills" />
+              </div>
+              <UserPrefillContentSection
+                content={{ header: "Prefills", value: "Prefills" }}
+                prefillsLoading={prefillsLoading}
+                onClose={onClose}
+              />
+              <button
+                className={`${classes["doneButton"]} flex items-center justify-center mt-6 mb-5 mx-auto bg-orange-500 color-white border border-solid radius h-10 min-w-28 px-4 text-center text-uppercase duration-300`}
+                onClick={onClose}
+              >
+                Done
+              </button>
+            </>
           )}
         </ModalBox>
       )}

@@ -59,7 +59,8 @@ export default class Excel extends App {
           datas,
           authenticationInfo,
           dependantApp,
-          requiredInfo
+          requiredInfo,
+          actionName
         );
       case "edit":
       case "add_old_submissions":
@@ -90,12 +91,19 @@ export default class Excel extends App {
     return { fieldOption: options, newDatas: datasCopy };
   }
 
-  async getFormFields(datas, authenticationInfo, dependantApp, requiredInfo) {
+  async getFormFields(
+    datas,
+    authenticationInfo,
+    dependantApp,
+    requiredInfo,
+    actionName
+  ) {
     const { formFieldOptions, newDatas } =
       await dependantApp.getFormFieldOptions(
         datas,
         authenticationInfo,
-        requiredInfo
+        requiredInfo,
+        actionName
       );
 
     const fieldOption = {

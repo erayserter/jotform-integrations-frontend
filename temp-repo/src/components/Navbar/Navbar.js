@@ -119,35 +119,6 @@ const Navbar = (props) => {
             : "justify-end hidden"
         }`}
       >
-        <ul
-          className={`flex items-center justify-end ${
-            isExpanded
-              ? "relative overflow-x-hidden overflow-y-auto flex-wrap shrink-0"
-              : "flex-nowrap"
-          }`}
-        >
-          <li
-            className={`cursor-pointer w-full relative ${
-              isExpanded ? "border-t border-solid" : ""
-            }`}
-          >
-            {/* {isLoggedIn && (
-              <Link
-                to="/"
-                className={`inline-block relative px-4 whitespace-nowrap ${
-                  isExpanded ? "w-full font-normal line-height-6xl" : ""
-                }`}
-              >
-                All Integrations
-              </Link>
-            )} */}
-          </li>
-          <li
-            className={`cursor-pointer w-full relative ${
-              isExpanded ? "border-t border-solid" : ""
-            }`}
-          ></li>
-        </ul>
         {isLoggedIn && (
           <div ref={accountMenuRef}>
             <ul
@@ -181,14 +152,9 @@ const Navbar = (props) => {
                     ></div>
                     <div className="flex flex-col justify-center pl-3">
                       <p className="color-navy-300">Hello,</p>
-                      <p>Gigachad</p>
+                      <p>Bahadır Ersöz</p>
                     </div>
                   </div>
-                  <ul>
-                    <li className="py-3 px-6">Popper element1</li>
-                    <li className="py-3 px-6">Popper element2</li>
-                    <li className="py-3 px-6">Popper element3</li>
-                  </ul>
                   <Link
                     to="/login"
                     className={`color-red-400 inline-block relative px-4 whitespace-nowrap py-3 px-6 ${

@@ -309,7 +309,9 @@ const IntegrationAppSelector = (props) => {
             props.type === "destination" && "bg-navy-700"
           } w-3 h-3 bg-navy-100 cursor-pointer radius-full`}
           onClick={(event) => {
-            props.onTypeChange("destination");
+            props.onTypeChange(
+              props.prefillSelector ? "prefill" : "destination"
+            );
           }}
         />
       </div>

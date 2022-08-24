@@ -1,0 +1,7 @@
+.doneButton {
+  border-color: #b8b9c9;
+}
+
+.doneButton:hover {
+  background-color: #e65700;
+}

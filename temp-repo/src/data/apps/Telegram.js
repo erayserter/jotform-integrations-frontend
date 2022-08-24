@@ -47,7 +47,8 @@ export default class Telegram extends App {
         return dependantApp.getFormTagInputOptions(
           allTypeData,
           authenticationInfo,
-          requiredInfo
+          requiredInfo,
+          actionName
         );
       case "upload_fields":
         return dependantApp.getFileUploadFieldsOptions(

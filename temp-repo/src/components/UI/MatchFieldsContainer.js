@@ -63,7 +63,8 @@ const MatchFieldsContainer = (props) => {
   const appSelections = useSelector((state) => state.inputs.appSelections);
 
   const source_app = appSelections.source.app;
-  const destination_app = appSelections.destination.app;
+  const destination_app =
+    appSelections.destination.app || appSelections.prefill.app;
 
   useEffect(() => {
     if (props.default && !isEmpty(props.default))

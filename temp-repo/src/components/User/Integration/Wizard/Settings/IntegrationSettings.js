@@ -109,7 +109,7 @@ const IntegrationSettings = (props) => {
     >
       <h1
         className={`color-navy-700 text-3xl font-semibold pt-1 text-center ${
-          props.type === "destination" && "md:pl-14"
+          props.type !== "source" && "md:pl-14"
         }`}
       >
         {app.name} Settings
@@ -146,10 +146,9 @@ const IntegrationSettings = (props) => {
                     menuPlacement="auto"
                     onChange={(event) => {
                       if (e.isMulti) {
-                        console.log(event);
                         newValueHandler(
                           event.map((element) => {
-                            return parseInt(element.value, 10);
+                            return element.value;
                           }),
                           e.selection
                         );

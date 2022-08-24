@@ -2,10 +2,12 @@ import App from "../App";
 import Action from "./Action";
 import TagInput from "./fields/TagInput";
 import Select from "./fields/Select";
+import Field from "./Field";
 import MatchFields from "./fields/MatchFields";
-import { cloneDeep, stubString } from "lodash";
+import { cloneDeep } from "lodash";
 import { isNil } from "lodash";
 import Jotform from "./Jotform";
+import configurations from "../../config";
 
 const ID = "GoogleContacts";
 const NAME = "Google Contacts";
@@ -23,7 +25,24 @@ const ACTIONS = [
   ]),
 ];
 const IS_OAUTH = true;
-const PREFILLS = [new Select("Choose Contacts", "contactChoices", [], true)];
+const PREFILLS = [
+  new Field(
+    "Prefill Title",
+    "prefill_title",
+    "input",
+    [],
+    "Template Prefill Title"
+  ),
+  new Field("Your Email", "email", "input", []),
+  new MatchFields(
+    "Match Your Fields",
+    "matchContactFields",
+    { source: "select", destination: "select" },
+    []
+  ),
+  new Select("Should be filled fields editable", "fieldBehaviour", [], false),
+  new Select("Choose Contacts", "contactChoices", [], true),
+];
 
 export default class GoogleContacts extends App {
   constructor() {
@@ -56,15 +75,51 @@ export default class GoogleContacts extends App {
           requiredInfo,
           dependantApp
         );
-      case "contactChoices":
-        return dependantApp.getFormTitleOptions(
+      case "matchContactFields":
+        return this.getMatchFieldOptions(
           datas,
-          "source",
-          authenticationInfo
+          type,
+          authenticationInfo,
+          requiredInfo,
+          dependantApp,
+          actionName
         );
+      case "contactChoices":
+        return this.getContactOptions(datas, type, authenticationInfo);
+      case "fieldBehaviour":
+        return {
+          fieldOption: [
+            { value: "edit", label: "Editable" },
+            { value: "readonly", label: "Read-only" },
+          ],
+          newDatas: datas,
+        };
       default:
         return;
     }
+  }
+
+  async getContactOptions(datas, type, authenticationInfo) {
+    const contactOptions = [];
+    let datasCopy = { ...datas };
+
+    if (isNil(this.getContacts(datas[type])))
+      datasCopy = {
+        ...datasCopy,
+        [type]: {
+          ...datasCopy[type],
+          contacts: await this.fetchData(authenticationInfo, "getContacts"),
+        },
+      };
+
+    const contacts = this.getContacts(datasCopy[type]);
+    for (const contact of contacts)
+      contactOptions.push({
+        value: contact.id,
+        label: contact.name,
+      });
+
+    return { fieldOption: contactOptions, newDatas: datasCopy };
   }
 
   async getMatchFieldOptions(
@@ -72,15 +127,16 @@ export default class GoogleContacts extends App {
     type,
     authenticationInfo,
     requiredInfo,
-    dependantApp
+    dependantApp,
+    actionName
   ) {
     let matchFieldOptions = {
       source: [],
       destination: [
-        { value: "givenName", label: "First Name" },
-        { value: "familyName", label: "Family Name" },
-        { value: "emailAddress", label: "Email" },
-        { value: "phoneNumber", label: "Phone Number" },
+        { value: "names:givenName", label: "First Name" },
+        { value: "names:familyName", label: "Family Name" },
+        { value: "emailAddresses:value", label: "Email" },
+        { value: "phoneNumbers:value", label: "Phone Number" },
       ],
       predefined: {},
     };
@@ -89,7 +145,8 @@ export default class GoogleContacts extends App {
       await dependantApp.getFormFieldOptions(
         datas,
         authenticationInfo,
-        requiredInfo
+        requiredInfo,
+        actionName
       );
 
     matchFieldOptions = {
@@ -99,11 +156,64 @@ export default class GoogleContacts extends App {
     };
 
     const newDatas = {
+      ...datas,
       source: sourceDatas.source,
       destination: datas.destination,
     };
 
     return { fieldOption: matchFieldOptions, newDatas };
+  }
+
+  getContacts(datas) {
+    return datas.contacts;
+  }
+
+  fetchData(authenticationInfo, action) {
+    const authId = authenticationInfo[this.id].authId;
+    const body = {
+      action: action,
+      auth_user_id: authId,
+    };
+    return this.fetchDataFromBackend(body);
+  }
+
+  async createPrefill(appSelections, settingsSelections) {
+    const requestBody = {
+      auth_user_id: appSelections.prefill.auth_id,
+      api_key: appSelections.source.key,
+      fieldBehaviour: settingsSelections.prefill.fieldBehaviour,
+      email: settingsSelections.prefill.email,
+      form_id: settingsSelections.source.form_id,
+      matching_fields: Object.keys(
+        settingsSelections.prefill.matchContactFields
+      ).reduce(
+        (array, element) => [
+          ...array,
+          { [element]: settingsSelections.prefill.matchContactFields[element] },
+        ],
+        []
+      ),
+      contact_ids: settingsSelections.prefill.contactChoices,
+      prefill_title: settingsSelections.prefill.prefill_title,
+    };
+
+    const responseContent = fetch(
+      "https://" +
+        configurations.DEV_RDS_NAME +
+        ".jotform.dev/intern-api/createPrefill",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      }
+    )
+      .then((data) => data.json())
+      .then((data) => data.content)
+      .catch((err) => console.log(err));
+
+    return responseContent;
   }
 
   prepareDataServerSide(data) {
@@ -113,28 +223,28 @@ export default class GoogleContacts extends App {
       contact_information: {
         names: Object.keys(matchFields).find(
           (key) =>
-            matchFields[key] === "givenName" ||
-            matchFields[key] === "familyName"
+            matchFields[key] === "names:givenName" ||
+            matchFields[key] === "names:familyName"
         ) && {
           givenName: Object.keys(matchFields).find(
-            (key) => matchFields[key] === "givenName"
+            (key) => matchFields[key] === "names:givenName"
           ),
           familyName: Object.keys(matchFields).find(
-            (key) => matchFields[key] === "familyName"
+            (key) => matchFields[key] === "names:familyName"
           ),
         },
         emailAddresses: Object.keys(matchFields).find(
-          (key) => matchFields[key] === "emailAddress"
+          (key) => matchFields[key] === "emailAddress:value"
         ) && {
           value: Object.keys(matchFields).find(
-            (key) => matchFields[key] === "emailAddress"
+            (key) => matchFields[key] === "emailAddresses:value"
           ),
         },
         phoneNumbers: Object.keys(matchFields).find(
-          (key) => matchFields[key] === "phoneNumber"
+          (key) => matchFields[key] === "phoneNumber:value"
         ) && {
           value: Object.keys(matchFields).find(
-            (key) => matchFields[key] === "phoneNumber"
+            (key) => matchFields[key] === "phoneNumbers:value"
           ),
         },
       },
@@ -152,22 +262,22 @@ export default class GoogleContacts extends App {
             ...(data.destination.settings.contact_information.names
               ?.givenName && {
               [data.destination.settings.contact_information.names?.givenName]:
-                "givenName",
+                "names:givenName",
             }),
             ...(data.destination.settings.contact_information.names
               ?.familyName && {
               [data.destination.settings.contact_information.names?.familyName]:
-                "familyName",
+                "names:familyName",
             }),
             ...(data.destination.settings.contact_information.emailAddresses
               ?.value && {
               [data.destination.settings.contact_information.emailAddresses
-                ?.value]: "emailAddress",
+                ?.value]: "emailAddresses:value",
             }),
             ...(data.destination.settings.contact_information.phoneNumbers
               ?.value && {
               [data.destination.settings.contact_information.phoneNumbers
-                ?.value]: "phoneNumber",
+                ?.value]: "phoneNumbers:value",
             }),
           },
         },
