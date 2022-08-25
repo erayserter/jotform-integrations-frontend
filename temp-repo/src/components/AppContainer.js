@@ -100,6 +100,18 @@ const AppContainer = (props) => {
       action: status.toLowerCase(),
     };
     await postWebhookRequest(credentials);
+
+    if (!changedWebhookID)
+      dispatch(setSelectedWebhooks({ selectedWebhooks: [] }));
+    else
+      dispatch(
+        setSelectedWebhooks({
+          selectedWebhooks: selectedWebhooks.filter(
+            (webhook_id) => webhook_id !== changedWebhookID
+          ),
+        })
+      );
+
     const newWebhooks = webhooks.map((webhook) => {
       if (
         (changedWebhookID && webhook.webhook_id === changedWebhookID) ||
@@ -109,8 +121,6 @@ const AppContainer = (props) => {
       return webhook;
     });
     dispatch(setWebhooks({ webhooks: newWebhooks }));
-    if (!changedWebhookID)
-      dispatch(setSelectedWebhooks({ selectedWebhooks: [] }));
   };
 
   const favoriteWebhookHandler = async (webhook_id, bool) => {
